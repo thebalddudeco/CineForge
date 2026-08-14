@@ -34,15 +34,18 @@ Official references:
 
 The adapter remains provider-neutral. Hugging Face Inference Providers or another compatible video API can be added later without changing the client contract.
 
-## Free beta budget controls
+## User-funded generation
 
-Free user access does not make provider inference free to operate. At the currently listed Wan 2.2 rate, a five-second 720p generation is approximately $0.40 before moderation, transfer, storage, and application-backend costs. One thousand successful generations at that setting would therefore consume approximately $400 in provider inference.
+Free application access does not make provider inference free. CineForge Online uses bring-your-own-provider billing during beta: each user connects their own supported provider account or API credential, purchases provider credits, and pays the provider for their generation. CineForge does not place generation on a CineForge-funded provider account.
 
-The beta requires daily allowances, per-account concurrency limits, maximum duration/resolution, pre-admission cost estimates, a global spend ceiling, and an automatic pause when the budget ceiling is reached. Users must see capacity messages before uploading large media or entering a queue.
+At the currently listed Wan 2.2 rate, a five-second 720p generation is approximately $0.40 before any separate provider charges. Before submission, the interface must show the provider, model, duration, resolution, current unit price, estimated total, and an explicit paid-action confirmation. Pricing must be retrieved or re-verified rather than treated as a permanent constant.
+
+The broker applies per-account concurrency limits and maximum duration/resolution, but it does not impose a CineForge inference budget because the provider bills the user. See [ONLINE_BILLING.md](ONLINE_BILLING.md).
 
 ## Security requirements
 
 - Never expose a provider API key in JavaScript, a mobile bundle, logs, or client-visible errors.
+- Never submit to a CineForge-funded provider credential as a fallback.
 - Bind provider request IDs to authenticated CineForge job IDs.
 - Verify every webhook signature and reject replays.
 - Apply SFW admission before paying for generation and SFW output inspection before delivery.

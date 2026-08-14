@@ -12,7 +12,7 @@ CineForge has two planned releases. They share the same brand, responsive interf
 | Model delivery | Automatic local Wan download | No model download to the client |
 | Storage | User-selected CineForge Library | Browser storage plus temporary moderated transfer storage |
 | Connectivity | Generation works locally after model installation | Internet connection required |
-| Access model | Downloadable desktop release | Free-to-access beta with capacity controls |
+| Access model | Downloadable desktop release | Free application beta; user-funded provider generation |
 | Interface | Full CineForge responsive studio | Same studio adapted to small screens and touch |
 | Content layer | No CineForge prompt or output moderation | SFW-only layered moderation at the hosted API boundary |
 
@@ -64,7 +64,9 @@ flowchart LR
     E -->|"Approved preview and download"| A
 ```
 
-The initial free beta does not require a paid plan. Capacity protection may include accounts, per-user concurrency limits, daily generation allowances, queue limits, rate limits, output expiration, and clearly communicated availability. Those controls protect a finite provider API budget and are not changes to the CineForge creative workflow.
+The initial CineForge Online beta has no application access fee. Generation is not subsidized: users connect a supported third-party provider account and fund that provider directly. CineForge displays the selected provider, model, duration, resolution, unit price, and estimated total before submission, then requires explicit confirmation. There is no automatic fallback to a CineForge-funded provider account.
+
+Capacity protection may still include accounts, per-user concurrency limits, queue limits, rate limits, output expiration, and clearly communicated availability. See [ONLINE_BILLING.md](ONLINE_BILLING.md) for the user-funded generation contract.
 
 Because CineForge Online processes user material on hosted infrastructure, it must publish a privacy and retention policy before release. It is an SFW-only service: prompt text, reference uploads, and generated video must pass the moderation stages defined in [ONLINE_MODERATION.md](ONLINE_MODERATION.md). Online moderation belongs at the hosted service boundary and must not be compiled into or silently imposed on CineForge Desktop.
 
@@ -87,6 +89,7 @@ Shared schemas cover projects, generation requests, progress events, runtime cap
 - server-side provider secrets with no credential exposure to clients;
 - secure direct uploads and signed output delivery;
 - account, quota, rate-limit, and capacity messaging;
+- bring-your-own-provider connection, secret handling, cost estimate, and explicit paid-job confirmation;
 - SFW prompt, reference-image, and sampled-video moderation with fail-closed handling;
 - privacy, retention, deletion, acceptable-use, and incident-response documentation;
 - accessibility, performance-budget, security, and abuse-resistance testing;
