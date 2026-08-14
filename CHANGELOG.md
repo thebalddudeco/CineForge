@@ -6,6 +6,10 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ### Changed
 
+- Added the standalone scaled-FP8 Wan 2.2 I2V loader, safe UMT5 FP8 prompt path, high/low expert switching, block-level CPU offload, float32 VAE decode, and native MP4 export without ComfyUI.
+- Validated real two-expert I2V generation on an RTX 4070 with finite latents, finite non-black frames, live progress callbacks, and a decodable MP4.
+- Added the scheduler, tokenizer, and architecture support files to the model pack and pinned Desktop setup to immutable Hugging Face revision `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`.
+
 - Defined CineForge Desktop and CineForge Online as separate releases sharing one responsive interface and project contract but using different inference and privacy boundaries.
 - Established CineForge Online as an SFW-only service with layered moderation for prompts, reference uploads, and generated video before delivery.
 - Defined CineForge Online as a lightweight client plus CPU/API broker that uses third-party video-generation APIs; users require no CUDA, WebGPU, dedicated GPU, or local model download, and CineForge operates no generation GPU.
@@ -26,11 +30,9 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 - Isolated CineForge inputs, outputs, projects, models, cache, logs, and temporary files from Shadowframe and removed Shadowframe model discovery paths.
 - Recorded the verified CineForge Desktop 0.3.1 preview artifact, automatic model-delivery sequence, immutable model revision, checksum, and remaining public-release gates.
 
-### In progress
+### Remaining release gate
 
-- Native loading of the split Wan 2.2 I2V A14B scaled-FP8 model pack.
-- Real end-to-end generation on a 12 GB NVIDIA GPU without ComfyUI.
-- Conversion and validation tooling for a redistributable CineForge Wan pack.
+- Clean-machine installation, automatic model download, launch, generation, and uninstall verification.
 
 ## [0.2.0] - 2026-08-14
 

@@ -1,4 +1,4 @@
-# CineForge Desktop v0.3.1 — Isolated Wan Installer Preview
+# CineForge Desktop v0.4.0 — Native Wan Release Candidate
 
 CineForge runs through its own PyTorch/Diffusers inference engine. ComfyUI is not launched, contacted, or required by the application.
 
@@ -17,18 +17,22 @@ CineForge runs through its own PyTorch/Diffusers inference engine. ComfyUI is no
 
 ## Download
 
-Download `CineForge-Desktop-Setup-0.3.1-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
+Download `CineForge-Desktop-Setup-0.4.0-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
+
+The setup EXE is intentionally small. During installation it downloads the matching `CineForge-Desktop-Runtime-0.4.0-win-x64.zip` release asset, verifies its SHA-256 checksum, extracts the application, and then downloads the pinned Wan pack. Publish both assets in the same GitHub Release.
 
 ### Verified preview artifact
 
 - Product: **CineForge Desktop**
 - Edition: `desktop`
-- Version: `0.3.1`
+- Version: `0.4.0`
 - Architecture: Windows x64
-- Installer size: 2,033,988,934 bytes
-- SHA-256: `ec231da71272a0e9af14f738e09b925091cce5634ac5c085c4dad62590caacf5`
+- Bootstrap installer size: 50,388,418 bytes
+- Bootstrap installer SHA-256: `4d9a60caa8651c4c0dd18d95c7ea05beededd7d0744d83509892aa4a7d892d60`
+- Runtime archive size: 2,017,201,506 bytes
+- Runtime archive SHA-256: `4ab5dbfbe10c576aea97276f3e8a554d57fe544d0cf11437cb656cec4794d346`
 - Model payload: four Wan components totaling 35,579,207,879 bytes
-- Model revision: `3abefe070febb87cf51e038edda29934743639fb`
+- Model revision: `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`
 
 ## Desktop installation experience
 
@@ -44,7 +48,7 @@ No manual model placement is required. CineForge Desktop does not reuse Shadowfr
 
 ## Model note
 
-The CineForge Desktop installer contains the CineForge Engine but not the large model weights. During setup it automatically downloads the four required Wan components from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. Users do not manually locate or install model files. Version 0.3.1 pins immutable model revision `3abefe070febb87cf51e038edda29934743639fb`.
+The CineForge Desktop installer contains the CineForge Engine but not the large model weights. During setup it automatically downloads the four required Wan components plus the small scheduler, tokenizer, and architecture support files from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. Users do not manually locate or install model files. Version 0.4.0 pins immutable model revision `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`.
 
 ## Security and signing
 
@@ -52,4 +56,4 @@ CineForge binds only to `127.0.0.1` and stores user data locally. It never scans
 
 ## Preview status
 
-This installer is an unsigned technical preview. Do not label it as the stable public release until native split-Wan loading, a real end-to-end generation, output validation, isolated model-download installation, clean-machine install/uninstall, and production signing have passed.
+This installer is an unsigned release candidate. Native split-Wan loading, real end-to-end generation, and MP4 output validation have passed on an RTX 4070 12 GB system. Do not label it as the stable public release until isolated model-download installation, clean-machine install/uninstall, and production signing have passed.

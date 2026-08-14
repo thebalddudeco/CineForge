@@ -1,5 +1,5 @@
 param(
-  [string]$Version = "0.3.1",
+  [string]$Version = "0.4.0",
   [switch]$SkipToolBootstrap
 )
 
@@ -100,13 +100,15 @@ $payloadZip = Join-Path $payloadRoot "CineForge-Payload.zip"
 Write-Host "Building the native Windows installer..."
 $installerProject = Join-Path $PSScriptRoot "CineForge.Installer\CineForge.Installer.csproj"
 dotnet publish $installerProject -c Release -r win-x64 --self-contained true -o $installerPublish `
-  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version
+  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version /p:SkipPayload=true
 if ($LASTEXITCODE -ne 0) { throw "The installer build failed with exit code $LASTEXITCODE." }
 
 $publishedInstaller = Join-Path $installerPublish "CineForge Desktop Setup.exe"
 $releaseInstaller = Join-Path $releaseRoot "CineForge-Desktop-Setup-$Version-win-x64.exe"
 if (!(Test-Path -LiteralPath $publishedInstaller)) { throw "The installer executable was not created." }
 Copy-Item -LiteralPath $publishedInstaller -Destination $releaseInstaller
+$runtimeAsset = Join-Path $releaseRoot "CineForge-Desktop-Runtime-$Version-win-x64.zip"
+Copy-Item -LiteralPath $payloadZip -Destination $runtimeAsset
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\GITHUB_RELEASE.md") -Destination (Join-Path $releaseRoot "RELEASE_NOTES.md")
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\INSTALLATION.md") -Destination (Join-Path $releaseRoot "INSTALLATION.md")
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\RELEASE_VERIFICATION.md") -Destination (Join-Path $releaseRoot "VERIFICATION.md")
@@ -122,13 +124,16 @@ $manifest = [ordered]@{
   installer = Split-Path -Leaf $releaseInstaller
   sha256 = $hash
   sizeBytes = (Get-Item -LiteralPath $releaseInstaller).Length
+  runtimeAsset = Split-Path -Leaf $runtimeAsset
+  runtimeSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeAsset).Hash
+  runtimeSizeBytes = (Get-Item -LiteralPath $runtimeAsset).Length
   builtAt = (Get-Date).ToUniversalTime().ToString("o")
   installScope = "CurrentUser"
   installRoot = "Selected by user; default %LOCALAPPDATA%\Programs\CineForge"
   dataRoot = "Selected by user; default %USERPROFILE%\Videos\CineForge Library"
   generationRuntime = "Bundled CineForge Engine with PyTorch CUDA; ComfyUI is not required"
   modelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models"
-  modelRevision = "3abefe070febb87cf51e038edda29934743639fb"
+  modelRevision = "493b7c8ff0a451b6b4c049afb3e6396dbfa1c688"
   modelDelivery = "Automatic resumable download with SHA-256 verification"
   codeSigned = $false
 } | ConvertTo-Json -Depth 5

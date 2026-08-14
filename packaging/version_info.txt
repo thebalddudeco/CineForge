@@ -4,12 +4,12 @@ VSVersionInfo(
     StringFileInfo([StringTable('040904B0', [
       StringStruct('CompanyName', 'The Bald Dude Co.'),
       StringStruct('FileDescription', 'CineForge Desktop Local Wan Video Generator'),
-      StringStruct('FileVersion', '0.3.1'),
+      StringStruct('FileVersion', '0.4.0'),
       StringStruct('InternalName', 'CineForge'),
       StringStruct('LegalCopyright', 'Copyright 2026 The Bald Dude Co.'),
       StringStruct('OriginalFilename', 'CineForge.exe'),
       StringStruct('ProductName', 'CineForge Desktop'),
-      StringStruct('ProductVersion', '0.3.1')
+      StringStruct('ProductVersion', '0.4.0')
     ])]),
     VarFileInfo([VarStruct('Translation', [1033, 1200])])
   ]

@@ -14,8 +14,8 @@
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <PublishReadyToRun>false</PublishReadyToRun>
-    <Version>0.3.1</Version>
-    <FileVersion>0.3.1.0</FileVersion>
+    <Version>0.4.0</Version>
+    <FileVersion>0.4.0.0</FileVersion>
     <Product>CineForge Desktop</Product>
     <Company>The Bald Dude Co.</Company>
     <Copyright>Copyright 2026 The Bald Dude Co.</Copyright>

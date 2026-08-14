@@ -17,7 +17,7 @@ internal static class Program
     internal const string InstallFolderName = "CineForge";
     internal const string Publisher = "The Bald Dude Co.";
     internal static string ProductVersion => Assembly.GetExecutingAssembly()
-        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.3.1";
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.4.0";
     internal static readonly string ProgramsRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs");
     internal static readonly string DefaultInstallRoot = Path.Combine(ProgramsRoot, InstallFolderName);
     internal static readonly string DefaultDataRoot = DefaultLibraryRoot();
@@ -127,7 +127,7 @@ internal sealed class InstallerForm : Form
         libraryPath = PathBox(280, Program.DefaultDataRoot);
         var libraryBrowse = BrowseButton(280, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
         var libraryNote = new Label {
-            Text = "Creates the separate CineForge Library for inputs, outputs, projects, models, cache, logs, and temp.\nCineForge Desktop automatically downloads and verifies approximately 35.6 GB of required Wan models.",
+            Text = "Creates the separate CineForge Library for inputs, outputs, projects, models, cache, logs, and temp.\nSetup downloads a ~2.0 GB native runtime, then approximately 35.6 GB of required Wan models.",
             AutoSize = true, ForeColor = Color.FromArgb(125, 123, 117), Font = new Font("Segoe UI", 9), Location = new Point(55, 320)
         };
 
@@ -214,16 +214,29 @@ internal sealed record ModelFile(string Name, long Bytes, string Sha256);
 
 internal static class InstallerEngine
 {
+    private const string RuntimeFileName = "CineForge-Desktop-Runtime-0.4.0-win-x64.zip";
+    private const string RuntimeUrl = "https://github.com/thebalddudeco/CineForge/releases/download/v0.4.0/CineForge-Desktop-Runtime-0.4.0-win-x64.zip";
+    private const long RuntimeBytes = 2017201506;
+    private const string RuntimeSha256 = "4ab5dbfbe10c576aea97276f3e8a554d57fe544d0cf11437cb656cec4794d346";
     private const string ModelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models";
-    private const string ModelRevision = "3abefe070febb87cf51e038edda29934743639fb";
+    private const string ModelRevision = "493b7c8ff0a451b6b4c049afb3e6396dbfa1c688";
     private const string PackFolder = "CineForge-Wan-2.2-I2V-A14B-FP8";
     private const long SafetyMargin = 5L * 1024 * 1024 * 1024;
     private static readonly HttpClient Http = new(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All }) { Timeout = Timeout.InfiniteTimeSpan };
     private static readonly ModelFile[] ModelFiles = [
-        new("wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors", 14294742832, "6122e79d55e0f235698d11d657f3b196c5273c830da00b2b013c5a048d5e6a42"),
-        new("wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors", 14294742832, "5471a457b6ac404202a5fbe6c11595a3d5641fc766b00f38763f72303fffc21e"),
-        new("umt5_xxl_fp8_e4m3fn_scaled.safetensors", 6735906897, "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68"),
-        new("wan_2.1_vae.safetensors", 253815318, "2fc39d31359a4b0a64f55876d8ff7fa8d780956ae2cb13463b0223e15148976b")
+        new("components/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors", 14294742832, "6122e79d55e0f235698d11d657f3b196c5273c830da00b2b013c5a048d5e6a42"),
+        new("components/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors", 14294742832, "5471a457b6ac404202a5fbe6c11595a3d5641fc766b00f38763f72303fffc21e"),
+        new("components/umt5_xxl_fp8_e4m3fn_scaled.safetensors", 6735906897, "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68"),
+        new("components/wan_2.1_vae.safetensors", 253815318, "2fc39d31359a4b0a64f55876d8ff7fa8d780956ae2cb13463b0223e15148976b"),
+        new("support/scheduler/scheduler_config.json", 820, "40624e058848feddf4bc2da5e8a232668b9a6f4a4939365810bebd9ce0166578"),
+        new("support/text_encoder/config.json", 855, "a2bcb24699f6c009a2427432bdd483ef8b2b42a712abc9503759cdc77d171f07"),
+        new("support/tokenizer/special_tokens_map.json", 7079, "456b58fd240a06c743a7c2cf8008bec501240d68ebd1fc4018ea569505fea270"),
+        new("support/tokenizer/spiece.model", 4548313, "e3909a67b780650b35cf529ac782ad2b6b26e6d1f849d3fbb6a872905f452458"),
+        new("support/tokenizer/tokenizer_config.json", 61758, "1d8d2a216bf8e70ac15b7ddcea566c4dd0433c024b39a58ca5e4c66bd78defbd"),
+        new("support/tokenizer/tokenizer.json", 16837459, "20a46ac256746594ed7e1e3ef733b83fbc5a6f0922aa7480eda961743de080ef"),
+        new("support/transformer/config.json", 495, "6809423c4a92f886feded9f85f55c667d73a2332d5e011fab4172f3448dd5666"),
+        new("support/transformer_2/config.json", 495, "6809423c4a92f886feded9f85f55c667d73a2332d5e011fab4172f3448dd5666"),
+        new("support/vae/config.json", 724, "47e8bcf55e93e9c182e1962a8c7a0650faeb34ea0f66826d6f8aaa9f73e08ec9")
     ];
 
     internal static async Task InstallAsync(string installRoot, string dataRoot, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
@@ -231,15 +244,16 @@ internal static class InstallerEngine
         installRoot = NormalizeInstallTarget(installRoot);
         dataRoot = NormalizeLibraryTarget(dataRoot);
         EnsureSeparateRoots(installRoot, dataRoot);
-        InstallApplication(installRoot, progress);
         CreateLibrary(dataRoot, installRoot);
+        string runtimePayload = await AcquireRuntimePayloadAsync(dataRoot, progress, cancellationToken);
+        InstallApplication(installRoot, runtimePayload, progress);
         await DownloadModelPackAsync(dataRoot, progress, cancellationToken);
         CreateShortcuts(installRoot);
         RegisterUninstaller(installRoot);
         WriteInstallPointer(installRoot, dataRoot);
     }
 
-    private static void InstallApplication(string installRoot, IProgress<InstallProgress>? progress)
+    private static void InstallApplication(string installRoot, string payloadPath, IProgress<InstallProgress>? progress)
     {
         string parent = Path.GetDirectoryName(installRoot)!;
         if (Directory.Exists(installRoot)) RequireInstallMarker(installRoot);
@@ -250,8 +264,7 @@ internal static class InstallerEngine
         {
             progress?.Report(new("Extracting CineForge application files…", 1));
             Directory.CreateDirectory(staging);
-            using Stream payload = Assembly.GetExecutingAssembly().GetManifestResourceStream("CineForge.Payload.zip")
-                ?? throw new InvalidOperationException("The CineForge application payload is missing.");
+            using Stream payload = new FileStream(payloadPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var archive = new ZipArchive(payload, ZipArchiveMode.Read);
             archive.ExtractToDirectory(staging, overwriteFiles: true);
             if (!File.Exists(Path.Combine(staging, "CineForge.exe"))) throw new InvalidDataException("The installed CineForge executable is missing.");
@@ -282,6 +295,62 @@ internal static class InstallerEngine
         }
     }
 
+    private static async Task<string> AcquireRuntimePayloadAsync(string dataRoot, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
+    {
+        string downloads = Path.Combine(dataRoot, "cache", "downloads");
+        Directory.CreateDirectory(downloads);
+        string destination = Path.Combine(downloads, RuntimeFileName);
+        if (File.Exists(destination) && new FileInfo(destination).Length == RuntimeBytes && await HashMatchesAsync(destination, RuntimeSha256, cancellationToken))
+        {
+            progress?.Report(new("CineForge native runtime verified.", 5, RuntimeBytes, RuntimeBytes));
+            return destination;
+        }
+        if (File.Exists(destination)) File.Delete(destination);
+        string partial = destination + ".partial";
+        EnsureDiskSpace(dataRoot, RuntimeBytes - (File.Exists(partial) ? new FileInfo(partial).Length : 0) + SafetyMargin);
+        for (int attempt = 1; attempt <= 3; attempt++)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                long offset = File.Exists(partial) ? new FileInfo(partial).Length : 0;
+                if (offset > RuntimeBytes) { File.Delete(partial); offset = 0; }
+                using var request = new HttpRequestMessage(HttpMethod.Get, RuntimeUrl);
+                if (offset > 0) request.Headers.Range = new RangeHeaderValue(offset, null);
+                using HttpResponseMessage response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                response.EnsureSuccessStatusCode();
+                bool append = offset > 0 && response.StatusCode == HttpStatusCode.PartialContent;
+                if (!append) offset = 0;
+                await using Stream source = await response.Content.ReadAsStreamAsync(cancellationToken);
+                await using var target = new FileStream(partial, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.Read, 1024 * 1024, true);
+                byte[] buffer = new byte[1024 * 1024];
+                long current = offset;
+                int read;
+                while ((read = await source.ReadAsync(buffer, cancellationToken)) > 0)
+                {
+                    await target.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
+                    current += read;
+                    progress?.Report(new($"Downloading CineForge native runtime — {FormatBytes(current)} / {FormatBytes(RuntimeBytes)}", 1 + (int)Math.Min(3, current * 4 / RuntimeBytes), current, RuntimeBytes));
+                }
+                await target.FlushAsync(cancellationToken);
+                if (new FileInfo(partial).Length != RuntimeBytes) throw new InvalidDataException("The CineForge runtime downloaded with an unexpected size.");
+                progress?.Report(new("Verifying CineForge native runtime…", 5, RuntimeBytes, RuntimeBytes));
+                if (!await HashMatchesAsync(partial, RuntimeSha256, cancellationToken))
+                {
+                    File.Delete(partial);
+                    throw new InvalidDataException("The CineForge runtime failed SHA-256 verification and will be downloaded again.");
+                }
+                File.Move(partial, destination, true);
+                return destination;
+            }
+            catch when (attempt < 3 && !cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(attempt * 2), cancellationToken);
+            }
+        }
+        throw new IOException("CineForge could not finish downloading its native runtime. Run setup again to resume.");
+    }
+
     private static void CreateLibrary(string dataRoot, string installRoot)
     {
         foreach (string folder in new[] { "inputs", "outputs", "projects", "models", "cache", "logs", "temp" })
@@ -304,14 +373,13 @@ internal static class InstallerEngine
     private static async Task DownloadModelPackAsync(string dataRoot, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
     {
         string packRoot = Path.Combine(dataRoot, "models", PackFolder);
-        string components = Path.Combine(packRoot, "components");
-        Directory.CreateDirectory(components);
+        Directory.CreateDirectory(packRoot);
         long total = ModelFiles.Sum(file => file.Bytes);
         long verified = 0;
         long missing = 0;
         foreach (ModelFile file in ModelFiles)
         {
-            string destination = Path.Combine(components, file.Name);
+            string destination = Path.Combine(packRoot, file.Name.Replace('/', Path.DirectorySeparatorChar));
             if (File.Exists(destination) && new FileInfo(destination).Length == file.Bytes && await HashMatchesAsync(destination, file.Sha256, cancellationToken))
                 verified += file.Bytes;
             else
@@ -320,7 +388,7 @@ internal static class InstallerEngine
         EnsureDiskSpace(dataRoot, missing + SafetyMargin);
         foreach (ModelFile file in ModelFiles)
         {
-            string destination = Path.Combine(components, file.Name);
+            string destination = Path.Combine(packRoot, file.Name.Replace('/', Path.DirectorySeparatorChar));
             if (File.Exists(destination) && new FileInfo(destination).Length == file.Bytes && await HashMatchesAsync(destination, file.Sha256, cancellationToken))
             {
                 progress?.Report(new($"Verified {file.Name}", 5 + (int)(verified * 90 / total), verified, total));
@@ -338,6 +406,7 @@ internal static class InstallerEngine
 
     private static async Task DownloadFileAsync(ModelFile file, string destination, long completedBefore, long total, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
     {
+        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
         string partial = destination + ".partial";
         for (int attempt = 1; attempt <= 3; attempt++)
         {
@@ -346,7 +415,8 @@ internal static class InstallerEngine
             {
                 long offset = File.Exists(partial) ? new FileInfo(partial).Length : 0;
                 if (offset > file.Bytes) { File.Delete(partial); offset = 0; }
-                string url = $"{ModelRepository}/resolve/{ModelRevision}/components/{Uri.EscapeDataString(file.Name)}?download=true";
+                string remotePath = string.Join('/', file.Name.Split('/').Select(Uri.EscapeDataString));
+                string url = $"{ModelRepository}/resolve/{ModelRevision}/{remotePath}?download=true";
                 using var request = new HttpRequestMessage(HttpMethod.Get, url);
                 if (offset > 0) request.Headers.Range = new RangeHeaderValue(offset, null);
                 using HttpResponseMessage response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);

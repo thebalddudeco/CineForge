@@ -9,11 +9,11 @@ The current repository and installer work are focused on CineForge Desktop.
 
 ## Project status
 
-**Pre-alpha / native Wan integration in progress.**
+**CineForge Desktop 0.4.0 release candidate.**
 
-The native application shell, local GPU runtime, job telemetry, project workflow, Windows packaging, and installer have been exercised independently of ComfyUI. The production Wan FP8 loader is the current engineering milestone. The previously built 0.2.0 installer is an engineering preview and is not the first supported public release.
+The application now loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-FP8 UMT5 encoder, and Wan VAE directly through the CineForge Engine without ComfyUI. A real two-expert generation completed on an RTX 4070 with finite latents, finite non-black frames, live progress telemetry, and MP4 export. The remaining public-release gate is a clean-machine installer/download/generation/uninstall pass.
 
-Do not interpret the presence of raw Wan files as proof that a standalone pack is runnable. A model pack becomes supported only after it passes the validation gates documented in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+The installer is pinned to the validated release-candidate pack revision recorded in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md) and [docs/RELEASE_VERIFICATION.md](docs/RELEASE_VERIFICATION.md).
 
 ## Product scope
 

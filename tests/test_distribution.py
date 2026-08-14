@@ -13,8 +13,12 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("HashMatchesAsync", source)
         self.assertIn("CineForge Library", source)
         self.assertIn('ProductName = "CineForge Desktop"', source)
-        self.assertIn("automatically downloads and verifies", source)
-        self.assertIn("3abefe070febb87cf51e038edda29934743639fb", source)
+        self.assertIn("DownloadModelPackAsync", source)
+        self.assertIn("downloaded and SHA-256 verified", source)
+        self.assertIn("493b7c8ff0a451b6b4c049afb3e6396dbfa1c688", source)
+        self.assertIn("support/tokenizer/tokenizer.json", source)
+        self.assertIn("CineForge-Desktop-Runtime-0.4.0-win-x64.zip", source)
+        self.assertIn("RuntimeSha256", source)
         self.assertNotIn('ModelRevision = "main"', source)
 
     def test_runtime_does_not_discover_shadowframe(self):
