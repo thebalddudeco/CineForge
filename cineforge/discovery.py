@@ -145,7 +145,6 @@ def discover_models(settings: Settings) -> dict[str, Any]:
                 "capability": capability, "pipeline": pipeline, "path": str(index_path.parent.resolve()),
                 "available": True, "native_pack": True, "reference": capability == "image",
                 "status": "standalone model pack", "diagnostic": bool(pack_manifest.get("diagnostic")),
-                "disable_safety_checker": bool(pack_manifest.get("disable_safety_checker")),
             })
         for path in root.rglob("*"):
             if not path.is_file() or path.suffix.lower() not in MODEL_EXTENSIONS:

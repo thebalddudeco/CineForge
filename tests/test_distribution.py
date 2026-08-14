@@ -39,9 +39,12 @@ class DistributionTests(unittest.TestCase):
         builder = (ROOT / "packaging" / "Build-Release.ps1").read_text(encoding="utf-8")
         metadata = (ROOT / "packaging" / "version_info.txt").read_text(encoding="utf-8")
         web = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
+        server = (ROOT / "cineforge" / "server.py").read_text(encoding="utf-8")
         self.assertIn("CineForge-Desktop-Setup", builder)
         self.assertIn("CineForge Desktop", metadata)
         self.assertIn("CineForge Desktop", web)
+        self.assertIn('"edition": "desktop"', server)
+        self.assertIn('"content_moderation": False', server)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,11 @@
-# CineForge Desktop
+# CineForge
 
-CineForge Desktop is a Windows application for locally generating cinematic video with Wan. It is being rebuilt as a focused, standalone Wan image-to-video workflow: import a source frame, direct motion and camera behavior, generate locally, monitor real progress, preview, and export.
+CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
+
+- **CineForge Desktop** is the private, local-only Windows edition. It downloads the required Wan models and performs generation on the user's own compatible NVIDIA GPU.
+- **CineForge Web Beta** is the lightweight, responsive browser and mobile edition. It keeps models and inference on hosted GPU workers rather than downloading model weights to the user's device. The beta is planned to be free to access, subject to capacity controls.
+
+The current repository and installer work are focused on CineForge Desktop.
 
 ## Project status
 
@@ -21,6 +26,11 @@ Do not interpret the presence of raw Wan files as proof that a standalone pack i
 - No ComfyUI service dependency
 - No built-in still-image generator
 - No LTX runtime
+- No application-level prompt or output content moderation in CineForge Desktop
+
+The Desktop edition is a local creative tool: prompts, imported media, and generated outputs stay under the user's control. Users remain responsible for complying with applicable law and respecting consent, privacy, likeness, and intellectual-property rights.
+
+See [docs/PRODUCT_EDITIONS.md](docs/PRODUCT_EDITIONS.md) for the shared product contract and edition-specific runtime boundaries.
 
 ## Repository map
 

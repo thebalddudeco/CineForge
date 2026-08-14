@@ -2,7 +2,7 @@ import time
 import unittest
 
 from cineforge.config import Settings
-from cineforge.engine import NativeEngine
+from cineforge.engine import NativeEngine, NativePipelineAdapter
 
 
 class FakeAdapter:
@@ -13,6 +13,14 @@ class FakeAdapter:
 
 
 class NativeEngineTests(unittest.TestCase):
+    def test_desktop_pipeline_disables_optional_content_checker(self):
+        class Pipeline:
+            safety_checker = object()
+
+        pipeline = Pipeline()
+        NativePipelineAdapter._configure_desktop_pipeline(pipeline)
+        self.assertIsNone(pipeline.safety_checker)
+
     def test_native_job_reports_real_progress_without_comfy(self):
         engine = NativeEngine(Settings(), adapter=FakeAdapter())
         queued = engine.queue_still(

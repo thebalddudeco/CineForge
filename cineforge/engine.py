@@ -73,6 +73,12 @@ class NativePipelineAdapter:
             "Install or convert a Diffusers-format pack first."
         )
 
+    @staticmethod
+    def _configure_desktop_pipeline(pipeline: Any) -> None:
+        """Keep local Desktop inference free of application-level content filtering."""
+        if hasattr(pipeline, "safety_checker"):
+            pipeline.safety_checker = None
+
     def _load(self, pack: dict[str, Any], progress: Progress) -> Any:
         with self._lock:
             if self._pipeline_id == pack["id"] and self._pipeline is not None:
@@ -104,8 +110,7 @@ class NativePipelineAdapter:
                 pack["path"], local_files_only=True, torch_dtype=torch.float16,
             )
             progress(3, 5, "CONFIGURING PIPELINE")
-            if pack.get("diagnostic") and pack.get("disable_safety_checker") and hasattr(pipeline, "safety_checker"):
-                pipeline.safety_checker = None
+            self._configure_desktop_pipeline(pipeline)
             pipeline.set_progress_bar_config(disable=True)
             if torch.cuda.is_available():
                 progress(4, 5, "MOVING MODEL TO GPU")

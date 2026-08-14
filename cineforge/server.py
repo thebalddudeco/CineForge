@@ -72,7 +72,18 @@ class CineForgeHandler(BaseHTTPRequestHandler):
         try:
             if parsed.path == "/api/health":
                 status = self.server.engine.runtime()
-                self._json({"app": "CineForge Desktop", "version": "0.3.1", "runtime": status})
+                self._json({
+                    "app": "CineForge Desktop",
+                    "edition": "desktop",
+                    "version": "0.3.1",
+                    "capabilities": {
+                        "local_inference": True,
+                        "model_installation": True,
+                        "hosted_accounts": False,
+                        "content_moderation": False,
+                    },
+                    "runtime": status,
+                })
                 return
             if parsed.path == "/api/models":
                 self._json(self.server.engine.models())
