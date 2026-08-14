@@ -5,6 +5,6 @@
 | Unreleased | Wan 2.2 I2V A14B scaled-FP8 | Experimental | RTX 4070 12 GB discovery only | Native standalone loading and generation are not yet verified. |
 | 0.2.0 | None | Engineering preview | RTX 4070 12 GB diagnostic inference | The native engine was verified with a small diagnostic image pipeline, not Wan. |
 
-The unreleased installer can create an isolated CineForge Library and automatically download the four core components from `TheBaldDudeCo/CineForge-Wan-Models`. The download path is not a compatibility claim; the pack remains experimental until native generation passes every validation gate.
+The CineForge Desktop installer creates an isolated CineForge Library and automatically downloads the four core components from `TheBaldDudeCo/CineForge-Wan-Models`. The download path is not a compatibility claim; the pack remains experimental until native generation passes every validation gate.
 
 Compatibility is earned through real generation, not inferred from filenames or successful discovery.

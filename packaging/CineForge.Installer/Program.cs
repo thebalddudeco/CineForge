@@ -13,16 +13,17 @@ namespace CineForge.Installer;
 
 internal static class Program
 {
-    internal const string ProductName = "CineForge";
+    internal const string ProductName = "CineForge Desktop";
+    internal const string InstallFolderName = "CineForge";
     internal const string Publisher = "The Bald Dude Co.";
     internal static string ProductVersion => Assembly.GetExecutingAssembly()
-        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.3.0";
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.3.1";
     internal static readonly string ProgramsRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs");
-    internal static readonly string DefaultInstallRoot = Path.Combine(ProgramsRoot, ProductName);
+    internal static readonly string DefaultInstallRoot = Path.Combine(ProgramsRoot, InstallFolderName);
     internal static readonly string DefaultDataRoot = DefaultLibraryRoot();
     internal static readonly string PointerRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CineForge");
     internal static readonly string PointerPath = Path.Combine(PointerRoot, "install.json");
-    internal const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\CineForge";
+    internal const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\CineForgeDesktop";
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern bool MoveFileEx(string existingFileName, string? newFileName, int flags);
@@ -72,14 +73,14 @@ internal static class Program
         if (!silent)
         {
             var answer = MessageBox.Show(
-                "Remove CineForge from this PC?\n\nYour CineForge Library, models, inputs, outputs, and projects will be preserved.",
-                "Uninstall CineForge", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                "Remove CineForge Desktop from this PC?\n\nYour CineForge Library, models, inputs, outputs, and projects will be preserved.",
+                "Uninstall CineForge Desktop", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (answer != DialogResult.Yes) return;
         }
         try
         {
             InstallerEngine.Uninstall(installRoot);
-            if (!silent) MessageBox.Show("CineForge was removed. Your CineForge Library was preserved.", "Uninstall complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!silent) MessageBox.Show("CineForge Desktop was removed. Your CineForge Library was preserved.", "Uninstall complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
@@ -104,7 +105,7 @@ internal sealed class InstallerForm : Form
 
     public InstallerForm()
     {
-        Text = $"CineForge {Program.ProductVersion} Setup";
+        Text = $"CineForge Desktop {Program.ProductVersion} Setup";
         ClientSize = new Size(760, 590);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -114,8 +115,8 @@ internal sealed class InstallerForm : Form
         Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath!);
 
         var accent = new Panel { BackColor = Color.FromArgb(215, 255, 69), Location = new Point(0, 0), Size = new Size(8, 590) };
-        var eyebrow = new Label { Text = "LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = Color.FromArgb(215, 255, 69), Font = new Font("Segoe UI Semibold", 9), Location = new Point(54, 35) };
-        var title = new Label { Text = "Install CineForge", AutoSize = true, Font = new Font("Segoe UI", 28, FontStyle.Bold), Location = new Point(49, 63) };
+        var eyebrow = new Label { Text = "CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = Color.FromArgb(215, 255, 69), Font = new Font("Segoe UI Semibold", 9), Location = new Point(54, 35) };
+        var title = new Label { Text = "Install CineForge Desktop", AutoSize = true, Font = new Font("Segoe UI", 28, FontStyle.Bold), Location = new Point(49, 63) };
         var subtitle = new Label { Text = "Application and library locations stay completely separate from Shadowframe.", AutoSize = true, ForeColor = Color.FromArgb(182, 176, 162), Font = new Font("Segoe UI", 10), Location = new Point(54, 118) };
 
         var appLabel = FieldLabel("APPLICATION FOLDER", 165);
@@ -126,7 +127,7 @@ internal sealed class InstallerForm : Form
         libraryPath = PathBox(280, Program.DefaultDataRoot);
         var libraryBrowse = BrowseButton(280, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
         var libraryNote = new Label {
-            Text = "Creates isolated inputs, outputs, projects, models, cache, logs, and temp folders.\nDownloads and verifies approximately 35.6 GB of Wan model files.",
+            Text = "Creates the separate CineForge Library for inputs, outputs, projects, models, cache, logs, and temp.\nCineForge Desktop automatically downloads and verifies approximately 35.6 GB of required Wan models.",
             AutoSize = true, ForeColor = Color.FromArgb(125, 123, 117), Font = new Font("Segoe UI", 9), Location = new Point(55, 320)
         };
 
@@ -178,9 +179,9 @@ internal sealed class InstallerForm : Form
             });
             await InstallerEngine.InstallAsync(installPath.Text.Trim(), libraryPath.Text.Trim(), report, cancellation.Token);
             progressBar.Value = 100;
-            statusLabel.Text = "CineForge and the Wan model pack are installed and verified.";
+            statusLabel.Text = "CineForge Desktop and the required Wan model pack are installed and verified.";
             cancelButton.Visible = false;
-            installButton.Text = "Launch CineForge";
+            installButton.Text = "Launch CineForge Desktop";
             installButton.Enabled = true;
             installButton.Click -= InstallClicked;
             installButton.Click += (_, _) => { InstallerEngine.Launch(installPath.Text.Trim(), libraryPath.Text.Trim()); Close(); };
@@ -194,7 +195,7 @@ internal sealed class InstallerForm : Form
         {
             statusLabel.Text = "Setup needs attention. Existing partial model downloads were preserved.";
             ResetForRetry();
-            MessageBox.Show(ex.Message, "CineForge setup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.Message, "CineForge Desktop setup", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -266,7 +267,7 @@ internal static class InstallerEngine
                 Directory.Move(installRoot, backup);
             }
             Directory.Move(staging, installRoot);
-            File.Copy(Environment.ProcessPath!, Path.Combine(installRoot, "CineForge Setup.exe"), true);
+            File.Copy(Environment.ProcessPath!, Path.Combine(installRoot, "CineForge Desktop Setup.exe"), true);
             if (Directory.Exists(backup))
             {
                 RequireInstallMarker(backup);
@@ -413,8 +414,8 @@ internal static class InstallerEngine
         installRoot = NormalizeInstallTarget(installRoot);
         RequireInstallMarker(installRoot);
         StopInstalledApp(installRoot);
-        DeleteShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "CineForge.lnk"));
-        DeleteShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs", "CineForge.lnk"));
+        DeleteShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "CineForge Desktop.lnk"));
+        DeleteShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs", "CineForge Desktop.lnk"));
         Registry.CurrentUser.DeleteSubKeyTree(Program.UninstallKey, throwOnMissingSubKey: false);
         if (Directory.Exists(installRoot)) Directory.Delete(installRoot, true);
     }
@@ -447,7 +448,7 @@ internal static class InstallerEngine
     private static void RegisterUninstaller(string installRoot)
     {
         using RegistryKey key = Registry.CurrentUser.CreateSubKey(Program.UninstallKey, true);
-        string setup = Path.Combine(installRoot, "CineForge Setup.exe");
+        string setup = Path.Combine(installRoot, "CineForge Desktop Setup.exe");
         key.SetValue("DisplayName", Program.ProductName);
         key.SetValue("DisplayVersion", Program.ProductVersion);
         key.SetValue("Publisher", Program.Publisher);
@@ -464,8 +465,8 @@ internal static class InstallerEngine
     private static void CreateShortcuts(string installRoot)
     {
         string target = Path.Combine(installRoot, "CineForge.exe");
-        CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "CineForge.lnk"), target, installRoot);
-        CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs", "CineForge.lnk"), target, installRoot);
+        CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "CineForge Desktop.lnk"), target, installRoot);
+        CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs", "CineForge Desktop.lnk"), target, installRoot);
     }
 
     private static void CreateShortcut(string path, string target, string installRoot)
@@ -477,7 +478,7 @@ internal static class InstallerEngine
         shortcut.TargetPath = target;
         shortcut.WorkingDirectory = installRoot;
         shortcut.IconLocation = target;
-        shortcut.Description = "CineForge local Wan video generator";
+        shortcut.Description = "CineForge Desktop local Wan video generator";
         shortcut.Save();
         Marshal.FinalReleaseComObject(shortcut);
         Marshal.FinalReleaseComObject(shell);

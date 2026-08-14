@@ -12,6 +12,8 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("RangeHeaderValue", source)
         self.assertIn("HashMatchesAsync", source)
         self.assertIn("CineForge Library", source)
+        self.assertIn('ProductName = "CineForge Desktop"', source)
+        self.assertIn("automatically downloads and verifies", source)
         self.assertIn("3abefe070febb87cf51e038edda29934743639fb", source)
         self.assertNotIn('ModelRevision = "main"', source)
 
@@ -32,6 +34,14 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("download.pytorch.org/whl/cu130", source)
         self.assertIn("diffusers==0.39.0", requirements)
         self.assertIn("transformers==5.0.0", requirements)
+
+    def test_desktop_release_identity(self):
+        builder = (ROOT / "packaging" / "Build-Release.ps1").read_text(encoding="utf-8")
+        metadata = (ROOT / "packaging" / "version_info.txt").read_text(encoding="utf-8")
+        web = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("CineForge-Desktop-Setup", builder)
+        self.assertIn("CineForge Desktop", metadata)
+        self.assertIn("CineForge Desktop", web)
 
 
 if __name__ == "__main__":

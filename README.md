@@ -1,6 +1,6 @@
-# CineForge
+# CineForge Desktop
 
-CineForge is a Windows desktop application for locally generating cinematic video with Wan. It is being rebuilt as a focused, standalone Wan image-to-video workflow: import a source frame, direct motion and camera behavior, generate locally, monitor real progress, preview, and export.
+CineForge Desktop is a Windows application for locally generating cinematic video with Wan. It is being rebuilt as a focused, standalone Wan image-to-video workflow: import a source frame, direct motion and camera behavior, generate locally, monitor real progress, preview, and export.
 
 ## Project status
 
@@ -63,7 +63,7 @@ The required process is documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PRO
 
 ## Models
 
-Model weights are distributed separately through [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models). The application repository never stores model weights. The Windows installer asks for separate application and CineForge Library locations, then downloads the required Wan components into the selected library with resumable transfers and SHA-256 verification. See [docs/MODEL_PROVENANCE.md](docs/MODEL_PROVENANCE.md) and [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+Model weights are distributed separately through [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models). The application repository never stores model weights. The CineForge Desktop installer asks for separate application and CineForge Library locations, then automatically downloads every required Wan component into the selected library with resumable transfers and SHA-256 verification. Users do not need to find or place model files manually. See [docs/MODEL_PROVENANCE.md](docs/MODEL_PROVENANCE.md) and [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
 
 The CineForge Library is isolated from every other application and contains `inputs`, `outputs`, `projects`, `models`, `cache`, `logs`, and `temp`. CineForge does not scan or write to Shadowframe directories.
 

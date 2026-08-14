@@ -1,4 +1,4 @@
-# CineForge v0.3.0 — Isolated Wan Installer Preview
+# CineForge Desktop v0.3.1 — Isolated Wan Installer Preview
 
 CineForge runs through its own PyTorch/Diffusers inference engine. ComfyUI is not launched, contacted, or required by the application.
 
@@ -17,11 +17,11 @@ CineForge runs through its own PyTorch/Diffusers inference engine. ComfyUI is no
 
 ## Download
 
-Download `CineForge-Setup-0.3.0-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
+Download `CineForge-Desktop-Setup-0.3.1-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
 
 ## Model note
 
-The installer contains the CineForge Engine but not the large model weights. During setup it downloads the four required Wan components from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. Version 0.3.0 pins immutable model revision `3abefe070febb87cf51e038edda29934743639fb`.
+The CineForge Desktop installer contains the CineForge Engine but not the large model weights. During setup it automatically downloads the four required Wan components from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. Users do not manually locate or install model files. Version 0.3.1 pins immutable model revision `3abefe070febb87cf51e038edda29934743639fb`.
 
 ## Security and signing
 

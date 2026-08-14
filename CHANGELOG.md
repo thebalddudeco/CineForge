@@ -6,6 +6,8 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ### Changed
 
+- Identified the installable Windows product as **CineForge Desktop** across setup, Installed Apps, shortcuts, application metadata, release filenames, and documentation.
+- Made the automatic four-component Wan download explicit in the desktop installer and public installation instructions.
 - Narrowed CineForge to a dedicated Wan video-generation application.
 - Removed LTX and built-in still-image generation from the supported product scope.
 - Defined source-image/keyframe import as the entry point for every generation.

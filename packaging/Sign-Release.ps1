@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 $appRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $releaseRoot = Join-Path $appRoot "release\CineForge-$Version-win-x64"
-$installer = Join-Path $releaseRoot "CineForge-Setup-$Version-win-x64.exe"
+$installer = Join-Path $releaseRoot "CineForge-Desktop-Setup-$Version-win-x64.exe"
 if (!(Test-Path -LiteralPath $installer)) { throw "Release installer not found: $installer" }
 
 $normalizedThumbprint = ($CertificateThumbprint -replace '\s', '').ToUpperInvariant()

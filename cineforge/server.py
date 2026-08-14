@@ -72,7 +72,7 @@ class CineForgeHandler(BaseHTTPRequestHandler):
         try:
             if parsed.path == "/api/health":
                 status = self.server.engine.runtime()
-                self._json({"app": "CineForge Local", "version": "0.2.0", "runtime": status})
+                self._json({"app": "CineForge Desktop", "version": "0.3.1", "runtime": status})
                 return
             if parsed.path == "/api/models":
                 self._json(self.server.engine.models())
@@ -185,7 +185,7 @@ class CineForgeHandler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run CineForge Local")
+    parser = argparse.ArgumentParser(description="Run CineForge Desktop")
     parser.add_argument("--host")
     parser.add_argument("--port", type=int)
     parser.add_argument("--no-browser", action="store_true")
@@ -199,7 +199,7 @@ def main() -> None:
     try:
         with urllib.request.urlopen(f"{url}/api/health", timeout=1) as response:
             existing = json.loads(response.read().decode("utf-8"))
-        if existing.get("app") == "CineForge Local":
+        if existing.get("app") == "CineForge Desktop":
             webbrowser.open(url)
             return
     except Exception:
@@ -215,9 +215,9 @@ def main() -> None:
         message = f"CineForge could not start on {settings.host}:{settings.port}.\n\n{exc}"
         if os.name == "nt":
             import ctypes
-            ctypes.windll.user32.MessageBoxW(0, message, "CineForge Local", 0x10)
+            ctypes.windll.user32.MessageBoxW(0, message, "CineForge Desktop", 0x10)
         raise
-    logging.info("CineForge Local started at %s with the native CineForge Engine", url)
+    logging.info("CineForge Desktop started at %s with the native CineForge Engine", url)
     if not args.no_browser:
         webbrowser.open(url)
     try:
@@ -226,7 +226,7 @@ def main() -> None:
         pass
     finally:
         server.server_close()
-        logging.info("CineForge Local stopped")
+        logging.info("CineForge Desktop stopped")
 
 
 if __name__ == "__main__":

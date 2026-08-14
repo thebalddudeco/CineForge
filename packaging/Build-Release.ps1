@@ -1,5 +1,5 @@
 param(
-  [string]$Version = "0.3.0",
+  [string]$Version = "0.3.1",
   [switch]$SkipToolBootstrap
 )
 
@@ -8,7 +8,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $appRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $workBase = if ($env:CINEFORGE_BUILD_WORK_ROOT) { [IO.Path]::GetFullPath($env:CINEFORGE_BUILD_WORK_ROOT) } else { Join-Path $appRoot "work" }
 $workRoot = Join-Path $workBase "release-build"
-$venvRoot = Join-Path $workBase "native-packaging-venv"
+$venvRoot = if ($env:CINEFORGE_PACKAGING_VENV_ROOT) { [IO.Path]::GetFullPath($env:CINEFORGE_PACKAGING_VENV_ROOT) } else { Join-Path $workBase "native-packaging-venv" }
 $distRoot = Join-Path $workRoot "dist"
 $buildRoot = Join-Path $workRoot "build"
 $payloadRoot = Join-Path $PSScriptRoot "payload"
@@ -103,8 +103,8 @@ dotnet publish $installerProject -c Release -r win-x64 --self-contained true -o 
   /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version
 if ($LASTEXITCODE -ne 0) { throw "The installer build failed with exit code $LASTEXITCODE." }
 
-$publishedInstaller = Join-Path $installerPublish "CineForge Setup.exe"
-$releaseInstaller = Join-Path $releaseRoot "CineForge-Setup-$Version-win-x64.exe"
+$publishedInstaller = Join-Path $installerPublish "CineForge Desktop Setup.exe"
+$releaseInstaller = Join-Path $releaseRoot "CineForge-Desktop-Setup-$Version-win-x64.exe"
 if (!(Test-Path -LiteralPath $publishedInstaller)) { throw "The installer executable was not created." }
 Copy-Item -LiteralPath $publishedInstaller -Destination $releaseInstaller
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\GITHUB_RELEASE.md") -Destination (Join-Path $releaseRoot "RELEASE_NOTES.md")
@@ -115,7 +115,8 @@ $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $releaseInstaller).Hash
 "$hash  $(Split-Path -Leaf $releaseInstaller)" | Set-Content -LiteralPath (Join-Path $releaseRoot "SHA256SUMS.txt") -Encoding ASCII
 $manifest = [ordered]@{
   schemaVersion = 1
-  product = "CineForge"
+  product = "CineForge Desktop"
+  edition = "desktop"
   version = $Version
   architecture = "win-x64"
   installer = Split-Path -Leaf $releaseInstaller

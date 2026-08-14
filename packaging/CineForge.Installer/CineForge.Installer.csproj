@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>CineForge Setup</AssemblyName>
+    <AssemblyName>CineForge Desktop Setup</AssemblyName>
     <RootNamespace>CineForge.Installer</RootNamespace>
     <ApplicationIcon>..\assets\CineForge.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -14,9 +14,9 @@
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <PublishReadyToRun>false</PublishReadyToRun>
-    <Version>0.3.0</Version>
-    <FileVersion>0.3.0.0</FileVersion>
-    <Product>CineForge Local</Product>
+    <Version>0.3.1</Version>
+    <FileVersion>0.3.1.0</FileVersion>
+    <Product>CineForge Desktop</Product>
     <Company>The Bald Dude Co.</Company>
     <Copyright>Copyright 2026 The Bald Dude Co.</Copyright>
   </PropertyGroup>
