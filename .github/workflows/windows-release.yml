@@ -60,5 +60,6 @@ jobs:
         run: |
           gh release create "$env:GITHUB_REF_NAME" `
             --title "CineForge Desktop $env:GITHUB_REF_NAME" `
+            --prerelease `
             --notes-file "release/CineForge-$env:CINEFORGE_RELEASE_VERSION-win-x64/RELEASE_NOTES.md" `
             "release/CineForge-$env:CINEFORGE_RELEASE_VERSION-win-x64/*"
