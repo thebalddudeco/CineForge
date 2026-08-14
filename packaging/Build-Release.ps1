@@ -120,7 +120,11 @@ Copy-Item -LiteralPath (Join-Path $appRoot "docs\INSTALLATION.md") -Destination 
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\RELEASE_VERIFICATION.md") -Destination (Join-Path $releaseRoot "VERIFICATION.md")
 
 $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $releaseInstaller).Hash
-"$hash  $(Split-Path -Leaf $releaseInstaller)" | Set-Content -LiteralPath (Join-Path $releaseRoot "SHA256SUMS.txt") -Encoding ASCII
+$runtimeHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeAsset).Hash
+@(
+  "$hash  $(Split-Path -Leaf $releaseInstaller)"
+  "$runtimeHash  $(Split-Path -Leaf $runtimeAsset)"
+) | Set-Content -LiteralPath (Join-Path $releaseRoot "SHA256SUMS.txt") -Encoding ASCII
 $manifest = [ordered]@{
   schemaVersion = 1
   product = "CineForge Desktop"
@@ -131,7 +135,7 @@ $manifest = [ordered]@{
   sha256 = $hash
   sizeBytes = (Get-Item -LiteralPath $releaseInstaller).Length
   runtimeAsset = Split-Path -Leaf $runtimeAsset
-  runtimeSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeAsset).Hash
+  runtimeSha256 = $runtimeHash
   runtimeSizeBytes = (Get-Item -LiteralPath $runtimeAsset).Length
   builtAt = (Get-Date).ToUniversalTime().ToString("o")
   installScope = "CurrentUser"

@@ -27,10 +27,7 @@ The setup EXE is intentionally small. During installation it downloads the match
 - Edition: `desktop`
 - Version: `0.4.0`
 - Architecture: Windows x64
-- Bootstrap installer size: 50,388,418 bytes
-- Bootstrap installer SHA-256: `4d9a60caa8651c4c0dd18d95c7ea05beededd7d0744d83509892aa4a7d892d60`
-- Runtime archive size: 2,017,201,506 bytes
-- Runtime archive SHA-256: `4ab5dbfbe10c576aea97276f3e8a554d57fe544d0cf11437cb656cec4794d346`
+- Exact installer and runtime sizes and SHA-256 values: included with each build in `CineForge-Release.json` and `SHA256SUMS.txt`
 - Model payload: four Wan components totaling 35,579,207,879 bytes
 - Model revision: `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`
 
