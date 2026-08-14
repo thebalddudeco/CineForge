@@ -11,6 +11,7 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 - Defined source-image/keyframe import as the entry point for every generation.
 - Established separate GitHub application and Hugging Face model distribution tracks.
 - Added mandatory release, provenance, compatibility, verification, and decision records.
+- Matched the local Wan 2.2 FP8 experts, UMT5 encoder, VAE, and optional acceleration LoRAs byte-for-byte to immutable upstream Hugging Face artifacts.
 
 ### In progress
 
