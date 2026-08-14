@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>CineForge Setup</AssemblyName>
+    <RootNamespace>CineForge.Installer</RootNamespace>
+    <ApplicationIcon>..\assets\CineForge.ico</ApplicationIcon>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <Version>0.2.0</Version>
+    <FileVersion>0.2.0.0</FileVersion>
+    <Product>CineForge Local</Product>
+    <Company>The Bald Dude Co.</Company>
+    <Copyright>Copyright 2026 The Bald Dude Co.</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\payload\CineForge-Payload.zip" LogicalName="CineForge.Payload.zip" />
+  </ItemGroup>
+</Project>

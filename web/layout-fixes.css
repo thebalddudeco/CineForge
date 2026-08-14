@@ -1,0 +1,18 @@
+.workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workspace > .panel {
+  min-width: 0;
+}
+
+@media (min-width: 1101px) and (max-width: 1320px) {
+  .hero {
+    gap: 34px;
+  }
+
+  .pipeline-map {
+    transform: scale(.84);
+    transform-origin: right bottom;
+  }
+}

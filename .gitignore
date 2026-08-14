@@ -1,0 +1,33 @@
+__pycache__/
+*.py[cod]
+data/
+work/
+build/
+dist/
+release/
+packaging/assets/
+packaging/payload/
+packaging/CineForge.Installer/bin/
+packaging/CineForge.Installer/obj/
+config.json
+.env*
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+*.bin
+*.gguf
+*.onnx
+*.mp4
+*.webm
+*.zip
+*.7z
+*.exe
+
+# Local design source/reference material is not redistributed.
+design-references/
+design-previews/
+sample-output/
+
+# Recovered third-party workflow research is retained locally but not published.
+docs/recovered-workflow/

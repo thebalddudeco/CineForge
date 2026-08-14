@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible CineForge problem
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include private images, prompts, tokens, or sensitive filesystem paths.
+  - type: input
+    id: version
+    attributes:
+      label: CineForge version
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Wan pack and revision
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: system
+    attributes:
+      label: System details
+      description: Windows version, GPU, VRAM, driver, and relevant logs.
+    validations:
+      required: true

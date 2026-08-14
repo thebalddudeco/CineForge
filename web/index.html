@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b0a">
+  <title>CineForge Local</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/layout-fixes.css">
+  <link rel="stylesheet" href="/release.css">
+  <link rel="stylesheet" href="/micro-ui.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <header class="topbar">
+    <a class="brand" href="#brief" aria-label="CineForge Local home">
+      <span class="brand-mark"><i></i><i></i><i></i></span>
+      <span><strong>CineForge</strong><small>LOCAL CINEMATIC STUDIO</small></span>
+      <svg class="version-badge" viewBox="0 0 66 59" role="img" aria-label="CineForge version 0.1.0">
+        <polygon points="8,1 58,1 66,14 40,58 27,58 0,14"></polygon>
+        <text x="33" y="24">v0.1.0</text>
+      </svg>
+    </a>
+    <div class="runtime-dock">
+      <button class="runtime-console" id="runtimeConsole" type="button" aria-expanded="false" aria-controls="runtimePopover">
+        <canvas id="runtimeSpark" width="180" height="48" aria-hidden="true"></canvas>
+        <span class="runtime-console-copy">
+          <small><i class="status-dot"></i><span id="runtimeState">CHECKING RUNTIME</span></small>
+          <strong id="runtimeDevice">LOCAL GPU</strong>
+          <em id="runtimeSummary">Awaiting telemetry</em>
+        </span>
+      </button>
+      <section class="runtime-popover hidden" id="runtimePopover" aria-label="Runtime Signal History">
+        <div class="instrument-heading"><span>RUNTIME SIGNAL HISTORY</span><b id="runtimeLinkState">CONNECTING / 01</b></div>
+        <div class="runtime-popover-grid">
+          <canvas id="runtimeHistory" width="430" height="190" aria-label="Live runtime signal history"></canvas>
+          <dl class="runtime-readout">
+            <div><dt>GPU</dt><dd id="runtimeGpu">—</dd></div>
+            <div><dt>VRAM</dt><dd class="accent" id="runtimeVram">—</dd></div>
+            <div><dt>ENGINE</dt><dd id="runtimeEngine">—</dd></div>
+            <div><dt>BUILD</dt><dd id="runtimeBuild">—</dd></div>
+          </dl>
+        </div>
+      </section>
+    </div>
+    <div class="topbar-actions"><button class="ghost-button" id="refreshModels">Refresh models</button><button class="ghost-button exit-button" id="exitApp">Exit</button></div>
+  </header>
+
+  <main>
+    <section class="hero" id="brief">
+      <div class="hero-copy">
+        <p class="eyebrow">REFERENCE → BRANCH → SELECT → MOVE</p>
+        <h1>Build the sequence,<br><em>not just the frame.</em></h1>
+        <p class="lede">Turn any scene into a continuity-aware shot system: five angles, five inserts, five progressing beats, then move the strongest frames with models already on this machine.</p>
+      </div>
+      <div class="pipeline-map" aria-label="Cinematic pipeline">
+        <div class="map-node active"><span>01</span><strong>Canon</strong><small>Story + locks</small></div>
+        <b>→</b>
+        <div class="map-stack">
+          <div class="map-node"><span>A</span><strong>Angles</strong></div>
+          <div class="map-node"><span>B</span><strong>Inserts</strong></div>
+          <div class="map-node"><span>C</span><strong>Progress</strong></div>
+        </div>
+        <b>→</b>
+        <div class="map-node"><span>15</span><strong>Frames</strong><small>Approve</small></div>
+        <b>→</b>
+        <div class="map-node accent"><span>▶</span><strong>Motion</strong><small>2–15 sec</small></div>
+      </div>
+    </section>
+
+    <section class="studio-grid">
+      <aside class="steps-panel">
+        <p class="panel-label">WORKFLOW</p>
+        <nav>
+          <a href="#brief" class="step-link active"><span>01</span><div><strong>Scene brief</strong><small>Define intent</small></div></a>
+          <a href="#references" class="step-link"><span>02</span><div><strong>Reference pack</strong><small>Lock continuity</small></div></a>
+          <a href="#factory" class="step-link"><span>03</span><div><strong>Shot factory</strong><small>Build 15 prompts</small></div></a>
+          <a href="#factory" class="step-link"><span>04</span><div><strong>Continuity select</strong><small>Approve frames</small></div></a>
+          <a href="#motion" class="step-link"><span>05</span><div><strong>Motion director</strong><small>Animate selections</small></div></a>
+        </nav>
+        <div class="local-note"><span>LOCAL-FIRST</span><p>Prompts, references, and outputs stay on this PC. Generation uses the active local ComfyUI runtime.</p></div>
+      </aside>
+
+      <div class="workspace">
+        <section class="panel brief-panel">
+          <div class="panel-heading"><div><p class="eyebrow">01 / SCENE BRIEF</p><h2>Give the sequence a dramatic spine.</h2></div><span class="save-state" id="saveState">Not planned</span></div>
+          <form id="briefForm">
+            <div class="field wide"><label for="title">Project title</label><input id="title" name="title" value="Midnight Exchange" placeholder="Untitled cinematic project"></div>
+            <div class="field wide"><label for="scene">Scene</label><textarea id="scene" name="scene" rows="3" placeholder="Describe the scene in plain language...">A courier crosses a rain-darkened station platform at midnight and realizes the handoff has been compromised.</textarea></div>
+            <div class="field"><label for="subject">Principal subject</label><input id="subject" name="subject" value="a wary courier in a charcoal overcoat" placeholder="Character, product, creature..."></div>
+            <div class="field"><label for="environment">Environment</label><input id="environment" name="environment" value="an aging metropolitan train platform in cold midnight rain" placeholder="Location and conditions"></div>
+            <div class="field"><label for="objective">Immediate objective</label><input id="objective" name="objective" value="reach the last train and complete a covert handoff" placeholder="What must happen?"></div>
+            <div class="field"><label for="obstacle">Pressure / obstacle</label><input id="obstacle" name="obstacle" value="an unseen observer closes in from the opposite platform" placeholder="What opposes it?"></div>
+            <div class="field"><label for="action">Primary action</label><input id="action" name="action" value="moves toward the marked bench, slows, and registers danger" placeholder="One readable action"></div>
+            <div class="field"><label for="duration">Clip length</label><select id="duration" name="duration"><option value="3">3 seconds</option><option value="5" selected>5 seconds</option><option value="10">10 seconds</option><option value="15">15 seconds</option></select></div>
+            <div class="field wide"><label for="look">Visual language</label><input id="look" name="look" value="neo-noir 35mm thriller, practical sodium-vapor light, wet reflections, natural skin, restrained grain and halation" placeholder="Era, medium, light, texture, color"></div>
+            <div class="field wide"><label for="continuity">Continuity locks</label><textarea id="continuity" name="continuity" rows="2">the courier's face, charcoal overcoat, leather document case in left hand, wet hair, platform geography, rain intensity, train direction, and screen direction</textarea></div>
+            <div class="form-actions"><button class="primary-button" type="submit"><span>Build 15-shot factory</span><b>→</b></button><small>Creates 5 angles · 5 inserts · 5 story beats</small></div>
+          </form>
+        </section>
+
+        <section class="panel references-panel" id="references">
+          <div class="panel-heading"><div><p class="eyebrow">02 / REFERENCE PACK</p><h2>Lock what must not drift.</h2></div><span class="count-badge" id="referenceCount">0 / 5</span></div>
+          <div class="reference-grid" id="referenceGrid">
+            <label class="reference-slot"><input type="file" accept="image/*" data-role="identity"><span>+</span><strong>Identity / subject</strong><small>Face, form, silhouette</small></label>
+            <label class="reference-slot"><input type="file" accept="image/*" data-role="wardrobe"><span>+</span><strong>Wardrobe / surface</strong><small>Materials and state</small></label>
+            <label class="reference-slot"><input type="file" accept="image/*" data-role="geography"><span>+</span><strong>Geography</strong><small>Location and orientation</small></label>
+            <label class="reference-slot"><input type="file" accept="image/*" data-role="look"><span>+</span><strong>Film look</strong><small>Color, texture, lighting</small></label>
+            <label class="reference-slot"><input type="file" accept="image/*" data-role="props"><span>+</span><strong>Props / details</strong><small>Hands, objects, condition</small></label>
+          </div>
+        </section>
+
+        <section class="panel models-panel">
+          <div class="panel-heading compact"><div><p class="eyebrow">LOCAL MODEL ROUTER</p><h2>Detected on this machine</h2></div></div>
+          <div class="model-strip" id="modelStrip"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+        </section>
+
+        <section class="panel factory-panel hidden" id="factory">
+          <div class="panel-heading"><div><p class="eyebrow">03–04 / SHOT FACTORY + SELECT</p><h2 id="factoryTitle">Fifteen continuity-aware candidates.</h2></div><div class="selection-count"><strong id="selectedCount">0</strong><span>selected</span></div></div>
+          <div class="branch-tabs" role="tablist">
+            <button class="branch-tab active" data-branch="angles">Five angles</button>
+            <button class="branch-tab" data-branch="inserts">Five inserts</button>
+            <button class="branch-tab" data-branch="progression">Story progression</button>
+          </div>
+          <div class="shot-grid" id="shotGrid"></div>
+        </section>
+
+        <section class="panel motion-panel hidden" id="motion">
+          <div class="panel-heading"><div><p class="eyebrow">05 / MOTION DIRECTOR</p><h2>Move only the approved frames.</h2></div><button class="ghost-button" id="saveProject">Save project</button></div>
+          <div class="motion-list" id="motionList"><div class="empty-motion">Select one or more shots to prepare motion prompts.</div></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <section class="generation-console hidden" id="generationWindow" role="status" aria-live="polite" aria-label="Live generation progress">
+    <div class="generation-frame-inner">
+      <div class="generation-heading">
+        <div><strong id="generationTitle">GENERATING</strong><small id="generationPhase">QUEUEING JOB</small></div>
+        <div class="generation-percent" id="generationPercent">00%</div>
+      </div>
+      <canvas id="generationMatrix" width="532" height="104" aria-hidden="true"></canvas>
+      <div class="generation-progress-row"><span>PROGRESS</span><div class="generation-segments" id="generationSegments"></div></div>
+      <div class="generation-detail-row"><strong id="generationDetail">WAITING FOR LOCAL RUNTIME</strong><span id="generationStep">STEP — / —</span></div>
+      <div class="generation-data-grid">
+        <div><small>LOCAL RUNTIME</small><strong id="generationRuntime">CHECKING</strong></div>
+        <div><small>ELAPSED</small><strong id="generationElapsed">00:00</strong></div>
+        <div><small>ETA</small><strong class="accent" id="generationEta">—</strong></div>
+        <div><small>SIGNAL LOCK</small><span class="signal-bars" id="generationSignal"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

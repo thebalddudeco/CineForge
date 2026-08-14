@@ -1,0 +1,453 @@
+{
+  "97": {
+    "inputs": {
+      "image": "source-image.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "108": {
+    "inputs": {
+      "filename_prefix": "video/Wan2.2_i2v",
+      "format": "mp4",
+      "codec": "h264",
+      "video": [
+        "129:94",
+        0
+      ]
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "129:94": {
+    "inputs": {
+      "fps": 16,
+      "images": [
+        "129:87",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video"
+    }
+  },
+  "129:104": {
+    "inputs": {
+      "shift": 5.000000000000001,
+      "model": [
+        "129:116",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "129:128": {
+    "inputs": {
+      "value": 20
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Steps"
+    }
+  },
+  "129:87": {
+    "inputs": {
+      "samples": [
+        "129:85",
+        0
+      ],
+      "vae": [
+        "129:90",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "129:131": {
+    "inputs": {
+      "value": true
+    },
+    "class_type": "PrimitiveBoolean",
+    "_meta": {
+      "title": "Enable 4steps LoRA?"
+    }
+  },
+  "129:127": {
+    "inputs": {
+      "value": 10
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "split_step"
+    }
+  },
+  "129:126": {
+    "inputs": {
+      "value": 3.5
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "CFG"
+    }
+  },
+  "129:102": {
+    "inputs": {
+      "lora_name": "wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors",
+      "strength_model": 1.0000000000000002,
+      "model": [
+        "129:96",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "129:101": {
+    "inputs": {
+      "lora_name": "wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
+      "strength_model": 1.0000000000000002,
+      "model": [
+        "129:95",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "129:85": {
+    "inputs": {
+      "add_noise": "disable",
+      "noise_seed": 0,
+      "steps": [
+        "129:119",
+        0
+      ],
+      "cfg": [
+        "129:120",
+        0
+      ],
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "start_at_step": [
+        "129:125",
+        0
+      ],
+      "end_at_step": [
+        "129:119",
+        0
+      ],
+      "return_with_leftover_noise": "disable",
+      "model": [
+        "129:103",
+        0
+      ],
+      "positive": [
+        "129:98",
+        0
+      ],
+      "negative": [
+        "129:98",
+        1
+      ],
+      "latent_image": [
+        "129:86",
+        0
+      ]
+    },
+    "class_type": "KSamplerAdvanced",
+    "_meta": {
+      "title": "KSampler (Advanced)"
+    }
+  },
+  "129:122": {
+    "inputs": {
+      "value": 1
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "CFG"
+    }
+  },
+  "129:124": {
+    "inputs": {
+      "value": 2
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "split_step"
+    }
+  },
+  "129:118": {
+    "inputs": {
+      "value": 4
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Steps"
+    }
+  },
+  "129:116": {
+    "inputs": {
+      "switch": [
+        "129:131",
+        0
+      ],
+      "on_false": [
+        "129:95",
+        0
+      ],
+      "on_true": [
+        "129:101",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Switch (Model)"
+    }
+  },
+  "129:119": {
+    "inputs": {
+      "switch": [
+        "129:131",
+        0
+      ],
+      "on_false": [
+        "129:128",
+        0
+      ],
+      "on_true": [
+        "129:118",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Switch (Steps)"
+    }
+  },
+  "129:103": {
+    "inputs": {
+      "shift": 5.000000000000001,
+      "model": [
+        "129:117",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "129:117": {
+    "inputs": {
+      "switch": [
+        "129:131",
+        0
+      ],
+      "on_false": [
+        "129:96",
+        0
+      ],
+      "on_true": [
+        "129:102",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Switch (Model)"
+    }
+  },
+  "129:86": {
+    "inputs": {
+      "add_noise": "enable",
+      "noise_seed": 553538331536037,
+      "steps": [
+        "129:119",
+        0
+      ],
+      "cfg": [
+        "129:120",
+        0
+      ],
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "start_at_step": 0,
+      "end_at_step": [
+        "129:125",
+        0
+      ],
+      "return_with_leftover_noise": "enable",
+      "model": [
+        "129:104",
+        0
+      ],
+      "positive": [
+        "129:98",
+        0
+      ],
+      "negative": [
+        "129:98",
+        1
+      ],
+      "latent_image": [
+        "129:98",
+        2
+      ]
+    },
+    "class_type": "KSamplerAdvanced",
+    "_meta": {
+      "title": "KSampler (Advanced)"
+    }
+  },
+  "129:120": {
+    "inputs": {
+      "switch": [
+        "129:131",
+        0
+      ],
+      "on_false": [
+        "129:126",
+        0
+      ],
+      "on_true": [
+        "129:122",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Switch (CFG)"
+    }
+  },
+  "129:125": {
+    "inputs": {
+      "switch": [
+        "129:131",
+        0
+      ],
+      "on_false": [
+        "129:127",
+        0
+      ],
+      "on_true": [
+        "129:124",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Switch (Split Step)"
+    }
+  },
+  "129:98": {
+    "inputs": {
+      "width": 720,
+      "height": 1280,
+      "length": 93,
+      "batch_size": 1,
+      "positive": [
+        "129:93",
+        0
+      ],
+      "negative": [
+        "129:89",
+        0
+      ],
+      "vae": [
+        "129:90",
+        0
+      ],
+      "start_image": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "WanImageToVideo"
+    }
+  },
+  "129:93": {
+    "inputs": {
+      "text": "Describe the subject, motion, camera movement, lighting, and final look.",
+      "clip": [
+        "129:84",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "129:90": {
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "129:84": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "129:96": {
+    "inputs": {
+      "unet_name": "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "129:95": {
+    "inputs": {
+      "unet_name": "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "129:89": {
+    "inputs": {
+      "text": "watermark, text, subtitles, blur, noise, artifacts, low quality, distorted anatomy, extra limbs, fused fingers, static frame",
+      "clip": [
+        "129:84",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative Prompt)"
+    }
+  }
+}
