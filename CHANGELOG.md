@@ -19,6 +19,7 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 - Published the complete Wan core pack and pinned installer downloads to immutable Hugging Face revision `3abefe070febb87cf51e038edda29934743639fb`.
 - Added an independently reproducible, version-pinned CUDA packaging environment for public Windows builds.
 - Isolated CineForge inputs, outputs, projects, models, cache, logs, and temporary files from Shadowframe and removed Shadowframe model discovery paths.
+- Recorded the verified CineForge Desktop 0.3.1 preview artifact, automatic model-delivery sequence, immutable model revision, checksum, and remaining public-release gates.
 
 ### In progress
 
