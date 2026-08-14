@@ -6,7 +6,8 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ### Changed
 
-- Defined CineForge Desktop and CineForge Web Beta as separate releases sharing one responsive interface and project contract but using different inference and privacy boundaries.
+- Defined CineForge Desktop and CineForge Online as separate releases sharing one responsive interface and project contract but using different inference and privacy boundaries.
+- Established CineForge Online as an SFW-only service with layered moderation for prompts, reference uploads, and generated video before delivery.
 - Removed the remaining optional Diffusers safety-checker hook from Desktop inference so the local edition performs no application-level prompt or output moderation.
 - Identified the installable Windows product as **CineForge Desktop** across setup, Installed Apps, shortcuts, application metadata, release filenames, and documentation.
 - Made the automatic four-component Wan download explicit in the desktop installer and public installation instructions.

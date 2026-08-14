@@ -3,7 +3,7 @@
 CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
 
 - **CineForge Desktop** is the private, local-only Windows edition. It downloads the required Wan models and performs generation on the user's own compatible NVIDIA GPU.
-- **CineForge Web Beta** is the lightweight, responsive browser and mobile edition. It keeps models and inference on hosted GPU workers rather than downloading model weights to the user's device. The beta is planned to be free to access, subject to capacity controls.
+- **CineForge Online** is the lightweight, responsive browser and mobile edition. It keeps models and inference on hosted GPU workers rather than downloading model weights to the user's device. It is planned to launch as a free-to-access beta, subject to capacity controls and SFW-only moderation.
 
 The current repository and installer work are focused on CineForge Desktop.
 
@@ -31,6 +31,8 @@ Do not interpret the presence of raw Wan files as proof that a standalone pack i
 The Desktop edition is a local creative tool: prompts, imported media, and generated outputs stay under the user's control. Users remain responsible for complying with applicable law and respecting consent, privacy, likeness, and intellectual-property rights.
 
 See [docs/PRODUCT_EDITIONS.md](docs/PRODUCT_EDITIONS.md) for the shared product contract and edition-specific runtime boundaries.
+
+CineForge Online is an SFW-only hosted service. Prompts, uploaded reference media, and generated outputs must pass the layered moderation contract in [docs/ONLINE_MODERATION.md](docs/ONLINE_MODERATION.md).
 
 ## Repository map
 
