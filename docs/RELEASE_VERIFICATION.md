@@ -55,4 +55,3 @@ Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 - Authenticode production signing
 
 This artifact is a technical preview and must not be represented as a stable public release until the remaining gates pass.
-
