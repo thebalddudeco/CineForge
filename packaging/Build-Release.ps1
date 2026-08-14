@@ -1,5 +1,5 @@
 param(
-  [string]$Version = "0.2.0",
+  [string]$Version = "0.3.0",
   [switch]$SkipToolBootstrap
 )
 
@@ -40,8 +40,8 @@ New-Item -ItemType Directory -Force -Path $workRoot,$distRoot,$buildRoot,$payloa
 $venvPython = Join-Path $venvRoot "Scripts\python.exe"
 if (!(Test-Path -LiteralPath $venvPython)) {
   if ($SkipToolBootstrap) { throw "The packaging environment is missing and -SkipToolBootstrap was supplied." }
-  $nativeBase = if ($env:CINEFORGE_NATIVE_PYTHON) { $env:CINEFORGE_NATIVE_PYTHON } else { "A:\Shadowframe AI Local Distro\release\Shadowframe-Core\Runtime\PythonBase\python.exe" }
-  if (!(Test-Path -LiteralPath $nativeBase)) { $nativeBase = (Get-Command python).Source }
+  $nativeBase = if ($env:CINEFORGE_NATIVE_PYTHON) { $env:CINEFORGE_NATIVE_PYTHON } else { (Get-Command python -ErrorAction Stop).Source }
+  if (!(Test-Path -LiteralPath $nativeBase)) { throw "Set CINEFORGE_NATIVE_PYTHON to an independent CUDA-enabled Python runtime." }
   & $nativeBase -m venv --system-site-packages $venvRoot
   & $venvPython -m pip install --disable-pip-version-check --upgrade pip
   & $venvPython -m pip install --disable-pip-version-check pyinstaller
@@ -111,7 +111,7 @@ $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $releaseInstaller).Hash
 "$hash  $(Split-Path -Leaf $releaseInstaller)" | Set-Content -LiteralPath (Join-Path $releaseRoot "SHA256SUMS.txt") -Encoding ASCII
 $manifest = [ordered]@{
   schemaVersion = 1
-  product = "CineForge Local"
+  product = "CineForge"
   version = $Version
   architecture = "win-x64"
   installer = Split-Path -Leaf $releaseInstaller
@@ -119,9 +119,11 @@ $manifest = [ordered]@{
   sizeBytes = (Get-Item -LiteralPath $releaseInstaller).Length
   builtAt = (Get-Date).ToUniversalTime().ToString("o")
   installScope = "CurrentUser"
-  installRoot = "%LOCALAPPDATA%\Programs\CineForge Local"
-  dataRoot = "%LOCALAPPDATA%\CineForge"
+  installRoot = "Selected by user; default %LOCALAPPDATA%\Programs\CineForge"
+  dataRoot = "Selected by user; default %USERPROFILE%\Videos\CineForge Library"
   generationRuntime = "Bundled CineForge Engine with PyTorch CUDA; ComfyUI is not required"
+  modelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models"
+  modelDelivery = "Automatic resumable download with SHA-256 verification"
   codeSigned = $false
 } | ConvertTo-Json -Depth 5
 $manifest | Set-Content -LiteralPath (Join-Path $releaseRoot "CineForge-Release.json") -Encoding UTF8

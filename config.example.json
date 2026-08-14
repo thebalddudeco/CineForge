@@ -2,9 +2,10 @@
   "host": "127.0.0.1",
   "port": 7331,
   "inference_backend": "native",
-  "model_cache_root": "X:\\CineForge\\models\\.cache",
+  "model_cache_root": "D:\\CineForge Library\\cache",
   "model_roots": [
-    "X:\\CineForge\\models",
-    "A:\\Shadowframe AI Local Distro\\models"
-  ]
+    "D:\\CineForge Library\\models"
+  ],
+  "input_root": "D:\\CineForge Library\\inputs",
+  "output_root": "D:\\CineForge Library\\outputs"
 }

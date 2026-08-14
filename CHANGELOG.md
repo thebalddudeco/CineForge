@@ -11,6 +11,10 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 - Defined source-image/keyframe import as the entry point for every generation.
 - Established separate GitHub application and Hugging Face model distribution tracks.
 - Added mandatory release, provenance, compatibility, verification, and decision records.
+- Created the public `TheBaldDudeCo/CineForge-Wan-Models` Hugging Face repository with model card, provenance, checksums, manifest, and validation state.
+- Reworked Windows setup to ask for separate application and CineForge Library destinations.
+- Added automatic, resumable Wan model downloads with aggregate progress, free-space checks, SHA-256 verification, retries, and safe failure recovery.
+- Isolated CineForge inputs, outputs, projects, models, cache, logs, and temporary files from Shadowframe and removed Shadowframe model discovery paths.
 
 ### In progress
 

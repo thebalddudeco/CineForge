@@ -1,10 +1,13 @@
-# CineForge Local v0.2.0 — Native Engine Preview
+# CineForge v0.3.0 — Isolated Wan Installer Preview
 
-CineForge now runs through its own PyTorch/Diffusers inference engine. ComfyUI is no longer launched, contacted, or required by the application.
+CineForge runs through its own PyTorch/Diffusers inference engine. ComfyUI is not launched, contacted, or required by the application.
 
 ## Highlights
 
-- Native Windows installer with bundled inference libraries.
+- Native Windows installer with separate application and CineForge Library selectors.
+- Automatic, resumable Wan model download from the CineForge Hugging Face repository.
+- SHA-256 verification before the model pack is marked complete.
+- Dedicated inputs, outputs, projects, models, cache, logs, and temporary folders.
 - Direct NVIDIA GPU and VRAM telemetry.
 - Native local job queue with live steps, phases, elapsed time, ETA, and errors.
 - Standalone Diffusers model-pack discovery.
@@ -14,12 +17,12 @@ CineForge now runs through its own PyTorch/Diffusers inference engine. ComfyUI i
 
 ## Download
 
-Download `CineForge-Setup-0.2.0-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
+Download `CineForge-Setup-0.3.0-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
 
 ## Model note
 
-The installer contains the CineForge Engine but not large third-party model weights. Generation requires a compatible standalone model pack. The existing Wan 2.2, Anima, RedCraft, Moody Real, LTX, and Qwen assets on the development workstation remain untouched; workflow-specific or scaled-FP8 files are not marked runnable until their native adapters are verified.
+The installer contains the CineForge Engine but not the large model weights. During setup it downloads the four required Wan components from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. The production installer will pin an immutable model-repository revision after the weight upload is complete.
 
 ## Security and signing
 
-CineForge binds only to `127.0.0.1` and stores user data locally. The prerelease build is unsigned; apply an Authenticode signature before a broad public release.
+CineForge binds only to `127.0.0.1` and stores user data locally. It never scans or writes to Shadowframe folders. The prerelease build is unsigned; apply an Authenticode signature before a broad public release.

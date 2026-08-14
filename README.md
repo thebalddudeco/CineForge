@@ -63,7 +63,9 @@ The required process is documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PRO
 
 ## Models
 
-Model weights are distributed separately through the CineForge Hugging Face organization/account repository. The application repository never stores model weights. See [docs/MODEL_PROVENANCE.md](docs/MODEL_PROVENANCE.md) and [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+Model weights are distributed separately through [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models). The application repository never stores model weights. The Windows installer asks for separate application and CineForge Library locations, then downloads the required Wan components into the selected library with resumable transfers and SHA-256 verification. See [docs/MODEL_PROVENANCE.md](docs/MODEL_PROVENANCE.md) and [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+
+The CineForge Library is isolated from every other application and contains `inputs`, `outputs`, `projects`, `models`, `cache`, `logs`, and `temp`. CineForge does not scan or write to Shadowframe directories.
 
 Wan 2.2 is an upstream project by the Wan Team. CineForge is an independent application and is not affiliated with or endorsed by Alibaba or the Wan Team.
 
