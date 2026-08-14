@@ -41,6 +41,6 @@ CineForge does not use Shadowframe's models, inputs, outputs, cache, projects, o
 
 Uninstall removes the CineForge application and shortcuts. It preserves the entire CineForge Library, including models and creative work. The installer refuses to replace or remove an application folder that does not contain its CineForge ownership marker.
 
-## Release status
+## Model revision
 
-The automatic download feature becomes operational when the four verified weight components are present in the CineForge Hugging Face repository. A stable installer must pin those downloads to an immutable model-repository revision before release.
+Version 0.3.0 downloads the verified model pack from immutable Hugging Face revision `3abefe070febb87cf51e038edda29934743639fb`. The installer will not follow later changes made to the repository's `main` branch.

@@ -14,6 +14,7 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 - Created the public `TheBaldDudeCo/CineForge-Wan-Models` Hugging Face repository with model card, provenance, checksums, manifest, and validation state.
 - Reworked Windows setup to ask for separate application and CineForge Library destinations.
 - Added automatic, resumable Wan model downloads with aggregate progress, free-space checks, SHA-256 verification, retries, and safe failure recovery.
+- Published the complete Wan core pack and pinned installer downloads to immutable Hugging Face revision `3abefe070febb87cf51e038edda29934743639fb`.
 - Isolated CineForge inputs, outputs, projects, models, cache, logs, and temporary files from Shadowframe and removed Shadowframe model discovery paths.
 
 ### In progress

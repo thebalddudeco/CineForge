@@ -12,6 +12,8 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("RangeHeaderValue", source)
         self.assertIn("HashMatchesAsync", source)
         self.assertIn("CineForge Library", source)
+        self.assertIn("3abefe070febb87cf51e038edda29934743639fb", source)
+        self.assertNotIn('ModelRevision = "main"', source)
 
     def test_runtime_does_not_discover_shadowframe(self):
         checked = [

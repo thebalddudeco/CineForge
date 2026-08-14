@@ -21,7 +21,7 @@ Download `CineForge-Setup-0.3.0-win-x64.exe` and use `SHA256SUMS.txt` to verify 
 
 ## Model note
 
-The installer contains the CineForge Engine but not the large model weights. During setup it downloads the four required Wan components from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. The production installer will pin an immutable model-repository revision after the weight upload is complete.
+The installer contains the CineForge Engine but not the large model weights. During setup it downloads the four required Wan components from [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models) into the selected CineForge Library. Version 0.3.0 pins immutable model revision `3abefe070febb87cf51e038edda29934743639fb`.
 
 ## Security and signing
 

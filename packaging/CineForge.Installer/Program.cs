@@ -214,7 +214,7 @@ internal sealed record ModelFile(string Name, long Bytes, string Sha256);
 internal static class InstallerEngine
 {
     private const string ModelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models";
-    private const string ModelRevision = "main"; // Pinned to an immutable revision by the release workflow after the weight upload.
+    private const string ModelRevision = "3abefe070febb87cf51e038edda29934743639fb";
     private const string PackFolder = "CineForge-Wan-2.2-I2V-A14B-FP8";
     private const long SafetyMargin = 5L * 1024 * 1024 * 1024;
     private static readonly HttpClient Http = new(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All }) { Timeout = Timeout.InfiniteTimeSpan };

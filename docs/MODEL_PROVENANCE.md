@@ -29,7 +29,7 @@ The development workstation currently contains a workflow-oriented scaled-FP8 pa
 
 These filenames and their presence do not establish origin, conversion authorship, or redistribution rights for every derivative component. Before upload, each artifact must be matched to its download source and license. Files with unresolved provenance must not be published.
 
-On 2026-08-14, the two Wan experts, UMT5 encoder, VAE, and two optional LightX2V LoRAs on the development workstation were hashed and found to be exact byte-for-byte matches for the corresponding artifacts in the immutable Comfy-Org repack revision above. Exact component hashes are published in [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models). The LightX2V files remain excluded from the core pack until their independent notices are reviewed.
+On 2026-08-14, the two Wan experts, UMT5 encoder, VAE, and two optional LightX2V LoRAs on the development workstation were hashed and found to be exact byte-for-byte matches for the corresponding artifacts in the immutable Comfy-Org repack revision above. Exact component hashes are published in [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models). The complete four-component core pack was remotely verified at immutable CineForge revision `3abefe070febb87cf51e038edda29934743639fb`. The LightX2V files remain excluded from the core pack until their independent notices are reviewed.
 
 ## CineForge policy
 
