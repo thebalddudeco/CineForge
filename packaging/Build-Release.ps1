@@ -43,8 +43,12 @@ if (!(Test-Path -LiteralPath $venvPython)) {
   $nativeBase = if ($env:CINEFORGE_NATIVE_PYTHON) { $env:CINEFORGE_NATIVE_PYTHON } else { (Get-Command python -ErrorAction Stop).Source }
   if (!(Test-Path -LiteralPath $nativeBase)) { throw "Set CINEFORGE_NATIVE_PYTHON to an independent CUDA-enabled Python runtime." }
   & $nativeBase -m venv --system-site-packages $venvRoot
+}
+if (!$SkipToolBootstrap) {
   & $venvPython -m pip install --disable-pip-version-check --upgrade pip
   & $venvPython -m pip install --disable-pip-version-check pyinstaller
+  & $venvPython -m pip install --disable-pip-version-check "torch==2.10.0+cu130" --index-url https://download.pytorch.org/whl/cu130
+  & $venvPython -m pip install --disable-pip-version-check -r (Join-Path $PSScriptRoot "requirements-native.txt")
 }
 
 & $venvPython -c "import torch, diffusers, transformers, safetensors, PIL; assert torch.version.cuda"
@@ -123,6 +127,7 @@ $manifest = [ordered]@{
   dataRoot = "Selected by user; default %USERPROFILE%\Videos\CineForge Library"
   generationRuntime = "Bundled CineForge Engine with PyTorch CUDA; ComfyUI is not required"
   modelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models"
+  modelRevision = "3abefe070febb87cf51e038edda29934743639fb"
   modelDelivery = "Automatic resumable download with SHA-256 verification"
   codeSigned = $false
 } | ConvertTo-Json -Depth 5

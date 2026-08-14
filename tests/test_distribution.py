@@ -25,6 +25,14 @@ class DistributionTests(unittest.TestCase):
         combined = "\n".join(path.read_text(encoding="utf-8") for path in checked).lower()
         self.assertNotIn("shadowframe", combined)
 
+    def test_release_builder_bootstraps_independent_cuda_runtime(self):
+        source = (ROOT / "packaging" / "Build-Release.ps1").read_text(encoding="utf-8")
+        requirements = (ROOT / "packaging" / "requirements-native.txt").read_text(encoding="utf-8")
+        self.assertIn("torch==2.10.0+cu130", source)
+        self.assertIn("download.pytorch.org/whl/cu130", source)
+        self.assertIn("diffusers==0.39.0", requirements)
+        self.assertIn("transformers==5.0.0", requirements)
+
 
 if __name__ == "__main__":
     unittest.main()
