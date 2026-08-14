@@ -22,7 +22,7 @@ Ordinary cinematic action, non-graphic peril, romance without explicit sexual co
 1. **Text admission:** Normalize the prompt and negative prompt, detect obfuscation, and classify the complete request before a GPU job is created.
 2. **Reference admission:** Scan every uploaded image and representative frames from uploaded video before storing it as a usable project asset.
 3. **Context decision:** Combine text and media signals so individually ambiguous inputs cannot bypass policy through multimodal context.
-4. **Generation isolation:** Only admitted jobs enter the hosted GPU queue. Workers receive an immutable moderation decision identifier with the job.
+4. **Generation isolation:** Only admitted jobs are submitted to the third-party model API. The CineForge job record retains an immutable moderation decision identifier and provider request identifier.
 5. **Output inspection:** Sample frames across the generated video, including scene-change and peak-motion frames, and classify the combined video before release.
 6. **Delivery gate:** Do not issue a preview URL, thumbnail, download URL, or share link until output inspection passes.
 7. **Abuse controls:** Apply rate limits, repeat-violation controls, audit events, and account action without exposing classifier thresholds.

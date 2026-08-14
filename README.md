@@ -3,7 +3,7 @@
 CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
 
 - **CineForge Desktop** is the private, local-only Windows edition. It downloads the required Wan models and performs generation on the user's own compatible NVIDIA GPU.
-- **CineForge Online** is the lightweight, responsive browser and mobile edition. It keeps models and inference on hosted GPU workers rather than downloading model weights to the user's device. It is planned to launch as a free-to-access beta, subject to capacity controls and SFW-only moderation.
+- **CineForge Online** is the lightweight, responsive browser and mobile edition. It sends approved generation jobs through a secure CineForge API broker to third-party video-model APIs, so phones and laptops download no model weights and need no dedicated GPU. It is planned to launch as a free-to-access beta, subject to capacity controls and SFW-only moderation.
 
 The current repository and installer work are focused on CineForge Desktop.
 
@@ -43,9 +43,9 @@ CineForge Online is an SFW-only hosted service. Prompts, uploaded reference medi
 - `docs/` — architecture, compatibility, release, provenance, and decision records
 - `.github/` — issue templates, pull-request template, and release automation
 
-## Run from source
+## Run CineForge Desktop from source
 
-Requirements for development currently include Windows 11, Python 3.12, an NVIDIA CUDA-capable GPU, and a compatible CineForge Wan model pack.
+Desktop development currently requires Windows 11, Python 3.12, an NVIDIA CUDA-capable GPU, and a compatible CineForge Wan model pack. These hardware requirements do not apply to people using CineForge Online; Online generation compute is supplied by its configured third-party model provider.
 
 ```powershell
 .\run.ps1

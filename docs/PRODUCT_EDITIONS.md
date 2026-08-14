@@ -7,9 +7,10 @@ CineForge has two planned releases. They share the same brand, responsive interf
 | Capability | CineForge Desktop | CineForge Online |
 | --- | --- | --- |
 | Primary devices | Windows desktop | Mobile and desktop browsers |
-| Inference | User's local NVIDIA GPU | Hosted GPU workers |
+| Inference | User's local NVIDIA GPU | Third-party video-model API |
+| Client GPU requirement | Compatible dedicated NVIDIA GPU | None |
 | Model delivery | Automatic local Wan download | No model download to the client |
-| Storage | User-selected CineForge Library | Hosted project and media storage with documented retention |
+| Storage | User-selected CineForge Library | Browser storage plus temporary moderated transfer storage |
 | Connectivity | Generation works locally after model installation | Internet connection required |
 | Access model | Downloadable desktop release | Free-to-access beta with capacity controls |
 | Interface | Full CineForge responsive studio | Same studio adapted to small screens and touch |
@@ -37,9 +38,33 @@ Desktop-specific code owns local model installation, CUDA discovery, GPU telemet
 
 ## CineForge Online
 
-CineForge Online is a lightweight responsive client. It must not ship PyTorch, CUDA, Wan weights, or the local Python server to browsers. The client submits compatible project and generation requests to a versioned hosted API, receives queue/progress events, and displays outputs using the same CineForge progress and project vocabulary.
+CineForge Online is a lightweight responsive client backed by a small, GPU-free CineForge API broker. It must not ship PyTorch, CUDA, Wan weights, or the local Python server to browsers. The broker protects provider credentials, applies SFW policy, submits approved requests to a third-party video-model API, receives queue/webhook events, and returns normalized progress and outputs using the same CineForge project vocabulary.
 
-The initial free beta does not require a paid plan. Capacity protection may include accounts, per-user concurrency limits, queue limits, rate limits, output expiration, and clearly communicated availability. Those controls protect a finite hosted GPU pool and are not changes to the CineForge creative workflow.
+### Client hardware contract
+
+CineForge Online never performs Wan inference on the user's phone, tablet, Chromebook, integrated laptop GPU, or desktop browser. It does not require CUDA, WebGPU, a dedicated graphics card, or enough local memory to load Wan. Ordinary browser graphics acceleration may render the interface and decode video, but it is not part of generation. CineForge also does not own or operate the generation GPU; the selected API provider supplies inference as a managed service.
+
+The Online client is responsible only for:
+
+- displaying the responsive CineForge interface;
+- validating and uploading source media;
+- submitting generation settings to the CineForge API broker;
+- receiving queue state, progress, elapsed time, ETA, and errors;
+- previewing, downloading, or sharing outputs that pass moderation.
+
+The CineForge broker handles authentication, quotas, moderation orchestration, provider routing, job mapping, webhook verification, and result delivery. The selected model provider handles model loading, prompt encoding, diffusion, decoding, and output assembly on its own infrastructure. Provider API keys are server-side secrets and are never sent to the browser or mobile client.
+
+```mermaid
+flowchart LR
+    A["Phone or browser"] -->|"HTTPS upload and settings"| B["CineForge API broker"]
+    B --> C["SFW admission checks"]
+    C --> D["Third-party model API"]
+    D -->|"Queue and webhook events"| B
+    B --> E["SFW output inspection"]
+    E -->|"Approved preview and download"| A
+```
+
+The initial free beta does not require a paid plan. Capacity protection may include accounts, per-user concurrency limits, daily generation allowances, queue limits, rate limits, output expiration, and clearly communicated availability. Those controls protect a finite provider API budget and are not changes to the CineForge creative workflow.
 
 Because CineForge Online processes user material on hosted infrastructure, it must publish a privacy and retention policy before release. It is an SFW-only service: prompt text, reference uploads, and generated video must pass the moderation stages defined in [ONLINE_MODERATION.md](ONLINE_MODERATION.md). Online moderation belongs at the hosted service boundary and must not be compiled into or silently imposed on CineForge Desktop.
 
@@ -55,8 +80,11 @@ Shared schemas cover projects, generation requests, progress events, runtime cap
 ## CineForge Online beta release gates
 
 - responsive touch-first verification on current mobile and desktop browsers;
+- successful use on devices without WebGPU or a dedicated GPU;
+- a client bundle that contains no model weights or native inference runtime;
 - installable PWA shell and resilient reconnect behavior;
-- hosted GPU queue with real progress, cancellation, retry, and failure recovery;
+- provider-backed queue with normalized progress, cancellation, retry, webhook verification, and failure recovery;
+- server-side provider secrets with no credential exposure to clients;
 - secure direct uploads and signed output delivery;
 - account, quota, rate-limit, and capacity messaging;
 - SFW prompt, reference-image, and sampled-video moderation with fail-closed handling;
