@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import Settings
+from .wan22 import PACK_ID as WAN22_PACK_ID, find_pack as find_wan22_pack
 
 
 MODEL_EXTENSIONS = {".safetensors", ".ckpt", ".pt", ".pth", ".bin", ".gguf"}
@@ -124,6 +125,22 @@ def discover_models(settings: Settings) -> dict[str, Any]:
         root = Path(root_text)
         if not root.exists():
             continue
+        wan_pack = find_wan22_pack(root)
+        if wan_pack is not None and not any(item["id"] == WAN22_PACK_ID for item in native_packs):
+            native_packs.append({
+                "id": WAN22_PACK_ID,
+                "label": "CineForge Wan 2.2 I2V A14B FP8",
+                "kind": "video",
+                "capability": "video",
+                "pipeline": "WanImageToVideoPipeline",
+                "path": str(wan_pack.resolve()),
+                "available": True,
+                "native_pack": True,
+                "native_format": "cineforge-wan22-scaled-fp8",
+                "reference": False,
+                "status": "native scaled-FP8 model pack",
+                "diagnostic": False,
+            })
         for index_path in root.rglob("model_index.json"):
             try:
                 metadata = json.loads(index_path.read_text(encoding="utf-8"))
@@ -145,7 +162,6 @@ def discover_models(settings: Settings) -> dict[str, Any]:
                 "capability": capability, "pipeline": pipeline, "path": str(index_path.parent.resolve()),
                 "available": True, "native_pack": True, "reference": capability == "image",
                 "status": "standalone model pack", "diagnostic": bool(pack_manifest.get("diagnostic")),
-                "disable_safety_checker": bool(pack_manifest.get("disable_safety_checker")),
             })
         for path in root.rglob("*"):
             if not path.is_file() or path.suffix.lower() not in MODEL_EXTENSIONS:

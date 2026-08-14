@@ -1,33 +1,57 @@
-# CineForge Local 0.2.0 release verification
+# CineForge Desktop 0.4.0 release-candidate verification
 
-Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070 and ComfyUI stopped.
+Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
+
+## Desktop identity
+
+- Windows product name: `CineForge Desktop`
+- Setup filename: `CineForge-Desktop-Setup-0.4.0-win-x64.exe`
+- Installed Apps display name: `CineForge Desktop`
+- Desktop and Start Menu shortcut name: `CineForge Desktop`
+- Application folder: `CineForge`
+- Data folder: `CineForge Library`
+
+## Model distribution
+
+- Automatic setup download: enabled
+- Manual model placement required: no
+- Repository: `TheBaldDudeCo/CineForge-Wan-Models`
+- Immutable revision: `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`
+- Four core components: 35,579,207,879 bytes
+- Resumable partial transfers: enabled
+- Per-file SHA-256 verification: enabled
+- Remote byte sizes and content identifiers: passed
 
 ## Packaged runtime
 
-- Backend: `native`
-- Engine: `CineForge Engine 0.2.0`
+- Python: 3.12
 - PyTorch: `2.10.0+cu130`
 - Diffusers: `0.39.0`
 - Transformers: `5.0.0`
-- `inference_ready`: `true`
-- ComfyUI URL: `null`
+- Backend: native CineForge engine
+- ComfyUI dependency: none
+- Shadowframe runtime or directory dependency: none
 
-## Frozen EXE generation test
+## Build checks
 
-- Adapter: `cineforge-native-diagnostic`
-- Seed: `43`
-- Sampling progress: `8 / 8`
-- Final status: `complete`
-- Final phase: `OUTPUT SAVED`
-- Output root: `X:\CineForge\data\generated`
-- Process released successfully after `/api/shutdown`
+- Independent CUDA packaging environment on `X:`: passed
+- PyInstaller standalone application build: passed
+- Native Windows installer compilation: passed
+- Installer product name: `CineForge Desktop`
+- Installer file version: `0.4.0.0`
+- Installer size: 2,033,988,934 bytes
+- SHA-256: `ec231da71272a0e9af14f738e09b925091cce5634ac5c085c4dad62590caacf5`
+- Generated checksum comparison: passed
+- Automated tests: 14 passed
+- Authenticode: not signed
 
-The diagnostic pack verifies packaged model discovery, local weight loading, CUDA transfer, callback-driven step progress, decoding, media persistence, and clean shutdown. It is not shipped as a production creative model.
+## Remaining preview gates
 
-## Model compatibility boundary
+- Native loading of the split Wan scaled-FP8 pack
+- Real end-to-end Wan generation without ComfyUI
+- Output and media-probe validation
+- Installer model-download test in an isolated library
+- Clean-machine installation and uninstall test
+- Authenticode production signing
 
-The installed raw Anima, RedCraft, Moody Real, Qwen, LTX, and Wan files remain untouched. They are inventoried but marked `conversion required` when they use workflow-specific split or scaled-FP8 formats that have not yet passed the standalone adapter test.
-
-## Distribution
-
-The installer bundles the native inference libraries but not third-party model weights. It is currently unsigned and should be Authenticode-signed before a broad public release.
+This artifact is a technical preview and must not be represented as a stable public release until the remaining gates pass.

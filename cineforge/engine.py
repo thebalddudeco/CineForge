@@ -73,6 +73,12 @@ class NativePipelineAdapter:
             "Install or convert a Diffusers-format pack first."
         )
 
+    @staticmethod
+    def _configure_desktop_pipeline(pipeline: Any) -> None:
+        """Keep local Desktop inference free of application-level content filtering."""
+        if hasattr(pipeline, "safety_checker"):
+            pipeline.safety_checker = None
+
     def _load(self, pack: dict[str, Any], progress: Progress) -> Any:
         with self._lock:
             if self._pipeline_id == pack["id"] and self._pipeline is not None:
@@ -100,12 +106,18 @@ class NativePipelineAdapter:
                 os.environ["HF_HOME"] = cache
                 os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache) / "hub")
             progress(2, 5, "LOADING MODEL WEIGHTS")
-            pipeline = DiffusionPipeline.from_pretrained(
-                pack["path"], local_files_only=True, torch_dtype=torch.float16,
-            )
+            if pack.get("native_format") == "cineforge-wan22-scaled-fp8":
+                from .wan22 import load_pipeline
+                pipeline = load_pipeline(
+                    Path(pack["path"]),
+                    lambda message: progress(2, 5, message.upper()),
+                )
+            else:
+                pipeline = DiffusionPipeline.from_pretrained(
+                    pack["path"], local_files_only=True, torch_dtype=torch.float16,
+                )
             progress(3, 5, "CONFIGURING PIPELINE")
-            if pack.get("diagnostic") and pack.get("disable_safety_checker") and hasattr(pipeline, "safety_checker"):
-                pipeline.safety_checker = None
+            self._configure_desktop_pipeline(pipeline)
             pipeline.set_progress_bar_config(disable=True)
             if torch.cuda.is_available():
                 progress(4, 5, "MOVING MODEL TO GPU")
@@ -141,6 +153,18 @@ class NativePipelineAdapter:
             "generator": generator,
             "callback_on_step_end": self._callback(progress, steps),
         }
+        if pack.get("native_format") == "cineforge-wan22-scaled-fp8":
+            from .wan22 import encode_prompt
+            progress(0, steps, "ENCODING PROMPT")
+            prompt_embeds, negative_prompt_embeds = encode_prompt(
+                pipeline, payload["prompt"], payload.get("negative_prompt") or None,
+            )
+            common.update(
+                prompt=None,
+                negative_prompt=None,
+                prompt_embeds=prompt_embeds,
+                negative_prompt_embeds=negative_prompt_embeds,
+            )
         if kind == "still":
             common.update(width=payload["width"], height=payload["height"])
             reference = payload.get("reference_image")
@@ -214,6 +238,8 @@ class NativeEngine:
     def queue_video(self, **payload: Any) -> dict[str, Any]:
         payload["seed"] = int(payload.get("seed") or random.randint(0, 2**31 - 1))
         payload["steps"] = 8 if payload.get("quality") == "proof" else 20
+        requested_frames = int(payload.get("length") or 17)
+        payload["length"] = max(5, min(241, 1 + round((requested_frames - 1) / 4) * 4))
         return self._queue("video", str(payload.get("model_id") or ""), payload)
 
     def _queue(self, kind: str, model_id: str, payload: dict[str, Any]) -> dict[str, Any]:

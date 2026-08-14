@@ -16,7 +16,17 @@ APP_ROOT = Path(sys.executable).resolve().parent if FROZEN else SOURCE_ROOT
 def _data_root() -> Path:
     explicit = os.environ.get("CINEFORGE_DATA_ROOT")
     if explicit:
-        return Path(explicit)
+        return Path(explicit).expanduser()
+    if FROZEN:
+        pointer = Path(os.environ.get("LOCALAPPDATA", APP_ROOT)) / "CineForge" / "install.json"
+        if pointer.is_file():
+            try:
+                installed = json.loads(pointer.read_text(encoding="utf-8"))
+                selected = str(installed.get("data_root") or "").strip()
+                if selected:
+                    return Path(selected).expanduser()
+            except (OSError, json.JSONDecodeError, TypeError):
+                pass
     workstation_root = Path(r"X:\CineForge")
     if workstation_root.exists():
         return workstation_root / "data"
@@ -25,9 +35,12 @@ def _data_root() -> Path:
 
 DATA_ROOT = _data_root()
 PROJECTS_ROOT = DATA_ROOT / "projects"
-UPLOADS_ROOT = DATA_ROOT / "uploads"
+UPLOADS_ROOT = DATA_ROOT / "inputs"
 LOGS_ROOT = DATA_ROOT / "logs"
-GENERATED_ROOT = DATA_ROOT / "generated"
+GENERATED_ROOT = DATA_ROOT / "outputs"
+MODELS_ROOT = DATA_ROOT / "models"
+CACHE_ROOT = DATA_ROOT / "cache"
+TEMP_ROOT = DATA_ROOT / "temp"
 
 
 @dataclass
@@ -45,16 +58,20 @@ class Settings:
 def _default_model_roots() -> list[str]:
     candidates = [
         os.environ.get("CINEFORGE_MODEL_ROOT", ""),
-        r"X:\CineForge\models",
-        r"A:\Shadowframe AI Local Distro\models",
-        str(Path(os.environ.get("LOCALAPPDATA", "")) / "Shadowframe" / "Models"),
-        str(Path.home() / ".cache" / "huggingface" / "hub"),
+        str(MODELS_ROOT),
     ]
-    return [str(Path(value)) for value in candidates if value and Path(value).exists()]
+    result: list[str] = []
+    for value in candidates:
+        if not value:
+            continue
+        normalized = str(Path(value).expanduser())
+        if normalized not in result:
+            result.append(normalized)
+    return result
 
 
 def load_settings() -> Settings:
-    default_cache = Path(os.environ.get("CINEFORGE_MODEL_CACHE", r"X:\CineForge\models\.cache"))
+    default_cache = Path(os.environ.get("CINEFORGE_MODEL_CACHE", str(CACHE_ROOT)))
     settings = Settings(model_roots=_default_model_roots(), model_cache_root=str(default_cache))
     config_path = DATA_ROOT / "config.json"
     fallback_config = APP_ROOT / "config.json"
@@ -69,6 +86,9 @@ def load_settings() -> Settings:
     UPLOADS_ROOT.mkdir(parents=True, exist_ok=True)
     LOGS_ROOT.mkdir(parents=True, exist_ok=True)
     GENERATED_ROOT.mkdir(parents=True, exist_ok=True)
+    MODELS_ROOT.mkdir(parents=True, exist_ok=True)
+    CACHE_ROOT.mkdir(parents=True, exist_ok=True)
+    TEMP_ROOT.mkdir(parents=True, exist_ok=True)
     if settings.model_cache_root:
         Path(settings.model_cache_root).mkdir(parents=True, exist_ok=True)
     return settings

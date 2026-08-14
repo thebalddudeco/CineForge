@@ -1,5 +1,5 @@
 param(
-  [string]$Version = "0.2.0",
+  [string]$Version = "0.4.0",
   [switch]$SkipToolBootstrap
 )
 
@@ -8,7 +8,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $appRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $workBase = if ($env:CINEFORGE_BUILD_WORK_ROOT) { [IO.Path]::GetFullPath($env:CINEFORGE_BUILD_WORK_ROOT) } else { Join-Path $appRoot "work" }
 $workRoot = Join-Path $workBase "release-build"
-$venvRoot = Join-Path $workBase "native-packaging-venv"
+$venvRoot = if ($env:CINEFORGE_PACKAGING_VENV_ROOT) { [IO.Path]::GetFullPath($env:CINEFORGE_PACKAGING_VENV_ROOT) } else { Join-Path $workBase "native-packaging-venv" }
 $distRoot = Join-Path $workRoot "dist"
 $buildRoot = Join-Path $workRoot "build"
 $payloadRoot = Join-Path $PSScriptRoot "payload"
@@ -40,11 +40,15 @@ New-Item -ItemType Directory -Force -Path $workRoot,$distRoot,$buildRoot,$payloa
 $venvPython = Join-Path $venvRoot "Scripts\python.exe"
 if (!(Test-Path -LiteralPath $venvPython)) {
   if ($SkipToolBootstrap) { throw "The packaging environment is missing and -SkipToolBootstrap was supplied." }
-  $nativeBase = if ($env:CINEFORGE_NATIVE_PYTHON) { $env:CINEFORGE_NATIVE_PYTHON } else { "A:\Shadowframe AI Local Distro\release\Shadowframe-Core\Runtime\PythonBase\python.exe" }
-  if (!(Test-Path -LiteralPath $nativeBase)) { $nativeBase = (Get-Command python).Source }
+  $nativeBase = if ($env:CINEFORGE_NATIVE_PYTHON) { $env:CINEFORGE_NATIVE_PYTHON } else { (Get-Command python -ErrorAction Stop).Source }
+  if (!(Test-Path -LiteralPath $nativeBase)) { throw "Set CINEFORGE_NATIVE_PYTHON to an independent CUDA-enabled Python runtime." }
   & $nativeBase -m venv --system-site-packages $venvRoot
+}
+if (!$SkipToolBootstrap) {
   & $venvPython -m pip install --disable-pip-version-check --upgrade pip
   & $venvPython -m pip install --disable-pip-version-check pyinstaller
+  & $venvPython -m pip install --disable-pip-version-check "torch==2.10.0+cu130" --index-url https://download.pytorch.org/whl/cu130
+  & $venvPython -m pip install --disable-pip-version-check -r (Join-Path $PSScriptRoot "requirements-native.txt")
 }
 
 & $venvPython -c "import torch, diffusers, transformers, safetensors, PIL; assert torch.version.cuda"
@@ -92,17 +96,25 @@ Copy-Item -LiteralPath (Join-Path $appRoot "config.example.json") -Destination (
 
 $payloadZip = Join-Path $payloadRoot "CineForge-Payload.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($appDist, $payloadZip, [IO.Compression.CompressionLevel]::Optimal, $false)
+$runtimeFileName = "CineForge-Desktop-Runtime-$Version-win-x64.zip"
+$runtimeUrl = "https://github.com/thebalddudeco/CineForge/releases/download/v$Version/$runtimeFileName"
+$runtimeBytes = (Get-Item -LiteralPath $payloadZip).Length
+$runtimeSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $payloadZip).Hash.ToLowerInvariant()
 
 Write-Host "Building the native Windows installer..."
 $installerProject = Join-Path $PSScriptRoot "CineForge.Installer\CineForge.Installer.csproj"
 dotnet publish $installerProject -c Release -r win-x64 --self-contained true -o $installerPublish `
-  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version
+  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version /p:SkipPayload=true `
+  /p:CineForgeRuntimeFileName=$runtimeFileName /p:CineForgeRuntimeUrl=$runtimeUrl `
+  /p:CineForgeRuntimeBytes=$runtimeBytes /p:CineForgeRuntimeSha256=$runtimeSha256
 if ($LASTEXITCODE -ne 0) { throw "The installer build failed with exit code $LASTEXITCODE." }
 
-$publishedInstaller = Join-Path $installerPublish "CineForge Setup.exe"
-$releaseInstaller = Join-Path $releaseRoot "CineForge-Setup-$Version-win-x64.exe"
+$publishedInstaller = Join-Path $installerPublish "CineForge Desktop Setup.exe"
+$releaseInstaller = Join-Path $releaseRoot "CineForge-Desktop-Setup-$Version-win-x64.exe"
 if (!(Test-Path -LiteralPath $publishedInstaller)) { throw "The installer executable was not created." }
 Copy-Item -LiteralPath $publishedInstaller -Destination $releaseInstaller
+$runtimeAsset = Join-Path $releaseRoot $runtimeFileName
+Copy-Item -LiteralPath $payloadZip -Destination $runtimeAsset
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\GITHUB_RELEASE.md") -Destination (Join-Path $releaseRoot "RELEASE_NOTES.md")
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\INSTALLATION.md") -Destination (Join-Path $releaseRoot "INSTALLATION.md")
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\RELEASE_VERIFICATION.md") -Destination (Join-Path $releaseRoot "VERIFICATION.md")
@@ -111,17 +123,24 @@ $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $releaseInstaller).Hash
 "$hash  $(Split-Path -Leaf $releaseInstaller)" | Set-Content -LiteralPath (Join-Path $releaseRoot "SHA256SUMS.txt") -Encoding ASCII
 $manifest = [ordered]@{
   schemaVersion = 1
-  product = "CineForge Local"
+  product = "CineForge Desktop"
+  edition = "desktop"
   version = $Version
   architecture = "win-x64"
   installer = Split-Path -Leaf $releaseInstaller
   sha256 = $hash
   sizeBytes = (Get-Item -LiteralPath $releaseInstaller).Length
+  runtimeAsset = Split-Path -Leaf $runtimeAsset
+  runtimeSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeAsset).Hash
+  runtimeSizeBytes = (Get-Item -LiteralPath $runtimeAsset).Length
   builtAt = (Get-Date).ToUniversalTime().ToString("o")
   installScope = "CurrentUser"
-  installRoot = "%LOCALAPPDATA%\Programs\CineForge Local"
-  dataRoot = "%LOCALAPPDATA%\CineForge"
+  installRoot = "Selected by user; default %LOCALAPPDATA%\Programs\CineForge"
+  dataRoot = "Selected by user; default %USERPROFILE%\Videos\CineForge Library"
   generationRuntime = "Bundled CineForge Engine with PyTorch CUDA; ComfyUI is not required"
+  modelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models"
+  modelRevision = "493b7c8ff0a451b6b4c049afb3e6396dbfa1c688"
+  modelDelivery = "Automatic resumable download with SHA-256 verification"
   codeSigned = $false
 } | ConvertTo-Json -Depth 5
 $manifest | Set-Content -LiteralPath (Join-Path $releaseRoot "CineForge-Release.json") -Encoding UTF8

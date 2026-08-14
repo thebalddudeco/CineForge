@@ -1,28 +1,48 @@
-# Installing CineForge Local
+# Installing CineForge Desktop on Windows
 
-## Supported system
+## Requirements
 
-- Windows 10 or Windows 11, 64-bit.
-- A supported NVIDIA GPU and current NVIDIA driver for local generation.
-- A compatible standalone CineForge/Diffusers model pack.
+- Windows 11 x64
+- Supported NVIDIA GPU and driver
+- At least 42 GB free for the initial Wan pack, plus working space for generated video
+- Reliable internet connection for the first model download
 
-## Install
+## Setup
 
-1. Download `CineForge-Setup-0.2.0-win-x64.exe` and `SHA256SUMS.txt`.
-2. Optionally verify the SHA-256 checksum.
-3. Run the setup EXE and choose **Install CineForge**.
-4. Launch CineForge from the installer, desktop shortcut, or Start Menu.
+1. Download the CineForge Desktop installer and `SHA256SUMS.txt` from the matching GitHub Release.
+2. Verify the installer checksum.
+3. Run setup.
+4. Choose the **application folder**. The final folder must be named `CineForge`.
+5. Choose the **CineForge Library** location. The final folder must be named `CineForge Library`.
+6. Setup installs CineForge Desktop, creates the library, and automatically downloads all four required Wan components. No manual model download or file placement is required.
+7. Leave setup open until every component passes SHA-256 verification.
 
-CineForge installs for the current Windows user. Projects and references are preserved during upgrades and uninstall. Model libraries and caches are configurable so large AI assets can be kept off `C:`.
+Downloads resume from `.partial` files if the network fails, setup closes, or the user pauses installation. Rerunning the installer with the same library path continues the transfer.
 
-## Generation runtime
+## Folder layout
 
-PyTorch, Diffusers, Transformers, and CUDA support are bundled with CineForge 0.2.0. Python, Node.js, .NET, and ComfyUI are not required on the destination PC. Model weights are installed separately because individual packs can be many gigabytes and have separate licenses.
+```text
+CineForge Library/
+  inputs/
+  outputs/
+  projects/
+  models/
+    CineForge-Wan-2.2-I2V-A14B-FP8/
+      components/
+  cache/
+  logs/
+  temp/
+  config.json
+```
 
-## Uninstall
+CineForge does not use Shadowframe's models, inputs, outputs, cache, projects, or application directory.
 
-Use **Settings → Apps → Installed apps → CineForge Local → Uninstall**. The uninstaller removes the application and shortcuts while preserving project and reference files.
+## Uninstall behavior
 
-## Windows SmartScreen
+Uninstall removes the CineForge application and shortcuts. It preserves the entire CineForge Library, including models and creative work. The installer refuses to replace or remove an application folder that does not contain its CineForge ownership marker.
 
-Unsigned prerelease builds may display a Windows SmartScreen warning. Production releases should be Authenticode-signed before upload. The included checksum verifies integrity but does not replace code signing.
+## Model revision
+
+Version 0.4.0 downloads the verified model pack and native runtime support files from immutable Hugging Face revision `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`. The installer will not follow later changes made to the repository's `main` branch.
+
+The public setup EXE is a lightweight bootstrapper. It first downloads and verifies the approximately 2.0 GB CineForge native CUDA runtime from the matching immutable GitHub Release, then downloads and verifies the approximately 35.6 GB Wan model pack. Both downloads resume after interruption.

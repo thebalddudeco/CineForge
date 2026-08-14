@@ -1,14 +1,19 @@
 # CineForge
 
-CineForge is a Windows desktop application for locally generating cinematic video with Wan. It is being rebuilt as a focused, standalone Wan image-to-video workflow: import a source frame, direct motion and camera behavior, generate locally, monitor real progress, preview, and export.
+CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
+
+- **CineForge Desktop** is the private, local-only Windows edition. It downloads the required Wan models and performs generation on the user's own compatible NVIDIA GPU.
+- **CineForge Online** is the lightweight, responsive browser and mobile edition. It sends approved generation jobs through a secure CineForge API broker to third-party video-model APIs, so phones and laptops download no model weights and need no dedicated GPU. The application is planned to launch as a free-to-access beta; users connect and fund their own supported provider account for generation. CineForge does not subsidize provider inference.
+
+The current repository and installer work are focused on CineForge Desktop.
 
 ## Project status
 
-**Pre-alpha / native Wan integration in progress.**
+**CineForge Desktop 0.4.0 release candidate.**
 
-The native application shell, local GPU runtime, job telemetry, project workflow, Windows packaging, and installer have been exercised independently of ComfyUI. The production Wan FP8 loader is the current engineering milestone. The previously built 0.2.0 installer is an engineering preview and is not the first supported public release.
+The application now loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-FP8 UMT5 encoder, and Wan VAE directly through the CineForge Engine without ComfyUI. A real two-expert generation completed on an RTX 4070 with finite latents, finite non-black frames, live progress telemetry, and MP4 export. The remaining public-release gate is a clean-machine installer/download/generation/uninstall pass.
 
-Do not interpret the presence of raw Wan files as proof that a standalone pack is runnable. A model pack becomes supported only after it passes the validation gates documented in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+The installer is pinned to the validated release-candidate pack revision recorded in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md) and [docs/RELEASE_VERIFICATION.md](docs/RELEASE_VERIFICATION.md).
 
 ## Product scope
 
@@ -21,6 +26,13 @@ Do not interpret the presence of raw Wan files as proof that a standalone pack i
 - No ComfyUI service dependency
 - No built-in still-image generator
 - No LTX runtime
+- No application-level prompt or output content moderation in CineForge Desktop
+
+The Desktop edition is a local creative tool: prompts, imported media, and generated outputs stay under the user's control. Users remain responsible for complying with applicable law and respecting consent, privacy, likeness, and intellectual-property rights.
+
+See [docs/PRODUCT_EDITIONS.md](docs/PRODUCT_EDITIONS.md) for the shared product contract and edition-specific runtime boundaries.
+
+CineForge Online is an SFW-only hosted service. Prompts, uploaded reference media, and generated outputs must pass the layered moderation contract in [docs/ONLINE_MODERATION.md](docs/ONLINE_MODERATION.md).
 
 ## Repository map
 
@@ -31,9 +43,9 @@ Do not interpret the presence of raw Wan files as proof that a standalone pack i
 - `docs/` — architecture, compatibility, release, provenance, and decision records
 - `.github/` — issue templates, pull-request template, and release automation
 
-## Run from source
+## Run CineForge Desktop from source
 
-Requirements for development currently include Windows 11, Python 3.12, an NVIDIA CUDA-capable GPU, and a compatible CineForge Wan model pack.
+Desktop development currently requires Windows 11, Python 3.12, an NVIDIA CUDA-capable GPU, and a compatible CineForge Wan model pack. These hardware requirements do not apply to people using CineForge Online; Online generation compute is supplied by its configured third-party model provider.
 
 ```powershell
 .\run.ps1
@@ -63,7 +75,9 @@ The required process is documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PRO
 
 ## Models
 
-Model weights are distributed separately through the CineForge Hugging Face organization/account repository. The application repository never stores model weights. See [docs/MODEL_PROVENANCE.md](docs/MODEL_PROVENANCE.md) and [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+Model weights are distributed separately through [TheBaldDudeCo/CineForge-Wan-Models](https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models). The application repository never stores model weights. The CineForge Desktop installer asks for separate application and CineForge Library locations, then automatically downloads every required Wan component into the selected library with resumable transfers and SHA-256 verification. Users do not need to find or place model files manually. See [docs/MODEL_PROVENANCE.md](docs/MODEL_PROVENANCE.md) and [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md).
+
+The CineForge Library is isolated from every other application and contains `inputs`, `outputs`, `projects`, `models`, `cache`, `logs`, and `temp`. CineForge does not scan or write to Shadowframe directories.
 
 Wan 2.2 is an upstream project by the Wan Team. CineForge is an independent application and is not affiliated with or endorsed by Alibaba or the Wan Team.
 
