@@ -19,7 +19,17 @@
     <Product>CineForge Desktop</Product>
     <Company>The Bald Dude Co.</Company>
     <Copyright>Copyright 2026 The Bald Dude Co.</Copyright>
+    <CineForgeRuntimeFileName Condition="'$(CineForgeRuntimeFileName)' == ''">CineForge-Desktop-Runtime-0.4.0-win-x64.zip</CineForgeRuntimeFileName>
+    <CineForgeRuntimeUrl Condition="'$(CineForgeRuntimeUrl)' == ''">https://github.com/thebalddudeco/CineForge/releases/download/v0.4.0/CineForge-Desktop-Runtime-0.4.0-win-x64.zip</CineForgeRuntimeUrl>
+    <CineForgeRuntimeBytes Condition="'$(CineForgeRuntimeBytes)' == ''">2017201506</CineForgeRuntimeBytes>
+    <CineForgeRuntimeSha256 Condition="'$(CineForgeRuntimeSha256)' == ''">4ab5dbfbe10c576aea97276f3e8a554d57fe544d0cf11437cb656cec4794d346</CineForgeRuntimeSha256>
   </PropertyGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="CineForgeRuntimeFileName" Value="$(CineForgeRuntimeFileName)" />
+    <AssemblyMetadata Include="CineForgeRuntimeUrl" Value="$(CineForgeRuntimeUrl)" />
+    <AssemblyMetadata Include="CineForgeRuntimeBytes" Value="$(CineForgeRuntimeBytes)" />
+    <AssemblyMetadata Include="CineForgeRuntimeSha256" Value="$(CineForgeRuntimeSha256)" />
+  </ItemGroup>
   <ItemGroup Condition="'$(SkipPayload)' != 'true'">
     <EmbeddedResource Include="..\payload\CineForge-Payload.zip" LogicalName="CineForge.Payload.zip" />
   </ItemGroup>

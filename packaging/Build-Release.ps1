@@ -96,18 +96,24 @@ Copy-Item -LiteralPath (Join-Path $appRoot "config.example.json") -Destination (
 
 $payloadZip = Join-Path $payloadRoot "CineForge-Payload.zip"
 [IO.Compression.ZipFile]::CreateFromDirectory($appDist, $payloadZip, [IO.Compression.CompressionLevel]::Optimal, $false)
+$runtimeFileName = "CineForge-Desktop-Runtime-$Version-win-x64.zip"
+$runtimeUrl = "https://github.com/thebalddudeco/CineForge/releases/download/v$Version/$runtimeFileName"
+$runtimeBytes = (Get-Item -LiteralPath $payloadZip).Length
+$runtimeSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $payloadZip).Hash.ToLowerInvariant()
 
 Write-Host "Building the native Windows installer..."
 $installerProject = Join-Path $PSScriptRoot "CineForge.Installer\CineForge.Installer.csproj"
 dotnet publish $installerProject -c Release -r win-x64 --self-contained true -o $installerPublish `
-  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version /p:SkipPayload=true
+  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version /p:SkipPayload=true `
+  /p:CineForgeRuntimeFileName=$runtimeFileName /p:CineForgeRuntimeUrl=$runtimeUrl `
+  /p:CineForgeRuntimeBytes=$runtimeBytes /p:CineForgeRuntimeSha256=$runtimeSha256
 if ($LASTEXITCODE -ne 0) { throw "The installer build failed with exit code $LASTEXITCODE." }
 
 $publishedInstaller = Join-Path $installerPublish "CineForge Desktop Setup.exe"
 $releaseInstaller = Join-Path $releaseRoot "CineForge-Desktop-Setup-$Version-win-x64.exe"
 if (!(Test-Path -LiteralPath $publishedInstaller)) { throw "The installer executable was not created." }
 Copy-Item -LiteralPath $publishedInstaller -Destination $releaseInstaller
-$runtimeAsset = Join-Path $releaseRoot "CineForge-Desktop-Runtime-$Version-win-x64.zip"
+$runtimeAsset = Join-Path $releaseRoot $runtimeFileName
 Copy-Item -LiteralPath $payloadZip -Destination $runtimeAsset
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\GITHUB_RELEASE.md") -Destination (Join-Path $releaseRoot "RELEASE_NOTES.md")
 Copy-Item -LiteralPath (Join-Path $appRoot "docs\INSTALLATION.md") -Destination (Join-Path $releaseRoot "INSTALLATION.md")

@@ -214,10 +214,10 @@ internal sealed record ModelFile(string Name, long Bytes, string Sha256);
 
 internal static class InstallerEngine
 {
-    private const string RuntimeFileName = "CineForge-Desktop-Runtime-0.4.0-win-x64.zip";
-    private const string RuntimeUrl = "https://github.com/thebalddudeco/CineForge/releases/download/v0.4.0/CineForge-Desktop-Runtime-0.4.0-win-x64.zip";
-    private const long RuntimeBytes = 2017201506;
-    private const string RuntimeSha256 = "4ab5dbfbe10c576aea97276f3e8a554d57fe544d0cf11437cb656cec4794d346";
+    private static readonly string RuntimeFileName = RuntimeMetadata("CineForgeRuntimeFileName");
+    private static readonly string RuntimeUrl = RuntimeMetadata("CineForgeRuntimeUrl");
+    private static readonly long RuntimeBytes = long.Parse(RuntimeMetadata("CineForgeRuntimeBytes"));
+    private static readonly string RuntimeSha256 = RuntimeMetadata("CineForgeRuntimeSha256");
     private const string ModelRepository = "https://huggingface.co/TheBaldDudeCo/CineForge-Wan-Models";
     private const string ModelRevision = "493b7c8ff0a451b6b4c049afb3e6396dbfa1c688";
     private const string PackFolder = "CineForge-Wan-2.2-I2V-A14B-FP8";
@@ -238,6 +238,11 @@ internal static class InstallerEngine
         new("support/transformer_2/config.json", 495, "6809423c4a92f886feded9f85f55c667d73a2332d5e011fab4172f3448dd5666"),
         new("support/vae/config.json", 724, "47e8bcf55e93e9c182e1962a8c7a0650faeb34ea0f66826d6f8aaa9f73e08ec9")
     ];
+
+    private static string RuntimeMetadata(string key) => Assembly.GetExecutingAssembly()
+        .GetCustomAttributes<AssemblyMetadataAttribute>()
+        .First(attribute => attribute.Key == key).Value
+        ?? throw new InvalidOperationException($"Installer runtime metadata is missing: {key}");
 
     internal static async Task InstallAsync(string installRoot, string dataRoot, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
     {

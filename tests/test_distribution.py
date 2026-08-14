@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class DistributionTests(unittest.TestCase):
     def test_installer_downloads_from_cineforge_repository(self):
         source = (ROOT / "packaging" / "CineForge.Installer" / "Program.cs").read_text(encoding="utf-8")
+        project = (ROOT / "packaging" / "CineForge.Installer" / "CineForge.Installer.csproj").read_text(encoding="utf-8")
         self.assertIn("TheBaldDudeCo/CineForge-Wan-Models", source)
         self.assertIn("RangeHeaderValue", source)
         self.assertIn("HashMatchesAsync", source)
@@ -17,7 +18,7 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("downloaded and SHA-256 verified", source)
         self.assertIn("493b7c8ff0a451b6b4c049afb3e6396dbfa1c688", source)
         self.assertIn("support/tokenizer/tokenizer.json", source)
-        self.assertIn("CineForge-Desktop-Runtime-0.4.0-win-x64.zip", source)
+        self.assertIn("CineForge-Desktop-Runtime-0.4.0-win-x64.zip", project)
         self.assertIn("RuntimeSha256", source)
         self.assertNotIn('ModelRevision = "main"', source)
 
@@ -38,6 +39,8 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("download.pytorch.org/whl/cu130", source)
         self.assertIn("diffusers==0.39.0", requirements)
         self.assertIn("transformers==5.0.0", requirements)
+        self.assertIn("CineForgeRuntimeSha256=$runtimeSha256", source)
+        self.assertIn("CineForgeRuntimeBytes=$runtimeBytes", source)
 
     def test_desktop_release_identity(self):
         builder = (ROOT / "packaging" / "Build-Release.ps1").read_text(encoding="utf-8")
