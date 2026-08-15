@@ -31,7 +31,7 @@ def native_runtime_status(settings: Settings) -> dict[str, Any]:
         "online": False,
         "backend": "native",
         "engine": "CineForge Engine",
-        "engine_version": "0.5.0",
+        "engine_version": "5.1",
         "url": None,
     }
     command = shutil.which("nvidia-smi")

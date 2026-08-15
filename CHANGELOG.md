@@ -4,7 +4,18 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ## [Unreleased]
 
+## [5.1] - 2026-08-15
+
+### Official release
+
+- Promoted CineForge Desktop from the `v0.5.0` prerelease track to the official `v5.1` public release.
+- Removed the leading zero from the public product version, release tag, runtime asset names, installer metadata, localized title bars, runtime telemetry labels, and approved version badge text.
+- Locked the packaged EXE icon pipeline to the approved Brand System favicon asset so the installer and desktop executable always ship with the approved CineForge mark.
+- Preserved the validated native Wan desktop workflow, installer behavior, automatic model delivery, and locked retrofuturist interface while issuing the corrected public version line.
+
 ### Documentation
+
+- Added official `5.1` release positioning to the README, release notes, verification record, installation guide, user guide, compatibility record, and version history.
 
 - Added a complete CineForge Desktop 0.5.0 user guide covering installation, runtime readiness, every workflow stage, the location of candidate-level Generate Video controls, live progress interpretation, outputs, localization, privacy, current version behavior, and troubleshooting.
 
@@ -107,7 +118,8 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 - ComfyUI-backed execution and multi-model routing were superseded by the standalone Wan-only direction.
 
-[Unreleased]: https://github.com/thebalddudeco/CineForge/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/thebalddudeco/CineForge/compare/v5.1...HEAD
+[5.1]: https://github.com/thebalddudeco/CineForge/compare/v0.5.0...v5.1
 [0.5.0]: https://github.com/thebalddudeco/CineForge/compare/v0.4.0...v0.5.0
 [0.2.0]: https://github.com/thebalddudeco/CineForge/releases/tag/v0.2.0
 [0.1.0]: https://github.com/thebalddudeco/CineForge/releases/tag/v0.1.0

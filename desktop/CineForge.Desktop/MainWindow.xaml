@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:CineForge.Desktop"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
-        Title="CineForge Desktop 0.5.0" Width="1520" Height="960" MinWidth="1120" MinHeight="720"
+        Title="CineForge Desktop 5.1" Width="1520" Height="960" MinWidth="1120" MinHeight="720"
         Background="{StaticResource MicroGrid}" Foreground="{StaticResource Ink}"
         WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanResize" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
   <shell:WindowChrome.WindowChrome>
@@ -163,7 +163,7 @@
           </StackPanel>
           <Grid Width="49" Height="44" Margin="16,0,0,0">
             <Polygon Points="6,1 43,1 49,10 30,43 20,43 0,10" Stroke="{StaticResource Acid}" StrokeThickness="1.5" Fill="{StaticResource Acid}"/>
-            <TextBlock Text="v0.5.0" Foreground="{StaticResource DarkText}" FontFamily="{DynamicResource MicroFont}" FontSize="7" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,11,0,0"/>
+            <TextBlock Text="v5.1" Foreground="{StaticResource DarkText}" FontFamily="{DynamicResource MicroFont}" FontSize="7" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,11,0,0"/>
           </Grid>
         </StackPanel>
         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0">
@@ -189,7 +189,7 @@
                 <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal"><Ellipse Width="6" Height="6" Fill="{StaticResource Acid}" Margin="0,1,7,0" Style="{StaticResource SignalPulse}"/><TextBlock x:Name="RuntimeHeader" Text="{DynamicResource L.CheckingRuntime}" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}" FontSize="8"/></StackPanel>
                 <Grid Grid.Row="1" Margin="13,3,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal"><TextBlock Text="GPU / " Style="{StaticResource Micro}" Foreground="{StaticResource Dim}"/><TextBlock x:Name="RuntimeGpuValue" Text="—" Style="{StaticResource Micro}" Foreground="{StaticResource Ink}"/></StackPanel><StackPanel Grid.Column="1" Orientation="Horizontal"><TextBlock Text="VRAM / " Style="{StaticResource Micro}" Foreground="{StaticResource Dim}"/><TextBlock x:Name="RuntimeVramValue" Text="—" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}"/></StackPanel></Grid>
-                <Grid Grid.Row="2" Margin="13,3,0,0"><TextBlock x:Name="RuntimeEngineValue" Text="NATIVE WAN / CUDA" Style="{StaticResource Micro}" FontSize="7"/><TextBlock x:Name="RuntimeBuildValue" Text="BUILD 0.5.0" Style="{StaticResource Micro}" FontSize="7" HorizontalAlignment="Right"/></Grid>
+                <Grid Grid.Row="2" Margin="13,3,0,0"><TextBlock x:Name="RuntimeEngineValue" Text="NATIVE WAN / CUDA" Style="{StaticResource Micro}" FontSize="7"/><TextBlock x:Name="RuntimeBuildValue" Text="BUILD 5.1" Style="{StaticResource Micro}" FontSize="7" HorizontalAlignment="Right"/></Grid>
               </Grid>
             </Border>
           </Grid>

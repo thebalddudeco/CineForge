@@ -40,7 +40,7 @@ class Worker:
             return {
                 "app": "CineForge Desktop",
                 "edition": "desktop",
-                "version": "0.5.0",
+                "version": "5.1",
                 "transport": "private-process",
                 "runtime": self.engine.runtime(),
             }

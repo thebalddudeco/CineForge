@@ -11,17 +11,17 @@ The current repository and installer work are focused on CineForge Desktop.
 
 ## Project status
 
-**CineForge Desktop 0.5.0 native-desktop release candidate.**
+**CineForge Desktop 5.1 official native-desktop release.**
 
-The application, engine protocol, installer, packaging defaults, localized title bars, runtime telemetry, and approved filled version badge are stamped consistently as `0.5.0`. The release remains a candidate until every verification gate in `docs/RELEASE_PROCESS.md` has passed.
+The application, engine protocol, installer, packaging defaults, localized title bars, runtime telemetry, and approved filled version badge are stamped consistently as `5.1`.
 
-The application now loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-FP8 UMT5 encoder, and Wan VAE directly through the CineForge Engine without ComfyUI. A real two-expert generation completed on an RTX 4070 with finite latents, finite non-black frames, live progress telemetry, and MP4 export. The remaining public-release gate is a clean-machine installer/download/generation/uninstall pass.
+The application loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-FP8 UMT5 encoder, and Wan VAE directly through the CineForge Engine without ComfyUI. The public 5.1 release carries forward the validated native generation path, the corrected approved brand icon, and the locked retrofuturist brand system.
 
-The installer is pinned to the validated release-candidate pack revision recorded in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md) and [docs/RELEASE_VERIFICATION.md](docs/RELEASE_VERIFICATION.md).
+The installer is pinned to the validated pack revision recorded in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md) and [docs/RELEASE_VERIFICATION.md](docs/RELEASE_VERIFICATION.md).
 
 ## How to use CineForge Desktop
 
-For the complete workflow, control explanations, first-project example, and troubleshooting, read the **[CineForge Desktop 0.5.0 User Guide](docs/USER_GUIDE.md)**.
+For the complete workflow, control explanations, first-project example, and troubleshooting, read the **[CineForge Desktop 5.1 User Guide](docs/USER_GUIDE.md)**.
 
 1. **Install CineForge Desktop.** Choose an application folder and a separate CineForge Library folder when prompted. Setup downloads and verifies the required Wan model pack automatically.
 2. **Open CineForge.** Confirm that the header reports a connected GPU/runtime. If the model list is empty, use **Refresh Models** after setup has finished downloading the model pack.
@@ -35,7 +35,7 @@ For the complete workflow, control explanations, first-project example, and trou
 
 The language controls in the lower-left corner switch the interface between English, Korean, and Japanese. CineForge Desktop keeps imported media, project data, models, and generated outputs on the local machine.
 
-> **v0.5.0 note:** the five reference cards currently share one canonical image, and the validated generation profile remains five seconds. The full user guide explains these behaviors and the planned workflow clearly.
+> **v5.1 note:** the five reference cards currently share one canonical image, and the validated generation profile remains five seconds. The full user guide explains these behaviors and the planned workflow clearly.
 
 ## Product scope
 

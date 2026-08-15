@@ -1,6 +1,6 @@
 # CineForge Desktop brand implementation record
 
-Status: implementation paper trail for the v0.5.0 native Windows interface. The normative rules remain in `DESIGN_SYSTEM.md`; the archived structural reference remains in `V010_VISUAL_SOURCE_OF_TRUTH.md`.
+Status: implementation paper trail for the v5.1 native Windows interface. The normative rules remain in `DESIGN_SYSTEM.md`; the archived structural reference remains in `V010_VISUAL_SOURCE_OF_TRUTH.md`.
 
 ## Design lineage
 

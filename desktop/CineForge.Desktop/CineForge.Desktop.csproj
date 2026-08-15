@@ -8,8 +8,8 @@
     <AssemblyName>CineForge</AssemblyName>
     <RootNamespace>CineForge.Desktop</RootNamespace>
     <ApplicationIcon>..\..\packaging\assets\CineForge.ico</ApplicationIcon>
-    <Version>0.5.0</Version>
-    <FileVersion>0.5.0.0</FileVersion>
+    <Version>5.1</Version>
+    <FileVersion>5.1.0.0</FileVersion>
     <AssemblyTitle>CineForge Desktop</AssemblyTitle>
     <Product>CineForge Desktop</Product>
   </PropertyGroup>

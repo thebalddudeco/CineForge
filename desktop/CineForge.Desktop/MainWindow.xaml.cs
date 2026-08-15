@@ -16,6 +16,7 @@ namespace CineForge.Desktop;
 
 public partial class MainWindow : Window
 {
+    private const string PublicVersion = "5.1";
     private readonly EngineClient _engine = new();
     private readonly ObservableCollection<ShotView> _visibleShots = [];
     private readonly Dictionary<string, List<ShotView>> _branches = [];
@@ -56,7 +57,7 @@ public partial class MainWindow : Window
             RuntimeGpuValue.Text = "RTX 4070";
             RuntimeVramValue.Text = "83%";
             RuntimeEngineValue.Text = "NATIVE WAN / CUDA";
-            RuntimeBuildValue.Text = "0.5.0";
+            RuntimeBuildValue.Text = PublicVersion;
             RuntimeOrbital.Activity = 42;
             SeedPreviewTelemetry();
             StatusText.Text = "NATIVE UI PREVIEW / ENGINE BYPASSED";
@@ -423,13 +424,11 @@ public partial class MainWindow : Window
         var utilization = runtime.TryGetProperty("gpu_utilization_percent", out var utilizationNode) ? utilizationNode.GetDouble() : 0;
         var temperature = runtime.TryGetProperty("temperature_c", out var temperatureNode) ? temperatureNode.GetDouble() : 0;
         var power = runtime.TryGetProperty("power_w", out var powerNode) ? powerNode.GetDouble() : 0;
-        var build = runtime.TryGetProperty("engine_version", out var buildNode) ? buildNode.GetString() ?? "0.5.0" : "0.5.0";
-
         RuntimeHeader.Text = online ? "CONNECTED / 01" : "OFFLINE / 00";
         RuntimeGpuValue.Text = device.Replace("NVIDIA GeForce ", "");
         RuntimeVramValue.Text = total > 0 ? $"{vram:0}%" : "—";
         RuntimeEngineValue.Text = "NATIVE WAN / CUDA";
-        RuntimeBuildValue.Text = $"BUILD {build}";
+        RuntimeBuildValue.Text = $"BUILD {PublicVersion}";
         RuntimeOrbital.Activity = utilization;
         AddRuntimeSample(0, utilization);
         AddRuntimeSample(1, vram);

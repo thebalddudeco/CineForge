@@ -6,12 +6,25 @@ This record connects the public repository history, design evolution, runtime ar
 
 The executable, installer, engine protocol, version badge, packaging defaults, tag, release title, checksums, and compatibility record must agree before a release is published.
 
-At the time of the v0.5.0 release record:
+At the time of the v5.1 release record:
 
-- the checked-in Desktop application, engine, installer, packaging defaults, localized titles, telemetry, and badge report `0.5.0`;
-- the native WPF and brand redesign are recorded in the dated v0.5.0 changelog section;
-- `v0.5.0` is authorized as an unsigned public prerelease, with generated installer/runtime checksums attached by the tagged Windows workflow;
-- stable-release status remains withheld until isolated installation, automatic model download, generation, uninstall, and production-signing gates pass.
+- the checked-in Desktop application, engine, installer, packaging defaults, localized titles, telemetry, and badge report `5.1`;
+- the native WPF rebuild, locked brand-system implementation, and approved EXE icon correction are recorded in the dated 5.1 changelog section;
+- `v5.1` is the official public release tag;
+- the prior `v0.5.0` record remains the final native prerelease checkpoint immediately before the official 5.1 line.
+
+## v5.1 — official native desktop release
+
+The 5.1 release promotes CineForge Desktop from prerelease status into the official public desktop line while preserving the validated native Wan generation path introduced during the 0.5.0 candidate cycle.
+
+This release:
+
+- removes the leading zero from the public version line;
+- standardizes the installer, runtime asset names, release tag, docs, localized title bars, and approved version badge around `5.1`;
+- locks the packaged EXE icon pipeline to the approved Brand System favicon asset so Explorer, installer surfaces, and executable metadata stop drifting back to the superseded mark;
+- preserves the native WPF workflow, locked retrofuturist visual system, live telemetry, fixed breathing dot matrix, and Wan-only local generation contract.
+
+The `v0.5.0` release remains part of the historical record as the final native Windows release candidate, but `v5.1` is the current official release line.
 
 ## v0.1.0 — cinematic workflow prototype
 

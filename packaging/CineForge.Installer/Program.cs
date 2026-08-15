@@ -17,7 +17,7 @@ internal static class Program
     internal const string InstallFolderName = "CineForge";
     internal const string Publisher = "The Bald Dude Co.";
     internal static string ProductVersion => Assembly.GetExecutingAssembly()
-        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.5.0";
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "5.1";
     internal static readonly string ProgramsRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs");
     internal static readonly string DefaultInstallRoot = Path.Combine(ProgramsRoot, InstallFolderName);
     internal static readonly string DefaultDataRoot = DefaultLibraryRoot();

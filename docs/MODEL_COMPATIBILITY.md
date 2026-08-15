@@ -2,7 +2,7 @@
 
 | CineForge version | Wan pack | State | Hardware verified | Notes |
 |---|---|---|---|---|
-| 0.5.0 RC | Wan 2.2 I2V A14B scaled-FP8 | Native Windows release candidate | RTX 4070 12 GB | Native WPF interface and private worker transport compile; the validated native generation path is retained; clean-machine install remains. |
+| 5.1 | Wan 2.2 I2V A14B scaled-FP8 | Official native Windows release | RTX 4070 12 GB | Native WPF interface, approved locked-brand icon, private worker transport, and validated native generation path retained. |
 | 0.4.0 RC | Wan 2.2 I2V A14B scaled-FP8 | Release candidate | RTX 4070 12 GB | Native load, two-expert generation, telemetry, finite frames, and MP4 export passed; clean-machine install remains. |
 | 0.2.0 | None | Engineering preview | RTX 4070 12 GB diagnostic inference | The native engine was verified with a small diagnostic image pipeline, not Wan. |
 

@@ -1,4 +1,4 @@
-# CineForge Desktop 0.5.0 user guide
+# CineForge Desktop 5.1 user guide
 
 This guide takes a first-time user from installation to a finished local Wan video. CineForge Desktop is a native Windows application: it does not open a browser, require ComfyUI, or send generation work to a CineForge server.
 
@@ -10,12 +10,12 @@ This guide takes a first-time user from installation to a finished local Wan vid
 - A reliable internet connection during the first installation
 - One source image for image-to-video generation
 
-The v0.5.0 release was validated on an NVIDIA GeForce RTX 4070 with 12 GB VRAM. Other NVIDIA configurations may work, but generation speed and memory behavior will vary.
+The 5.1 release was validated on an NVIDIA GeForce RTX 4070 with 12 GB VRAM. Other NVIDIA configurations may work, but generation speed and memory behavior will vary.
 
 ## 1. Install CineForge
 
-1. Open the [CineForge Desktop v0.5.0 release](https://github.com/thebalddudeco/CineForge/releases/tag/v0.5.0).
-2. Download `CineForge-Desktop-Setup-0.5.0-win-x64.exe`.
+1. Open the [CineForge Desktop v5.1 release](https://github.com/thebalddudeco/CineForge/releases/tag/v5.1).
+2. Download `CineForge-Desktop-Setup-5.1-win-x64.exe`.
 3. Run the installer.
 4. Choose English, Korean, or Japanese as the initial interface language.
 5. Choose the application location. The final application folder is named `CineForge`.
@@ -59,7 +59,7 @@ Specific descriptions produce a more coherent set of shot prompts than abstract 
 
 ### Clip length and model
 
-Keep **5 Seconds** selected for v0.5.0. The current release uses its validated five-second generation profile even though additional duration choices are visible in the menu.
+Keep **5 Seconds** selected for 5.1. The current release uses its validated five-second generation profile even though additional duration choices are visible in the menu.
 
 Use **Active Wan Video Model** to confirm the installed Wan adapter that will generate the clip.
 
@@ -77,7 +77,7 @@ Supported formats are PNG, JPEG, WebP, and BMP. A useful reference image should 
 
 After the image is imported, its local CineForge path appears in the reference panel and **Build 15-Shot Factory** becomes available.
 
-> **v0.5.0 reference behavior:** Identity, Wardrobe, Geography, Film Look, and Props are continuity categories, but this release stores one canonical image for the generation job. Selecting another category and importing another image replaces the current canonical image; it does not add a separate fifth reference.
+> **v5.1 reference behavior:** Identity, Wardrobe, Geography, Film Look, and Props are continuity categories, but this release stores one canonical image for the generation job. Selecting another category and importing another image replaces the current canonical image; it does not add a separate fifth reference.
 
 ## 5. Build the 15-shot factory
 
@@ -100,7 +100,7 @@ There is intentionally no Generate button in the Scene Brief. Generation becomes
 3. Select **Generate Video** on that candidate.
 4. Leave CineForge open while the local Wan job runs.
 
-CineForge sends the chosen candidate’s motion prompt, the canonical image, and the selected Wan adapter to its private local engine. The v0.5.0 validated output profile is 768 × 432 using the five-second generation path.
+CineForge sends the chosen candidate’s motion prompt, the canonical image, and the selected Wan adapter to its private local engine. The 5.1 validated output profile is 768 × 432 using the five-second generation path.
 
 ## 7. Read the generation monitor
 
@@ -163,7 +163,7 @@ Import the reference image, build the factory, inspect all three branches, and g
 1. Confirm the installer completed rather than being closed during the model download.
 2. Select **Refresh Models**.
 3. Confirm that the selected CineForge Library still contains `models/CineForge-Wan-2.2-I2V-A14B-FP8/`.
-4. Rerun the v0.5.0 installer using the same application and library locations. Existing verified files are retained and partial downloads resume.
+4. Rerun the 5.1 installer using the same application and library locations. Existing verified files are retained and partial downloads resume.
 
 ### The engine reports offline or GPU unavailable
 

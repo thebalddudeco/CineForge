@@ -46,6 +46,6 @@ Uninstall removes the CineForge application and shortcuts. It preserves the enti
 
 ## Model revision
 
-Version 0.5.0 downloads the verified model pack and native runtime support files from immutable Hugging Face revision `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`. The installer will not follow later changes made to the repository's `main` branch. After installation, CineForge launches as a native Windows application; it does not open a browser or start a localhost web server.
+Version 5.1 downloads the verified model pack and native runtime support files from immutable Hugging Face revision `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`. The installer will not follow later changes made to the repository's `main` branch. After installation, CineForge launches as a native Windows application; it does not open a browser or start a localhost web server.
 
 The public setup EXE is a lightweight bootstrapper. It first downloads and verifies the approximately 2.0 GB CineForge native CUDA runtime from the matching immutable GitHub Release, then downloads and verifies the approximately 35.6 GB Wan model pack. Both downloads resume after interruption.

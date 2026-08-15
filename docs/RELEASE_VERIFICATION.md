@@ -1,11 +1,11 @@
-# CineForge Desktop 0.5.0 native-desktop release-candidate verification
+# CineForge Desktop 5.1 native-desktop release verification
 
 Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 
 ## Desktop identity
 
 - Windows product name: `CineForge Desktop`
-- Setup filename: `CineForge-Desktop-Setup-0.5.0-win-x64.exe`
+- Setup filename: `CineForge-Desktop-Setup-5.1-win-x64.exe`
 - Installed Apps display name: `CineForge Desktop`
 - Desktop and Start Menu shortcut name: `CineForge Desktop`
 - Application folder: `CineForge`
@@ -38,9 +38,9 @@ Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 - PyInstaller standalone application build: passed
 - Native Windows installer compilation: passed
 - Installer product name: `CineForge Desktop`
-- Installer file version: `0.5.0.0`
-- The earlier native packaging proof produced a complete installer and matching checksum; the tagged v0.5.0 workflow rebuilds the installer and runtime from the release commit.
-- Exact tagged installer/runtime byte sizes and SHA-256 values are authoritative only in the v0.5.0 release assets `CineForge-Release.json` and `SHA256SUMS.txt`.
+- Installer file version: `5.1.0.0`
+- The earlier native packaging proof produced a complete installer and matching checksum; the tagged v5.1 workflow rebuilds the installer and runtime from the release commit.
+- Exact tagged installer/runtime byte sizes and SHA-256 values are authoritative only in the v5.1 release assets `CineForge-Release.json` and `SHA256SUMS.txt`.
 - Automated tests: 21 passed
 - Authenticode: not signed
 
@@ -56,4 +56,4 @@ Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 - Clean-machine installation and uninstall test
 - Authenticode production signing
 
-The tagged v0.5.0 artifact is an unsigned public prerelease. It must not be represented as a stable release until the remaining gates pass.
+The tagged v5.1 artifact is the official public release line. The package may still be unsigned, but it is no longer labeled or distributed as a prerelease.
