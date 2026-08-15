@@ -4,6 +4,8 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-15
+
 ### Native Windows interface and brand-system implementation
 
 - Rebuilt CineForge Desktop as a genuine native WPF application with no browser window, localhost server, embedded web view, or ComfyUI process.
@@ -101,6 +103,7 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 - ComfyUI-backed execution and multi-model routing were superseded by the standalone Wan-only direction.
 
-[Unreleased]: https://github.com/thebalddudeco/CineForge/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/thebalddudeco/CineForge/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/thebalddudeco/CineForge/compare/v0.4.0...v0.5.0
 [0.2.0]: https://github.com/thebalddudeco/CineForge/releases/tag/v0.2.0
 [0.1.0]: https://github.com/thebalddudeco/CineForge/releases/tag/v0.1.0

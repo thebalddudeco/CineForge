@@ -32,26 +32,28 @@ Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 - ComfyUI dependency: none
 - Shadowframe runtime or directory dependency: none
 
-## Build checks
+## Prior local build checks
 
 - Independent CUDA packaging environment on `X:`: passed
 - PyInstaller standalone application build: passed
 - Native Windows installer compilation: passed
 - Installer product name: `CineForge Desktop`
 - Installer file version: `0.5.0.0`
-- Installer size: 2,033,988,934 bytes
-- SHA-256: `ec231da71272a0e9af14f738e09b925091cce5634ac5c085c4dad62590caacf5`
-- Generated checksum comparison: passed
-- Automated tests: 14 passed
+- The earlier native packaging proof produced a complete installer and matching checksum; the tagged v0.5.0 workflow rebuilds the installer and runtime from the release commit.
+- Exact tagged installer/runtime byte sizes and SHA-256 values are authoritative only in the v0.5.0 release assets `CineForge-Release.json` and `SHA256SUMS.txt`.
+- Automated tests: 21 passed
 - Authenticode: not signed
 
-## Remaining preview gates
+## Native generation verification
 
-- Native loading of the split Wan scaled-FP8 pack
-- Real end-to-end Wan generation without ComfyUI
-- Output and media-probe validation
+- Native loading of the split Wan scaled-FP8 pack: passed
+- Real two-expert end-to-end Wan generation without ComfyUI: passed
+- Finite latents, finite non-black frames, live progress telemetry, MP4 export, and media-probe validation: passed
+
+## Remaining stable-release gates
+
 - Installer model-download test in an isolated library
 - Clean-machine installation and uninstall test
 - Authenticode production signing
 
-This artifact is a technical preview and must not be represented as a stable public release until the remaining gates pass.
+The tagged v0.5.0 artifact is an unsigned public prerelease. It must not be represented as a stable release until the remaining gates pass.

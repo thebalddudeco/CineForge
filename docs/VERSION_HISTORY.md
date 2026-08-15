@@ -6,12 +6,12 @@ This record connects the public repository history, design evolution, runtime ar
 
 The executable, installer, engine protocol, version badge, packaging defaults, tag, release title, checksums, and compatibility record must agree before a release is published.
 
-At the time of this record:
+At the time of the v0.5.0 release record:
 
-- GitHub contains the earlier `v0.4.0` prerelease tag;
 - the checked-in Desktop application, engine, installer, packaging defaults, localized titles, telemetry, and badge report `0.5.0`;
-- the native WPF and brand redesign are the v0.5.0 release-candidate work recorded in `Unreleased`;
-- a `v0.5.0` tag and public release must not be created until every release gate passes and the release artifacts/checksums are produced.
+- the native WPF and brand redesign are recorded in the dated v0.5.0 changelog section;
+- `v0.5.0` is authorized as an unsigned public prerelease, with generated installer/runtime checksums attached by the tagged Windows workflow;
+- stable-release status remains withheld until isolated installation, automatic model download, generation, uninstall, and production-signing gates pass.
 
 ## v0.1.0 — cinematic workflow prototype
 
@@ -90,7 +90,7 @@ The current work replaces the Desktop presentation and process boundary without 
 - exact user-supplied orbital-globe animation packaged as an application resource;
 - numerous contrast, spacing, dropdown, registration-mark, grain, gradient, and clipping corrections from visual review.
 
-All product version surfaces are now coordinated at `0.5.0`. The work remains in `Unreleased` until the remaining release gates pass, the installer/runtime assets and checksums are produced, and the `v0.5.0` tag is created.
+All product version surfaces are coordinated at `0.5.0`. The tagged build is published as an unsigned prerelease; its workflow-generated manifest and checksums are the authoritative artifact record. Stable status remains gated by isolated clean-machine and production-signing verification.
 
 ## Release evidence
 
