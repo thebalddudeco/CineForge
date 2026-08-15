@@ -21,7 +21,21 @@ The installer is pinned to the validated pack revision recorded in [docs/MODEL_P
 
 ## How to use CineForge Desktop
 
+If you just want the short version:
+
+1. Install CineForge Desktop.
+2. Open it and make sure the runtime header shows a connected GPU.
+3. Fill out the **Scene Brief**.
+4. Choose your Wan model from the model menu under **Clip Length**.
+5. In **Lock what must not drift**, import the reference image you want the sequence to stay faithful to.
+6. Click **Build 15-Shot Factory**.
+7. Review the generated shot candidates.
+8. Click **Generate Video** on the specific candidate you want to turn into motion.
+9. Wait for the live progress panel to finish, then open the exported result.
+
 For the complete workflow, control explanations, first-project example, and troubleshooting, read the **[CineForge Desktop 5.1 User Guide](docs/USER_GUIDE.md)**.
+
+### Quick-start workflow
 
 1. **Install CineForge Desktop.** Choose an application folder and a separate CineForge Library folder when prompted. Setup downloads and verifies the required Wan model pack automatically.
 2. **Open CineForge.** Confirm that the header reports a connected GPU/runtime. If the model list is empty, use **Refresh Models** after setup has finished downloading the model pack.
@@ -29,13 +43,22 @@ For the complete workflow, control explanations, first-project example, and trou
 4. **Lock the visual reference.** In **Lock what must not drift**, select the source image that establishes the subject and visual continuity. The build action remains unavailable until a reference image has been selected.
 5. **Build the 15-shot factory.** Select **Build 15-Shot Factory** beneath the reference pack. CineForge creates five angle prompts, five insert prompts, and five story-progressing prompts, then moves the view to the generated candidates.
 6. **Review the candidates.** Compare the planned shots and choose the candidate that should become video.
-7. **Generate the video.** Use **Generate Video** on the chosen candidate. CineForge sends that shot, the locked image, and its motion direction to the local Wan engine.
+7. **Generate the video.** There is no single giant master Generate button at the top of the app. Instead, each generated candidate has its own **Generate Video** action. Click **Generate Video** on the chosen candidate. CineForge sends that shot, the locked image, and its motion direction to the local Wan engine.
 8. **Monitor generation.** The live generation instrument reports stage, percentage, elapsed time, estimated time remaining, GPU activity, and VRAM use. The segmented bar is real progress data; the breathing dot matrix is the active-generation signal.
 9. **Open the result.** When generation completes, preview the clip or use **Open Output Folder** to access the exported file in the CineForge Library.
 
 The language controls in the lower-left corner switch the interface between English, Korean, and Japanese. CineForge Desktop keeps imported media, project data, models, and generated outputs on the local machine.
 
 > **v5.1 note:** the five reference cards currently share one canonical image, and the validated generation profile remains five seconds. The full user guide explains these behaviors and the planned workflow clearly.
+
+### What each main section does
+
+- **Scene Brief**: defines the dramatic intent, subject, environment, action, lighting, and overall cinematic language.
+- **Lock what must not drift**: holds the visual identity reference for the sequence.
+- **Build 15-Shot Factory**: creates the planning set of five angles, five inserts, and five story-progressing beats.
+- **Shot candidates**: lets you review what CineForge planned before spending time on video generation.
+- **Generate Video**: launches the actual Wan video job for one chosen candidate.
+- **Generation panel**: shows real progress, GPU activity, elapsed time, and ETA while the shot is rendering.
 
 ## Product scope
 
