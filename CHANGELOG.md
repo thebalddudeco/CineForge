@@ -6,6 +6,7 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ### Changed
 
+- Fixed resumable installer downloads at the exact end-of-file boundary: completed `.partial` runtime and Wan files are now checksum-verified and promoted, while stale HTTP ranges are safely restarted after a 416 response.
 - Added the standalone scaled-FP8 Wan 2.2 I2V loader, safe UMT5 FP8 prompt path, high/low expert switching, block-level CPU offload, float32 VAE decode, and native MP4 export without ComfyUI.
 - Validated real two-expert I2V generation on an RTX 4070 with finite latents, finite non-black frames, live progress callbacks, and a decodable MP4.
 - Added the scheduler, tokenizer, and architecture support files to the model pack and pinned Desktop setup to immutable Hugging Face revision `493b7c8ff0a451b6b4c049afb3e6396dbfa1c688`.

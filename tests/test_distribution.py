@@ -20,6 +20,9 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("support/tokenizer/tokenizer.json", source)
         self.assertIn("CineForge-Desktop-Runtime-0.4.0-win-x64.zip", project)
         self.assertIn("RuntimeSha256", source)
+        self.assertIn("offset == RuntimeBytes", source)
+        self.assertIn("offset == file.Bytes", source)
+        self.assertIn("RequestedRangeNotSatisfiable", source)
         self.assertNotIn('ModelRevision = "main"', source)
 
     def test_runtime_does_not_discover_shadowframe(self):

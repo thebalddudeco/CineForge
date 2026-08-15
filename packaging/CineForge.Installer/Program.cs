@@ -320,9 +320,25 @@ internal static class InstallerEngine
             {
                 long offset = File.Exists(partial) ? new FileInfo(partial).Length : 0;
                 if (offset > RuntimeBytes) { File.Delete(partial); offset = 0; }
+                if (offset == RuntimeBytes)
+                {
+                    progress?.Report(new("Verifying completed CineForge runtime download…", 5, RuntimeBytes, RuntimeBytes));
+                    if (await HashMatchesAsync(partial, RuntimeSha256, cancellationToken))
+                    {
+                        File.Move(partial, destination, true);
+                        return destination;
+                    }
+                    File.Delete(partial);
+                    offset = 0;
+                }
                 using var request = new HttpRequestMessage(HttpMethod.Get, RuntimeUrl);
                 if (offset > 0) request.Headers.Range = new RangeHeaderValue(offset, null);
                 using HttpResponseMessage response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                if (response.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable && offset > 0)
+                {
+                    File.Delete(partial);
+                    continue;
+                }
                 response.EnsureSuccessStatusCode();
                 bool append = offset > 0 && response.StatusCode == HttpStatusCode.PartialContent;
                 if (!append) offset = 0;
@@ -420,11 +436,27 @@ internal static class InstallerEngine
             {
                 long offset = File.Exists(partial) ? new FileInfo(partial).Length : 0;
                 if (offset > file.Bytes) { File.Delete(partial); offset = 0; }
+                if (offset == file.Bytes)
+                {
+                    progress?.Report(new($"Verifying completed {file.Name} download…", 5 + (int)((completedBefore + file.Bytes) * 90 / total), completedBefore + file.Bytes, total));
+                    if (await HashMatchesAsync(partial, file.Sha256, cancellationToken))
+                    {
+                        File.Move(partial, destination, true);
+                        return;
+                    }
+                    File.Delete(partial);
+                    offset = 0;
+                }
                 string remotePath = string.Join('/', file.Name.Split('/').Select(Uri.EscapeDataString));
                 string url = $"{ModelRepository}/resolve/{ModelRevision}/{remotePath}?download=true";
                 using var request = new HttpRequestMessage(HttpMethod.Get, url);
                 if (offset > 0) request.Headers.Range = new RangeHeaderValue(offset, null);
                 using HttpResponseMessage response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                if (response.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable && offset > 0)
+                {
+                    File.Delete(partial);
+                    continue;
+                }
                 response.EnsureSuccessStatusCode();
                 bool append = offset > 0 && response.StatusCode == HttpStatusCode.PartialContent;
                 if (!append) offset = 0;
