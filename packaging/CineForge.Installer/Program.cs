@@ -1,6 +1,7 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http.Headers;
@@ -100,64 +101,351 @@ internal static class Program
 internal sealed class InstallerForm : Form
 {
     private readonly Label statusLabel;
-    private readonly ProgressBar progressBar;
-    private readonly Button installButton;
-    private readonly Button cancelButton;
+    private readonly SegmentedProgressBar progressBar;
+    private readonly AngledButton installButton;
+    private readonly AngledButton cancelButton;
     private readonly TextBox installPath;
     private readonly TextBox libraryPath;
     private readonly ComboBox languagePicker;
+    private readonly Label signalCodeLabel;
+    private readonly Label signalPercentLabel;
+    private readonly Bitmap backgroundNoise;
     private CancellationTokenSource? cancellation;
 
     public InstallerForm()
     {
         Text = $"CineForge Desktop {Program.ProductVersion} Setup";
-        ClientSize = new Size(760, 650);
-        FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
+        DoubleBuffered = true;
+        ClientSize = new Size(1160, 900);
+        FormBorderStyle = FormBorderStyle.None;
         StartPosition = FormStartPosition.CenterScreen;
-        BackColor = Color.FromArgb(2, 3, 0);
+        MaximizeBox = false;
+        MinimizeBox = false;
+        BackColor = InstallerPalette.Black;
         ForeColor = Color.FromArgb(224, 224, 224);
         Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath!);
+        backgroundNoise = BrandAssets.CreateNoiseTexture(ClientSize.Width, ClientSize.Height);
 
-        var accent = new Panel { BackColor = Color.FromArgb(228, 255, 26), Location = new Point(0, 0), Size = new Size(8, 650) };
-        var eyebrow = new Label { Text = "CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = Color.FromArgb(228, 255, 26), Font = new Font("Segoe UI Semibold", 9), Location = new Point(54, 35) };
-        var title = new Label { Text = "Install CineForge Desktop", AutoSize = true, Font = new Font("Segoe UI", 28, FontStyle.Bold), Location = new Point(49, 63) };
-        var subtitle = new Label { Text = "Application and library locations stay completely separate from Shadowframe.", AutoSize = true, ForeColor = Color.FromArgb(224, 224, 224), Font = new Font("Segoe UI", 10), Location = new Point(54, 118) };
+        var topBar = new Panel { Bounds = new Rectangle(0, 0, ClientSize.Width, 42), BackColor = Color.Transparent };
+        topBar.MouseDown += DragWindow;
+        Controls.Add(topBar);
 
-        var languageLabel = FieldLabel("LANGUAGE / 언어 / 言語", 150);
-        languagePicker = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(55, 171), Size = new Size(210, 28), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), DisplayMember = nameof(LanguageOption.Label), ValueMember = nameof(LanguageOption.Id) };
+        var brandMark = new PictureBox
+        {
+            Image = BrandAssets.IconMarkAcid,
+            SizeMode = PictureBoxSizeMode.Zoom,
+            BackColor = Color.Transparent,
+            Bounds = new Rectangle(22, 12, 26, 18)
+        };
+        brandMark.MouseDown += DragWindow;
+        topBar.Controls.Add(brandMark);
+
+        var chromeTitle = new Label
+        {
+            Text = $"CINEFORGE DESKTOP  /  SETUP SYSTEM  /  {Program.ProductVersion}",
+            AutoSize = true,
+            ForeColor = InstallerPalette.Alabaster,
+            BackColor = Color.Transparent,
+            Font = new Font("Consolas", 10, FontStyle.Regular),
+            Location = new Point(58, 12)
+        };
+        chromeTitle.MouseDown += DragWindow;
+        topBar.Controls.Add(chromeTitle);
+
+        var minimize = CreateChromeButton("—", new Point(ClientSize.Width - 92, 8), () => WindowState = FormWindowState.Minimized);
+        var close = CreateChromeButton("×", new Point(ClientSize.Width - 48, 8), Close);
+        topBar.Controls.Add(minimize);
+        topBar.Controls.Add(close);
+
+        var frameMarks = new FrameMarks { Bounds = new Rectangle(26, 58, 1108, 782), BackColor = Color.Transparent };
+        Controls.Add(frameMarks);
+
+        var headerRule = new RuleLine { Bounds = new Rectangle(42, 82, 1062, 14), DotAlignedRight = true, BackColor = Color.Transparent };
+        Controls.Add(headerRule);
+
+        var eyebrow = new Label
+        {
+            Text = "CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM",
+            AutoSize = true,
+            ForeColor = InstallerPalette.BrandGreen,
+            BackColor = Color.Transparent,
+            Font = new Font("Consolas", 10, FontStyle.Bold),
+            Location = new Point(58, 132)
+        };
+        Controls.Add(eyebrow);
+
+        var title = new Label
+        {
+            Text = "Install CineForge Desktop",
+            AutoSize = true,
+            BackColor = Color.Transparent,
+            ForeColor = InstallerPalette.Alabaster,
+            Font = new Font("Segoe UI", 30, FontStyle.Regular),
+            Location = new Point(58, 160)
+        };
+        Controls.Add(title);
+
+        var subtitle = new Label
+        {
+            Text = "Choose the application and private local-library locations. Existing verified files are reused.",
+            AutoSize = true,
+            ForeColor = InstallerPalette.SoftText,
+            BackColor = Color.Transparent,
+            Font = new Font("Segoe UI", 11, FontStyle.Regular),
+            Location = new Point(60, 222)
+        };
+        Controls.Add(subtitle);
+
+        var routerPanel = new NotchedPanel
+        {
+            Bounds = new Rectangle(42, 286, 1046, 372),
+            PanelTitle = "01 / INSTALLATION ROUTER",
+            PanelCode = "LOCAL / DESKTOP"
+        };
+        Controls.Add(routerPanel);
+
+        var languageLabel = FieldLabel("LANGUAGE / 언어 / 言語", 26, 54);
+        languagePicker = new ComboBox
+        {
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            DrawMode = DrawMode.OwnerDrawFixed,
+            IntegralHeight = false,
+            Bounds = new Rectangle(26, 77, 235, 30),
+            DisplayMember = nameof(LanguageOption.Label),
+            ValueMember = nameof(LanguageOption.Id)
+        };
+        ConfigureCombo(languagePicker);
         languagePicker.Items.AddRange([new LanguageOption("en", "EN  English"), new LanguageOption("ko", "한  한국어"), new LanguageOption("ja", "日  日本語")]);
         languagePicker.SelectedValue = Program.DefaultLanguage;
+        languagePicker.DrawItem += DrawLanguageItem;
+        routerPanel.Controls.Add(languageLabel);
+        routerPanel.Controls.Add(languagePicker);
 
-        var appLabel = FieldLabel("APPLICATION FOLDER", 215);
-        installPath = PathBox(240, Program.DefaultInstallRoot);
-        var appBrowse = BrowseButton(240, () => BrowseFor(installPath, "Select a parent folder for CineForge", "CineForge"));
+        var appLabel = FieldLabel("APPLICATION FOLDER", 26, 138);
+        installPath = PathBox(26, 161, 636, Program.DefaultInstallRoot);
+        var appBrowse = BrowseButton(674, 159, () => BrowseFor(installPath, "Select a parent folder for CineForge", "CineForge"));
+        routerPanel.Controls.Add(appLabel);
+        routerPanel.Controls.Add(installPath);
+        routerPanel.Controls.Add(appBrowse);
 
-        var libraryLabel = FieldLabel("CINEFORGE LIBRARY", 305);
-        libraryPath = PathBox(330, Program.DefaultDataRoot);
-        var libraryBrowse = BrowseButton(330, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
-        var libraryNote = new Label {
-            Text = "Creates the separate CineForge Library for inputs, outputs, projects, models, cache, logs, and temp.\nSetup downloads a ~2.0 GB native runtime, then approximately 35.6 GB of required Wan models.",
-            AutoSize = true, ForeColor = Color.FromArgb(224, 224, 224), Font = new Font("Segoe UI", 9), Location = new Point(55, 370)
+        var libraryLabel = FieldLabel("CINEFORGE LIBRARY", 26, 214);
+        libraryPath = PathBox(26, 237, 636, Program.DefaultDataRoot);
+        var libraryBrowse = BrowseButton(674, 235, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
+        routerPanel.Controls.Add(libraryLabel);
+        routerPanel.Controls.Add(libraryPath);
+        routerPanel.Controls.Add(libraryBrowse);
+
+        var libraryNoteBack = new Panel
+        {
+            Bounds = new Rectangle(26, 286, 560, 40),
+            BackColor = Color.FromArgb(6, 6, 6)
         };
+        var libraryNote = new Label
+        {
+            Text = "SEPARATE DATA VAULT  /  inputs  ·  outputs  ·  projects  ·  models  ·  cache  ·  logs  ·  temp\nSetup verifies existing components before downloading the Wan pack.",
+            AutoSize = false,
+            Size = new Size(550, 34),
+            Location = new Point(4, 2),
+            ForeColor = InstallerPalette.SoftText,
+            BackColor = Color.Transparent,
+            Font = new Font("Segoe UI", 8.5f, FontStyle.Regular)
+        };
+        libraryNoteBack.Controls.Add(libraryNote);
+        routerPanel.Controls.Add(libraryNoteBack);
 
-        progressBar = new ProgressBar { Location = new Point(55, 455), Size = new Size(650, 10), Style = ProgressBarStyle.Continuous, Visible = false };
-        statusLabel = new Label { Text = "Ready to install", AutoEllipsis = true, Size = new Size(650, 38), ForeColor = Color.FromArgb(224, 224, 224), Location = new Point(55, 480) };
-        cancelButton = new Button { Text = "Pause", Size = new Size(110, 44), Location = new Point(375, 565), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), FlatStyle = FlatStyle.Flat, Visible = false };
-        installButton = new Button { Text = "Install + Download  →", Size = new Size(210, 44), Location = new Point(495, 565), BackColor = Color.FromArgb(228, 255, 26), ForeColor = Color.FromArgb(2, 3, 0), FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Semibold", 10) };
-        installButton.FlatAppearance.BorderSize = 0;
+        var divider = new Panel { Bounds = new Rectangle(26, 346, 970, 1), BackColor = InstallerPalette.Line };
+        routerPanel.Controls.Add(divider);
+
+        var signalPanel = new NotchedPanel
+        {
+            Bounds = new Rectangle(42, 686, 1046, 102),
+            PanelTitle = "INSTALLATION SIGNAL",
+            PanelCode = string.Empty
+        };
+        Controls.Add(signalPanel);
+
+        progressBar = new SegmentedProgressBar
+        {
+            Bounds = new Rectangle(26, 42, 938, 14),
+            Visible = true
+        };
+        signalPanel.Controls.Add(progressBar);
+
+        statusLabel = new Label
+        {
+            Text = "READY / Awaiting installation command",
+            AutoEllipsis = true,
+            Bounds = new Rectangle(26, 66, 938, 20),
+            ForeColor = InstallerPalette.Alabaster,
+            BackColor = Color.Black,
+            Font = new Font("Segoe UI", 10, FontStyle.Regular)
+        };
+        signalPanel.Controls.Add(statusLabel);
+
+        signalCodeLabel = new Label
+        {
+            Text = $"PKG {Program.ProductVersion} / READY",
+            AutoSize = true,
+            ForeColor = InstallerPalette.Alabaster,
+            BackColor = Color.Transparent,
+            Font = new Font("Consolas", 9, FontStyle.Regular),
+            Location = new Point(848, 14)
+        };
+        signalPanel.Controls.Add(signalCodeLabel);
+
+        signalPercentLabel = new Label
+        {
+            Text = "00%",
+            AutoSize = true,
+            ForeColor = InstallerPalette.BrandGreen,
+            BackColor = Color.Transparent,
+            Font = new Font("Consolas", 11, FontStyle.Bold),
+            Location = new Point(972, 40)
+        };
+        signalPanel.Controls.Add(signalPercentLabel);
+
+        cancelButton = new AngledButton
+        {
+            Text = "PAUSE",
+            Bounds = new Rectangle(628, 824, 112, 42),
+            FillColor = InstallerPalette.Carbon,
+            ForeColor = InstallerPalette.Alabaster,
+            Visible = false
+        };
+        installButton = new AngledButton
+        {
+            Text = "INSTALL + DOWNLOAD  →",
+            Bounds = new Rectangle(840, 820, 248, 48),
+            FillColor = InstallerPalette.BrandGreen,
+            ForeColor = InstallerPalette.DarkText
+        };
         cancelButton.Click += (_, _) => cancellation?.Cancel();
         installButton.Click += InstallClicked;
-        Controls.AddRange([accent, eyebrow, title, subtitle, languageLabel, languagePicker, appLabel, installPath, appBrowse, libraryLabel, libraryPath, libraryBrowse, libraryNote, progressBar, statusLabel, cancelButton, installButton]);
+        Controls.Add(cancelButton);
+        Controls.Add(installButton);
+
+        var footer = new Label
+        {
+            Text = "LOCAL-FIRST / VERIFIED COMPONENTS / PRIVATE RUNTIME",
+            AutoSize = true,
+            ForeColor = InstallerPalette.SoftText,
+            BackColor = Color.Transparent,
+            Font = new Font("Consolas", 9),
+            Location = new Point(54, 844)
+        };
+        Controls.Add(footer);
+
+        frameMarks.SendToBack();
+        headerRule.BringToFront();
+        eyebrow.BringToFront();
+        title.BringToFront();
+        subtitle.BringToFront();
+        routerPanel.BringToFront();
+        signalPanel.BringToFront();
+        cancelButton.BringToFront();
+        installButton.BringToFront();
+        footer.BringToFront();
+        topBar.BringToFront();
     }
 
-    private static Label FieldLabel(string text, int y) => new() { Text = text, AutoSize = true, ForeColor = Color.FromArgb(228, 255, 26), Font = new Font("Consolas", 8), Location = new Point(55, y) };
-    private static TextBox PathBox(int y, string value) => new() { Text = value, Size = new Size(550, 27), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), BorderStyle = BorderStyle.FixedSingle, Location = new Point(55, y) };
-    private static Button BrowseButton(int y, Action action)
+    protected override void OnPaintBackground(PaintEventArgs e)
     {
-        var button = new Button { Text = "Browse…", Size = new Size(90, 28), Location = new Point(615, y - 1), FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(224, 224, 224), BackColor = Color.FromArgb(36, 36, 36) };
+        using var solid = new SolidBrush(InstallerPalette.Black);
+        e.Graphics.FillRectangle(solid, ClientRectangle);
+        e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+        e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        DrawGrid(e.Graphics, ClientRectangle, 24, Color.FromArgb(28, 36, 28));
+        e.Graphics.DrawImage(backgroundNoise, 0, 0, ClientSize.Width, ClientSize.Height);
+    }
+
+    private static void DrawGrid(Graphics g, Rectangle bounds, int spacing, Color lineColor)
+    {
+        using var pen = new Pen(lineColor, 1f);
+        for (int x = bounds.Left; x < bounds.Right; x += spacing) g.DrawLine(pen, x, bounds.Top, x, bounds.Bottom);
+        for (int y = bounds.Top; y < bounds.Bottom; y += spacing) g.DrawLine(pen, bounds.Left, y, bounds.Right, y);
+    }
+
+    private void DragWindow(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left) return;
+        NativeMethods.ReleaseCapture();
+        NativeMethods.SendMessage(Handle, NativeMethods.WM_NCLBUTTONDOWN, NativeMethods.HTCAPTION, 0);
+    }
+
+    private static Label FieldLabel(string text, int x, int y) => new()
+    {
+        Text = text,
+        AutoSize = true,
+        ForeColor = InstallerPalette.BrandGreen,
+        BackColor = Color.Transparent,
+        Font = new Font("Consolas", 8.5f, FontStyle.Bold),
+        Location = new Point(x, y)
+    };
+
+    private static TextBox PathBox(int x, int y, int width, string value)
+    {
+        var box = new TextBox
+        {
+            Text = value,
+            Bounds = new Rectangle(x, y, width, 28),
+            BackColor = Color.FromArgb(6, 6, 6),
+            ForeColor = InstallerPalette.Alabaster,
+            BorderStyle = BorderStyle.FixedSingle,
+            Font = new Font("Segoe UI", 10, FontStyle.Regular)
+        };
+        return box;
+    }
+
+    private static AngledButton BrowseButton(int x, int y, Action action)
+    {
+        var button = new AngledButton
+        {
+            Text = "BROWSE…",
+            Bounds = new Rectangle(x, y, 106, 30),
+            FillColor = InstallerPalette.BrandGreen,
+            ForeColor = InstallerPalette.DarkText
+        };
         button.Click += (_, _) => action();
         return button;
+    }
+
+    private static Control CreateChromeButton(string text, Point location, Action click)
+    {
+        var button = new Label
+        {
+            Text = text,
+            TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
+            AutoSize = false,
+            Bounds = new Rectangle(location.X, location.Y, 30, 24),
+            ForeColor = InstallerPalette.Alabaster,
+            BackColor = Color.Transparent,
+            Font = new Font("Segoe UI", 12, FontStyle.Regular),
+            Cursor = Cursors.Hand
+        };
+        button.Click += (_, _) => click();
+        return button;
+    }
+
+    private static void ConfigureCombo(ComboBox combo)
+    {
+        combo.BackColor = Color.FromArgb(6, 6, 6);
+        combo.ForeColor = InstallerPalette.Alabaster;
+        combo.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+        combo.FlatStyle = FlatStyle.Flat;
+        combo.DropDownHeight = 160;
+    }
+
+    private void DrawLanguageItem(object? sender, DrawItemEventArgs e)
+    {
+        e.DrawBackground();
+        if (e.Index < 0) return;
+        var item = (LanguageOption)languagePicker.Items[e.Index];
+        bool selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+        using var fill = new SolidBrush(selected ? InstallerPalette.BrandGreen : InstallerPalette.Carbon);
+        using var textBrush = new SolidBrush(selected ? InstallerPalette.DarkText : InstallerPalette.Alabaster);
+        e.Graphics.FillRectangle(fill, e.Bounds);
+        e.Graphics.DrawString(item.Label, languagePicker.Font, textBrush, e.Bounds.Left + 6, e.Bounds.Top + 4);
+        e.DrawFocusRectangle();
     }
 
     private static void BrowseFor(TextBox target, string description, string leaf)
@@ -176,35 +464,42 @@ internal sealed class InstallerForm : Form
         installPath.Enabled = false;
         libraryPath.Enabled = false;
         languagePicker.Enabled = false;
-        progressBar.Visible = true;
         progressBar.Value = 0;
         cancelButton.Visible = true;
-        installButton.Location = new Point(495, 565);
+        signalPercentLabel.Text = "00%";
+        signalCodeLabel.Text = $"PKG {Program.ProductVersion} / RUNNING";
         cancellation = new CancellationTokenSource();
         try
         {
             var report = new Progress<InstallProgress>(item =>
             {
                 statusLabel.Text = item.Message;
-                if (item.Percent is int value) progressBar.Value = Math.Clamp(value, 0, 100);
+                if (item.Percent is int value)
+                {
+                    int clamped = Math.Clamp(value, 0, 100);
+                    progressBar.Value = clamped;
+                    signalPercentLabel.Text = $"{clamped:00}%";
+                }
             });
             await InstallerEngine.InstallAsync(installPath.Text.Trim(), libraryPath.Text.Trim(), languagePicker.SelectedValue?.ToString() ?? "en", report, cancellation.Token);
             progressBar.Value = 100;
-            statusLabel.Text = "CineForge Desktop and the required Wan model pack are installed and verified.";
+            signalPercentLabel.Text = "100%";
+            signalCodeLabel.Text = $"PKG {Program.ProductVersion} / READY";
+            statusLabel.Text = "READY / CineForge Desktop and the required Wan model pack are installed and verified.";
             cancelButton.Visible = false;
-            installButton.Text = "Launch CineForge Desktop";
+            installButton.Text = "LAUNCH CINEFORGE DESKTOP  →";
             installButton.Enabled = true;
             installButton.Click -= InstallClicked;
             installButton.Click += (_, _) => { InstallerEngine.Launch(installPath.Text.Trim(), libraryPath.Text.Trim()); Close(); };
         }
         catch (OperationCanceledException)
         {
-            statusLabel.Text = "Download paused. Run setup again to resume from the saved partial files.";
+            statusLabel.Text = "PAUSED / Run setup again to resume from the saved partial files.";
             ResetForRetry();
         }
         catch (Exception ex)
         {
-            statusLabel.Text = "Setup needs attention. Existing partial model downloads were preserved.";
+            statusLabel.Text = "ATTENTION / Existing partial model downloads were preserved.";
             ResetForRetry();
             MessageBox.Show(ex.Message, "CineForge Desktop setup", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -213,12 +508,365 @@ internal sealed class InstallerForm : Form
     private void ResetForRetry()
     {
         cancelButton.Visible = false;
-        installButton.Text = "Retry setup  →";
+        signalCodeLabel.Text = $"PKG {Program.ProductVersion} / READY";
+        signalPercentLabel.Text = $"{progressBar.Value:00}%";
+        installButton.Text = "INSTALL + DOWNLOAD  →";
         installButton.Enabled = true;
         installPath.Enabled = true;
         libraryPath.Enabled = true;
         languagePicker.Enabled = true;
     }
+}
+
+internal static class InstallerPalette
+{
+    internal static readonly Color BrandGreen = Color.FromArgb(228, 255, 26);
+    internal static readonly Color Black = Color.FromArgb(2, 3, 0);
+    internal static readonly Color Carbon = Color.FromArgb(36, 36, 36);
+    internal static readonly Color Alabaster = Color.FromArgb(224, 224, 224);
+    internal static readonly Color SoftText = Color.FromArgb(185, 185, 185);
+    internal static readonly Color Line = Color.FromArgb(82, 82, 82);
+    internal static readonly Color DarkText = Color.FromArgb(8, 8, 8);
+}
+
+internal static class BrandAssets
+{
+    internal static Bitmap IconMarkAcid => LoadBitmap("CineForge.Brand.icon-mark-acid-512.png");
+    internal static Bitmap WordmarkAlabaster => LoadBitmap("CineForge.Brand.wordmark-alabaster-512.png");
+    internal static Bitmap BuildVersionBadge(string version)
+        => LoadBitmap("CineForge.Brand.version-badge-filled-acid-v5.1.png");
+
+    internal static Bitmap CreateNoiseTexture(int width, int height)
+    {
+        var bmp = new Bitmap(width, height);
+        var rng = new Random(17);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int shade = 255 - rng.Next(0, 16);
+                int alpha = rng.Next(0, 12);
+                bmp.SetPixel(x, y, Color.FromArgb(alpha, shade, shade, shade));
+            }
+        }
+        return bmp;
+    }
+
+    private static Bitmap LoadBitmap(string resourceName)
+    {
+        using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Missing embedded brand asset: {resourceName}");
+        return new Bitmap(stream);
+    }
+
+    private static Bitmap PrepareTransparent(Bitmap source)
+    {
+        var bmp = new Bitmap(source.Width, source.Height);
+        for (int y = 0; y < source.Height; y++)
+        {
+            for (int x = 0; x < source.Width; x++)
+            {
+                var pixel = source.GetPixel(x, y);
+                if (pixel.R > 245 && pixel.G > 245 && pixel.B > 245)
+                    bmp.SetPixel(x, y, Color.Transparent);
+                else
+                    bmp.SetPixel(x, y, pixel);
+            }
+        }
+        return bmp;
+    }
+
+    private static Bitmap TrimTransparentBounds(Bitmap source)
+    {
+        int left = source.Width;
+        int top = source.Height;
+        int right = -1;
+        int bottom = -1;
+        for (int y = 0; y < source.Height; y++)
+        {
+            for (int x = 0; x < source.Width; x++)
+            {
+                if (source.GetPixel(x, y).A == 0) continue;
+                left = Math.Min(left, x);
+                top = Math.Min(top, y);
+                right = Math.Max(right, x);
+                bottom = Math.Max(bottom, y);
+            }
+        }
+
+        if (right < left || bottom < top) return source;
+        var rect = Rectangle.FromLTRB(left, top, right + 1, bottom + 1);
+        var trimmed = new Bitmap(rect.Width, rect.Height);
+        using var g = Graphics.FromImage(trimmed);
+        g.DrawImage(source, new Rectangle(0, 0, rect.Width, rect.Height), rect, GraphicsUnit.Pixel);
+        return trimmed;
+    }
+}
+
+internal sealed class FrameMarks : Control
+{
+    public FrameMarks()
+    {
+        SetStyle(
+            ControlStyles.AllPaintingInWmPaint |
+            ControlStyles.OptimizedDoubleBuffer |
+            ControlStyles.UserPaint |
+            ControlStyles.SupportsTransparentBackColor,
+            true);
+        BackColor = Color.Transparent;
+    }
+
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        using var pen = new Pen(Color.FromArgb(210, 210, 210), 1);
+        DrawCorner(e.Graphics, pen, 0, 0, false, false);
+        DrawCorner(e.Graphics, pen, Width - 18, 0, true, false);
+        DrawCorner(e.Graphics, pen, 0, Height - 18, false, true);
+        DrawCorner(e.Graphics, pen, Width - 18, Height - 18, true, true);
+    }
+
+    private static void DrawCorner(Graphics g, Pen pen, int x, int y, bool right, bool bottom)
+    {
+        int h = 12;
+        int v = 14;
+        if (!right && !bottom)
+        {
+            g.DrawLine(pen, x, y + v, x, y);
+            g.DrawLine(pen, x, y, x + h, y);
+        }
+        else if (right && !bottom)
+        {
+            g.DrawLine(pen, x + h, y + v, x + h, y);
+            g.DrawLine(pen, x, y, x + h, y);
+        }
+        else if (!right && bottom)
+        {
+            g.DrawLine(pen, x, y, x, y + v);
+            g.DrawLine(pen, x, y + v, x + h, y + v);
+        }
+        else
+        {
+            g.DrawLine(pen, x + h, y, x + h, y + v);
+            g.DrawLine(pen, x, y + v, x + h, y + v);
+        }
+    }
+}
+
+internal sealed class RuleLine : Control
+{
+    [System.ComponentModel.Browsable(false)]
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    internal bool DotAlignedRight { get; set; }
+
+    public RuleLine()
+    {
+        SetStyle(
+            ControlStyles.AllPaintingInWmPaint |
+            ControlStyles.OptimizedDoubleBuffer |
+            ControlStyles.UserPaint |
+            ControlStyles.SupportsTransparentBackColor,
+            true);
+        BackColor = Color.Transparent;
+    }
+
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        using var pen = new Pen(Color.FromArgb(110, 110, 110), 1f);
+        int y = Height / 2;
+        e.Graphics.DrawLine(pen, 0, y, Width - 12, y);
+        if (DotAlignedRight) e.Graphics.DrawEllipse(pen, Width - 10, y - 2, 4, 4);
+    }
+}
+
+internal sealed class NotchedPanel : Panel
+{
+    [System.ComponentModel.Browsable(false)]
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    internal string PanelTitle { get; set; } = "";
+    [System.ComponentModel.Browsable(false)]
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    internal string PanelCode { get; set; } = "";
+
+    public NotchedPanel()
+    {
+        SetStyle(
+            ControlStyles.UserPaint |
+            ControlStyles.AllPaintingInWmPaint |
+            ControlStyles.OptimizedDoubleBuffer,
+            true);
+        DoubleBuffered = true;
+        BackColor = Color.FromArgb(34, 34, 34);
+        Padding = new Padding(18, 20, 18, 18);
+    }
+
+    protected override void OnResize(EventArgs eventargs)
+    {
+        base.OnResize(eventargs);
+        using var path = BuildPath(ClientRectangle, 14);
+        Region = new Region(path);
+    }
+
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        var rect = new Rectangle(0, 0, Width - 1, Height - 1);
+        using var path = BuildPath(rect, 14);
+        using var fill = new SolidBrush(Color.FromArgb(34, 34, 34));
+        using var border = new Pen(Color.FromArgb(96, 96, 96), 1.1f);
+        e.Graphics.FillPath(fill, path);
+        DrawOpenCutBorder(e.Graphics, border, rect, 14);
+
+        using var micro = new SolidBrush(InstallerPalette.BrandGreen);
+        e.Graphics.FillRectangle(micro, 16, 16, 34, 3);
+
+        using var titleBrush = new SolidBrush(InstallerPalette.BrandGreen);
+        e.Graphics.DrawString(PanelTitle, new Font("Consolas", 9, FontStyle.Bold), titleBrush, new PointF(18, 24));
+
+        if (!string.IsNullOrWhiteSpace(PanelCode))
+        {
+            var codeSize = e.Graphics.MeasureString(PanelCode, new Font("Consolas", 8.5f));
+            var codeRect = new RectangleF(Width - codeSize.Width - 24, 18, codeSize.Width + 10, 18);
+            using var bg = new SolidBrush(Color.FromArgb(12, 12, 12));
+            e.Graphics.FillRectangle(bg, codeRect);
+            e.Graphics.DrawString(PanelCode, new Font("Consolas", 8.5f), Brushes.Gainsboro, codeRect.X + 4, codeRect.Y + 2);
+        }
+    }
+
+    private static void DrawOpenCutBorder(Graphics graphics, Pen pen, Rectangle rect, int cut)
+    {
+        float left = rect.Left + 0.5f;
+        float top = rect.Top + 0.5f;
+        float right = rect.Right - 0.5f;
+        float bottom = rect.Bottom - 0.5f;
+
+        graphics.DrawLine(pen, left + cut, top, right, top);
+        graphics.DrawLine(pen, right, top, right, bottom - cut);
+        graphics.DrawLine(pen, right - cut, bottom, left, bottom);
+        graphics.DrawLine(pen, left, bottom, left, top + cut);
+    }
+
+    internal static GraphicsPath BuildPath(Rectangle rect, int cut)
+    {
+        var path = new GraphicsPath();
+        path.AddPolygon([
+            new Point(rect.Left + cut, rect.Top),
+            new Point(rect.Right, rect.Top),
+            new Point(rect.Right, rect.Bottom - cut),
+            new Point(rect.Right - cut, rect.Bottom),
+            new Point(rect.Left, rect.Bottom),
+            new Point(rect.Left, rect.Top + cut)
+        ]);
+        path.CloseFigure();
+        return path;
+    }
+}
+
+internal sealed class AngledButton : Button
+{
+    [System.ComponentModel.Browsable(false)]
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    internal Color FillColor { get; set; } = InstallerPalette.Carbon;
+
+    public AngledButton()
+    {
+        FlatStyle = FlatStyle.Flat;
+        FlatAppearance.BorderSize = 0;
+        Font = new Font("Segoe UI", 10, FontStyle.Bold);
+        SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        BackColor = Color.Transparent;
+        Cursor = Cursors.Hand;
+        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+    }
+
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        using var path = BuildPath(ClientRectangle);
+        Region = new Region(path);
+    }
+
+    protected override void OnPaint(PaintEventArgs pevent)
+    {
+        pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        var rect = new Rectangle(0, 0, Width - 1, Height - 1);
+        using var path = BuildPath(rect);
+        using var fill = new SolidBrush(Enabled ? FillColor : Color.FromArgb(58, 58, 58));
+        using var border = new Pen(Enabled ? InstallerPalette.Line : Color.FromArgb(78, 78, 78), 1f);
+        pevent.Graphics.FillPath(fill, path);
+        pevent.Graphics.DrawPath(border, path);
+
+        var flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine;
+        TextRenderer.DrawText(pevent.Graphics, Text, Font, rect, ForeColor, flags);
+    }
+
+    private static GraphicsPath BuildPath(Rectangle rect)
+    {
+        int cut = Math.Min(16, Math.Max(8, rect.Height / 3));
+        var path = new GraphicsPath();
+        path.AddPolygon([
+            new Point(rect.Left, rect.Top),
+            new Point(rect.Right - cut, rect.Top),
+            new Point(rect.Right, rect.Top + cut),
+            new Point(rect.Right, rect.Bottom),
+            new Point(rect.Left + cut, rect.Bottom),
+            new Point(rect.Left, rect.Bottom - cut)
+        ]);
+        path.CloseFigure();
+        return path;
+    }
+}
+
+internal sealed class SegmentedProgressBar : Control
+{
+    private int value;
+    [System.ComponentModel.Browsable(false)]
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    internal int Value
+    {
+        get => value;
+        set { this.value = Math.Clamp(value, 0, 100); Invalidate(); }
+    }
+
+    public SegmentedProgressBar()
+    {
+        SetStyle(
+            ControlStyles.AllPaintingInWmPaint |
+            ControlStyles.OptimizedDoubleBuffer |
+            ControlStyles.UserPaint |
+            ControlStyles.SupportsTransparentBackColor,
+            true);
+        BackColor = Color.Transparent;
+        ForeColor = InstallerPalette.BrandGreen;
+    }
+
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        e.Graphics.SmoothingMode = SmoothingMode.None;
+        int segments = 52;
+        int gap = 3;
+        int width = Math.Max(4, (Width - ((segments - 1) * gap)) / segments);
+        int lit = (int)Math.Round((Value / 100d) * segments);
+        for (int i = 0; i < segments; i++)
+        {
+            int x = i * (width + gap);
+            using var brush = new SolidBrush(i < lit ? InstallerPalette.BrandGreen : Color.FromArgb(72, 72, 72));
+            e.Graphics.FillRectangle(brush, x, 0, width, Height - 1);
+        }
+        using var border = new Pen(Color.FromArgb(58, 58, 58));
+        e.Graphics.DrawRectangle(border, 0, 0, Width - 1, Height - 1);
+    }
+}
+
+internal static class NativeMethods
+{
+    internal const int WM_NCLBUTTONDOWN = 0xA1;
+    internal const int HTCAPTION = 0x2;
+
+    [DllImport("user32.dll")]
+    internal static extern bool ReleaseCapture();
+
+    [DllImport("user32.dll")]
+    internal static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 }
 
 internal sealed record InstallProgress(string Message, int? Percent = null, long BytesReceived = 0, long TotalBytes = 0);

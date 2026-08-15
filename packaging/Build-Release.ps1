@@ -15,7 +15,7 @@ $payloadRoot = Join-Path $PSScriptRoot "payload"
 $assetsRoot = Join-Path $PSScriptRoot "assets"
 $installerPublish = Join-Path $workRoot "installer-publish"
 $releaseRoot = Join-Path $appRoot "release\CineForge-$Version-win-x64"
-$iconPath = Join-Path $assetsRoot "CineForge.ico"
+$iconPath = Join-Path $appRoot "..\..\..\Brand System\Logos\Exports\favicon\cineforge-app-icon.ico"
 
 function Assert-WorkPath([string]$Path) {
   $full = [IO.Path]::GetFullPath($Path)
@@ -34,8 +34,6 @@ foreach ($path in @($workRoot)) {
 if (Test-Path -LiteralPath $payloadRoot) { Remove-Item -LiteralPath $payloadRoot -Recurse -Force }
 if (Test-Path -LiteralPath $releaseRoot) { Remove-Item -LiteralPath $releaseRoot -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $workRoot,$distRoot,$buildRoot,$payloadRoot,$assetsRoot,$releaseRoot | Out-Null
-
-& (Join-Path $PSScriptRoot "Generate-Icon.ps1") -OutputPath $iconPath
 
 $venvPython = Join-Path $venvRoot "Scripts\python.exe"
 if (!(Test-Path -LiteralPath $venvPython)) {

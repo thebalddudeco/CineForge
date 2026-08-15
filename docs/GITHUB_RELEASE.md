@@ -57,3 +57,15 @@ CineForge Desktop opens no listening port and stores user data locally. It never
 ## Release status
 
 This installer is the official `v5.1` public release line. It carries forward the validated native split-Wan loading path, end-to-end generation, MP4 output validation, corrected approved EXE icon, and locked brand-system implementation first completed in the `v0.5.0` candidate cycle.
+
+## Post-release patch note
+
+After the initial `v5.1` publication, the installer metadata and shell were corrected so the setup experience matches the approved desktop packaging contract more closely.
+
+This patch:
+
+- removes the installer-only filled version badge so that identifier stays inside the app itself;
+- keeps the approved Brand System favicon as the locked executable and installer icon source;
+- corrects the installer-pinned runtime package size and SHA-256 to the live public `CineForge-Desktop-Runtime-5.1-win-x64.zip` asset so setup no longer rejects the runtime payload with an unexpected-size failure.
+
+This patch does not change the validated native Wan runtime path, model revision, or Desktop workflow behavior. It is a release-packaging and installer-distribution correction.

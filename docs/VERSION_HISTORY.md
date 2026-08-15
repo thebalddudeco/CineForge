@@ -26,6 +26,19 @@ This release:
 
 The `v0.5.0` release remains part of the historical record as the final native Windows release candidate, but `v5.1` is the current official release line.
 
+### v5.1 post-release installer patch
+
+After the initial public 5.1 publication, the installer line received a targeted patch to correct release-distribution mismatches and remove the last unwanted installer-only version ornament.
+
+This patch:
+
+- removes the filled tapered version badge from the installer so the version identifier remains an app-only element;
+- hard-locks both the desktop executable and installer icon paths to the approved Brand System favicon export;
+- updates the installer metadata to the real public `CineForge-Desktop-Runtime-5.1-win-x64.zip` size and SHA-256 so the runtime payload is accepted instead of being rejected with an unexpected-size failure;
+- keeps the native installer shell, grid logic, frame language, and localized routing layout introduced during the 5.1 brand pass.
+
+This is a packaging-and-release correction. It does not change the validated native Wan generation path, the CineForge Desktop workflow contract, or the installed model revision.
+
 ## v0.1.0 — cinematic workflow prototype
 
 The first CineForge build established the reusable FLORA-inspired cinematic topology:
