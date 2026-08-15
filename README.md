@@ -19,9 +19,11 @@ The installer is pinned to the validated release-candidate pack revision recorde
 
 ## How to use CineForge Desktop
 
+For the complete workflow, control explanations, first-project example, and troubleshooting, read the **[CineForge Desktop 0.5.0 User Guide](docs/USER_GUIDE.md)**.
+
 1. **Install CineForge Desktop.** Choose an application folder and a separate CineForge Library folder when prompted. Setup downloads and verifies the required Wan model pack automatically.
 2. **Open CineForge.** Confirm that the header reports a connected GPU/runtime. If the model list is empty, use **Refresh Models** after setup has finished downloading the model pack.
-3. **Describe the sequence.** Complete the Scene Brief fields, choose the clip length, and select the installed Wan model from the model menu directly beneath Clip Length.
+3. **Describe the sequence.** Complete the Scene Brief fields, leave the validated **5 Seconds** profile selected, and select the installed Wan model from the model menu directly beneath Clip Length.
 4. **Lock the visual reference.** In **Lock what must not drift**, select the source image that establishes the subject and visual continuity. The build action remains unavailable until a reference image has been selected.
 5. **Build the 15-shot factory.** Select **Build 15-Shot Factory** beneath the reference pack. CineForge creates five angle prompts, five insert prompts, and five story-progressing prompts, then moves the view to the generated candidates.
 6. **Review the candidates.** Compare the planned shots and choose the candidate that should become video.
@@ -30,6 +32,8 @@ The installer is pinned to the validated release-candidate pack revision recorde
 9. **Open the result.** When generation completes, preview the clip or use **Open Output Folder** to access the exported file in the CineForge Library.
 
 The language controls in the lower-left corner switch the interface between English, Korean, and Japanese. CineForge Desktop keeps imported media, project data, models, and generated outputs on the local machine.
+
+> **v0.5.0 note:** the five reference cards currently share one canonical image, and the validated generation profile remains five seconds. The full user guide explains these behaviors and the planned workflow clearly.
 
 ## Product scope
 
