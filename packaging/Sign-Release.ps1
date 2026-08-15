@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory = $true)][string]$CertificateThumbprint,
-  [string]$Version = "0.2.0",
+  [string]$Version = "0.5.0",
   [string]$TimestampServer = "http://timestamp.digicert.com"
 )
 

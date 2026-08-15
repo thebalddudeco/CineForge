@@ -5,6 +5,8 @@ work/
 build/
 dist/
 release/
+**/bin/
+**/obj/
 packaging/assets/
 packaging/payload/
 packaging/CineForge.Installer/bin/

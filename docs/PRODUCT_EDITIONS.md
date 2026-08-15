@@ -74,7 +74,7 @@ Because CineForge Online processes user material on hosted infrastructure, it mu
 
 The interface talks to an edition-neutral generation API:
 
-- Desktop adapter: `http://127.0.0.1` local engine and local files.
+- Desktop adapter: private child-process commands and local files; no HTTP server or browser layer.
 - Online adapter: authenticated HTTPS API, moderated object upload, hosted queue, progress stream, output moderation, and signed delivery.
 
 Shared schemas cover projects, generation requests, progress events, runtime capabilities, errors, and outputs. Edition-specific operations—model installation, local path selection, hosted authentication, billing, quotas, and retention—remain outside those shared schemas.

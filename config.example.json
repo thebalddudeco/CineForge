@@ -1,6 +1,4 @@
 {
-  "host": "127.0.0.1",
-  "port": 7331,
   "inference_backend": "native",
   "model_cache_root": "D:\\CineForge Library\\cache",
   "model_roots": [

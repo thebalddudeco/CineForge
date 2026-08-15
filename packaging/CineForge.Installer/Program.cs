@@ -17,10 +17,14 @@ internal static class Program
     internal const string InstallFolderName = "CineForge";
     internal const string Publisher = "The Bald Dude Co.";
     internal static string ProductVersion => Assembly.GetExecutingAssembly()
-        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.4.0";
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "0.5.0";
     internal static readonly string ProgramsRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs");
     internal static readonly string DefaultInstallRoot = Path.Combine(ProgramsRoot, InstallFolderName);
     internal static readonly string DefaultDataRoot = DefaultLibraryRoot();
+    internal static string DefaultLanguage => System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+    {
+        "ko" => "ko", "ja" => "ja", _ => "en"
+    };
     internal static readonly string PointerRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CineForge");
     internal static readonly string PointerPath = Path.Combine(PointerRoot, "install.json");
     internal const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\CineForgeDesktop";
@@ -44,7 +48,7 @@ internal static class Program
         }
         if (args.Contains("--silent", StringComparer.OrdinalIgnoreCase))
         {
-            InstallerEngine.InstallAsync(DefaultInstallRoot, DefaultDataRoot, null, CancellationToken.None).GetAwaiter().GetResult();
+            InstallerEngine.InstallAsync(DefaultInstallRoot, DefaultDataRoot, DefaultLanguage, null, CancellationToken.None).GetAwaiter().GetResult();
             return;
         }
         Application.Run(new InstallerForm());
@@ -101,51 +105,57 @@ internal sealed class InstallerForm : Form
     private readonly Button cancelButton;
     private readonly TextBox installPath;
     private readonly TextBox libraryPath;
+    private readonly ComboBox languagePicker;
     private CancellationTokenSource? cancellation;
 
     public InstallerForm()
     {
         Text = $"CineForge Desktop {Program.ProductVersion} Setup";
-        ClientSize = new Size(760, 590);
+        ClientSize = new Size(760, 650);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
-        BackColor = Color.FromArgb(9, 9, 8);
-        ForeColor = Color.FromArgb(233, 229, 220);
+        BackColor = Color.FromArgb(2, 3, 0);
+        ForeColor = Color.FromArgb(224, 224, 224);
         Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath!);
 
-        var accent = new Panel { BackColor = Color.FromArgb(215, 255, 69), Location = new Point(0, 0), Size = new Size(8, 590) };
-        var eyebrow = new Label { Text = "CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = Color.FromArgb(215, 255, 69), Font = new Font("Segoe UI Semibold", 9), Location = new Point(54, 35) };
+        var accent = new Panel { BackColor = Color.FromArgb(228, 255, 26), Location = new Point(0, 0), Size = new Size(8, 650) };
+        var eyebrow = new Label { Text = "CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = Color.FromArgb(228, 255, 26), Font = new Font("Segoe UI Semibold", 9), Location = new Point(54, 35) };
         var title = new Label { Text = "Install CineForge Desktop", AutoSize = true, Font = new Font("Segoe UI", 28, FontStyle.Bold), Location = new Point(49, 63) };
-        var subtitle = new Label { Text = "Application and library locations stay completely separate from Shadowframe.", AutoSize = true, ForeColor = Color.FromArgb(182, 176, 162), Font = new Font("Segoe UI", 10), Location = new Point(54, 118) };
+        var subtitle = new Label { Text = "Application and library locations stay completely separate from Shadowframe.", AutoSize = true, ForeColor = Color.FromArgb(224, 224, 224), Font = new Font("Segoe UI", 10), Location = new Point(54, 118) };
 
-        var appLabel = FieldLabel("APPLICATION FOLDER", 165);
-        installPath = PathBox(190, Program.DefaultInstallRoot);
-        var appBrowse = BrowseButton(190, () => BrowseFor(installPath, "Select a parent folder for CineForge", "CineForge"));
+        var languageLabel = FieldLabel("LANGUAGE / 언어 / 言語", 150);
+        languagePicker = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(55, 171), Size = new Size(210, 28), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), DisplayMember = nameof(LanguageOption.Label), ValueMember = nameof(LanguageOption.Id) };
+        languagePicker.Items.AddRange([new LanguageOption("en", "EN  English"), new LanguageOption("ko", "한  한국어"), new LanguageOption("ja", "日  日本語")]);
+        languagePicker.SelectedValue = Program.DefaultLanguage;
 
-        var libraryLabel = FieldLabel("CINEFORGE LIBRARY", 255);
-        libraryPath = PathBox(280, Program.DefaultDataRoot);
-        var libraryBrowse = BrowseButton(280, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
+        var appLabel = FieldLabel("APPLICATION FOLDER", 215);
+        installPath = PathBox(240, Program.DefaultInstallRoot);
+        var appBrowse = BrowseButton(240, () => BrowseFor(installPath, "Select a parent folder for CineForge", "CineForge"));
+
+        var libraryLabel = FieldLabel("CINEFORGE LIBRARY", 305);
+        libraryPath = PathBox(330, Program.DefaultDataRoot);
+        var libraryBrowse = BrowseButton(330, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
         var libraryNote = new Label {
             Text = "Creates the separate CineForge Library for inputs, outputs, projects, models, cache, logs, and temp.\nSetup downloads a ~2.0 GB native runtime, then approximately 35.6 GB of required Wan models.",
-            AutoSize = true, ForeColor = Color.FromArgb(125, 123, 117), Font = new Font("Segoe UI", 9), Location = new Point(55, 320)
+            AutoSize = true, ForeColor = Color.FromArgb(224, 224, 224), Font = new Font("Segoe UI", 9), Location = new Point(55, 370)
         };
 
-        progressBar = new ProgressBar { Location = new Point(55, 405), Size = new Size(650, 10), Style = ProgressBarStyle.Continuous, Visible = false };
-        statusLabel = new Label { Text = "Ready to install", AutoEllipsis = true, Size = new Size(650, 38), ForeColor = Color.FromArgb(145, 143, 137), Location = new Point(55, 430) };
-        cancelButton = new Button { Text = "Pause", Size = new Size(110, 44), Location = new Point(375, 505), BackColor = Color.FromArgb(24, 24, 21), ForeColor = Color.FromArgb(233, 229, 220), FlatStyle = FlatStyle.Flat, Visible = false };
-        installButton = new Button { Text = "Install + Download  →", Size = new Size(210, 44), Location = new Point(495, 505), BackColor = Color.FromArgb(215, 255, 69), ForeColor = Color.FromArgb(9, 9, 8), FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Semibold", 10) };
+        progressBar = new ProgressBar { Location = new Point(55, 455), Size = new Size(650, 10), Style = ProgressBarStyle.Continuous, Visible = false };
+        statusLabel = new Label { Text = "Ready to install", AutoEllipsis = true, Size = new Size(650, 38), ForeColor = Color.FromArgb(224, 224, 224), Location = new Point(55, 480) };
+        cancelButton = new Button { Text = "Pause", Size = new Size(110, 44), Location = new Point(375, 565), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), FlatStyle = FlatStyle.Flat, Visible = false };
+        installButton = new Button { Text = "Install + Download  →", Size = new Size(210, 44), Location = new Point(495, 565), BackColor = Color.FromArgb(228, 255, 26), ForeColor = Color.FromArgb(2, 3, 0), FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Semibold", 10) };
         installButton.FlatAppearance.BorderSize = 0;
         cancelButton.Click += (_, _) => cancellation?.Cancel();
         installButton.Click += InstallClicked;
-        Controls.AddRange([accent, eyebrow, title, subtitle, appLabel, installPath, appBrowse, libraryLabel, libraryPath, libraryBrowse, libraryNote, progressBar, statusLabel, cancelButton, installButton]);
+        Controls.AddRange([accent, eyebrow, title, subtitle, languageLabel, languagePicker, appLabel, installPath, appBrowse, libraryLabel, libraryPath, libraryBrowse, libraryNote, progressBar, statusLabel, cancelButton, installButton]);
     }
 
-    private static Label FieldLabel(string text, int y) => new() { Text = text, AutoSize = true, ForeColor = Color.FromArgb(215, 255, 69), Font = new Font("Consolas", 8), Location = new Point(55, y) };
-    private static TextBox PathBox(int y, string value) => new() { Text = value, Size = new Size(550, 27), BackColor = Color.FromArgb(17, 17, 15), ForeColor = Color.FromArgb(233, 229, 220), BorderStyle = BorderStyle.FixedSingle, Location = new Point(55, y) };
+    private static Label FieldLabel(string text, int y) => new() { Text = text, AutoSize = true, ForeColor = Color.FromArgb(228, 255, 26), Font = new Font("Consolas", 8), Location = new Point(55, y) };
+    private static TextBox PathBox(int y, string value) => new() { Text = value, Size = new Size(550, 27), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), BorderStyle = BorderStyle.FixedSingle, Location = new Point(55, y) };
     private static Button BrowseButton(int y, Action action)
     {
-        var button = new Button { Text = "Browse…", Size = new Size(90, 28), Location = new Point(615, y - 1), FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(233, 229, 220), BackColor = Color.FromArgb(24, 24, 21) };
+        var button = new Button { Text = "Browse…", Size = new Size(90, 28), Location = new Point(615, y - 1), FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(224, 224, 224), BackColor = Color.FromArgb(36, 36, 36) };
         button.Click += (_, _) => action();
         return button;
     }
@@ -165,10 +175,11 @@ internal sealed class InstallerForm : Form
         installButton.Enabled = false;
         installPath.Enabled = false;
         libraryPath.Enabled = false;
+        languagePicker.Enabled = false;
         progressBar.Visible = true;
         progressBar.Value = 0;
         cancelButton.Visible = true;
-        installButton.Location = new Point(495, 505);
+        installButton.Location = new Point(495, 565);
         cancellation = new CancellationTokenSource();
         try
         {
@@ -177,7 +188,7 @@ internal sealed class InstallerForm : Form
                 statusLabel.Text = item.Message;
                 if (item.Percent is int value) progressBar.Value = Math.Clamp(value, 0, 100);
             });
-            await InstallerEngine.InstallAsync(installPath.Text.Trim(), libraryPath.Text.Trim(), report, cancellation.Token);
+            await InstallerEngine.InstallAsync(installPath.Text.Trim(), libraryPath.Text.Trim(), languagePicker.SelectedValue?.ToString() ?? "en", report, cancellation.Token);
             progressBar.Value = 100;
             statusLabel.Text = "CineForge Desktop and the required Wan model pack are installed and verified.";
             cancelButton.Visible = false;
@@ -206,11 +217,13 @@ internal sealed class InstallerForm : Form
         installButton.Enabled = true;
         installPath.Enabled = true;
         libraryPath.Enabled = true;
+        languagePicker.Enabled = true;
     }
 }
 
 internal sealed record InstallProgress(string Message, int? Percent = null, long BytesReceived = 0, long TotalBytes = 0);
 internal sealed record ModelFile(string Name, long Bytes, string Sha256);
+internal sealed record LanguageOption(string Id, string Label);
 
 internal static class InstallerEngine
 {
@@ -244,12 +257,12 @@ internal static class InstallerEngine
         .First(attribute => attribute.Key == key).Value
         ?? throw new InvalidOperationException($"Installer runtime metadata is missing: {key}");
 
-    internal static async Task InstallAsync(string installRoot, string dataRoot, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
+    internal static async Task InstallAsync(string installRoot, string dataRoot, string language, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)
     {
         installRoot = NormalizeInstallTarget(installRoot);
         dataRoot = NormalizeLibraryTarget(dataRoot);
         EnsureSeparateRoots(installRoot, dataRoot);
-        CreateLibrary(dataRoot, installRoot);
+        CreateLibrary(dataRoot, installRoot, language);
         string runtimePayload = await AcquireRuntimePayloadAsync(dataRoot, progress, cancellationToken);
         InstallApplication(installRoot, runtimePayload, progress);
         await DownloadModelPackAsync(dataRoot, progress, cancellationToken);
@@ -372,23 +385,23 @@ internal static class InstallerEngine
         throw new IOException("CineForge could not finish downloading its native runtime. Run setup again to resume.");
     }
 
-    private static void CreateLibrary(string dataRoot, string installRoot)
+    private static void CreateLibrary(string dataRoot, string installRoot, string requestedLanguage)
     {
+        string language = requestedLanguage is "ko" or "ja" ? requestedLanguage : "en";
         foreach (string folder in new[] { "inputs", "outputs", "projects", "models", "cache", "logs", "temp" })
             Directory.CreateDirectory(Path.Combine(dataRoot, folder));
         var config = new
         {
-            host = "127.0.0.1",
-            port = 7331,
             inference_backend = "native",
             model_roots = new[] { Path.Combine(dataRoot, "models") },
             model_cache_root = Path.Combine(dataRoot, "cache"),
             input_root = Path.Combine(dataRoot, "inputs"),
-            output_root = Path.Combine(dataRoot, "outputs")
+            output_root = Path.Combine(dataRoot, "outputs"),
+            language
         };
         File.WriteAllText(Path.Combine(dataRoot, "config.json"), JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true }));
         Directory.CreateDirectory(Program.PointerRoot);
-        File.WriteAllText(Program.PointerPath, JsonSerializer.Serialize(new { install_root = installRoot, data_root = dataRoot, version = Program.ProductVersion }, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(Program.PointerPath, JsonSerializer.Serialize(new { install_root = installRoot, data_root = dataRoot, version = Program.ProductVersion, language }, new JsonSerializerOptions { WriteIndented = true }));
     }
 
     private static async Task DownloadModelPackAsync(string dataRoot, IProgress<InstallProgress>? progress, CancellationToken cancellationToken)

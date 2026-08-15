@@ -9,7 +9,9 @@ The current repository and installer work are focused on CineForge Desktop.
 
 ## Project status
 
-**CineForge Desktop 0.4.0 release candidate.**
+**CineForge Desktop 0.5.0 native-desktop release candidate.**
+
+The application, engine protocol, installer, packaging defaults, localized title bars, runtime telemetry, and approved filled version badge are stamped consistently as `0.5.0`. The release remains a candidate until every verification gate in `docs/RELEASE_PROCESS.md` has passed.
 
 The application now loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-FP8 UMT5 encoder, and Wan VAE directly through the CineForge Engine without ComfyUI. A real two-expert generation completed on an RTX 4070 with finite latents, finite non-black frames, live progress telemetry, and MP4 export. The remaining public-release gate is a clean-machine installer/download/generation/uninstall pass.
 
@@ -36,8 +38,8 @@ CineForge Online is an SFW-only hosted service. Prompts, uploaded reference medi
 
 ## Repository map
 
-- `cineforge/` — native local server, model discovery, job orchestration, and project planning
-- `web/` — desktop application interface
+- `desktop/CineForge.Desktop/` — native WPF Windows interface
+- `cineforge/` — private Wan worker, model discovery, job orchestration, and project planning
 - `packaging/` — Windows installer build and signing scripts
 - `tests/` — automated checks
 - `docs/` — architecture, compatibility, release, provenance, and decision records
@@ -51,13 +53,13 @@ Desktop development currently requires Windows 11, Python 3.12, an NVIDIA CUDA-c
 .\run.ps1
 ```
 
-CineForge opens locally at `http://127.0.0.1:7331`.
+CineForge opens as a native Windows application. It does not open a browser, host a local website, bind a localhost port, or embed a web view. The WPF interface communicates with the bundled Wan engine over private redirected process streams.
 
 ## Verify
 
 ```powershell
 python -m unittest discover -s tests -v
-python -m cineforge.server --no-browser
+dotnet build desktop\CineForge.Desktop\CineForge.Desktop.csproj -c Release
 ```
 
 ## Releases and paper trail
@@ -72,6 +74,8 @@ Every user-facing release must include:
 - verification evidence for supported hardware and workflows.
 
 The required process is documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md). Architecture and scope decisions are recorded in [docs/decisions](docs/decisions).
+
+The complete product and version history is recorded in [docs/VERSION_HISTORY.md](docs/VERSION_HISTORY.md). The locked visual rules and their current native implementation are recorded in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md), [docs/V010_VISUAL_SOURCE_OF_TRUTH.md](docs/V010_VISUAL_SOURCE_OF_TRUTH.md), and [docs/BRAND_IMPLEMENTATION_RECORD.md](docs/BRAND_IMPLEMENTATION_RECORD.md).
 
 ## Models
 

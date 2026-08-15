@@ -1,11 +1,11 @@
-# CineForge Desktop 0.4.0 release-candidate verification
+# CineForge Desktop 0.5.0 native-desktop release-candidate verification
 
 Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 
 ## Desktop identity
 
 - Windows product name: `CineForge Desktop`
-- Setup filename: `CineForge-Desktop-Setup-0.4.0-win-x64.exe`
+- Setup filename: `CineForge-Desktop-Setup-0.5.0-win-x64.exe`
 - Installed Apps display name: `CineForge Desktop`
 - Desktop and Start Menu shortcut name: `CineForge Desktop`
 - Application folder: `CineForge`
@@ -38,7 +38,7 @@ Verified on 2026-08-14 on Windows 11 with an NVIDIA GeForce RTX 4070.
 - PyInstaller standalone application build: passed
 - Native Windows installer compilation: passed
 - Installer product name: `CineForge Desktop`
-- Installer file version: `0.4.0.0`
+- Installer file version: `0.5.0.0`
 - Installer size: 2,033,988,934 bytes
 - SHA-256: `ec231da71272a0e9af14f738e09b925091cce5634ac5c085c4dad62590caacf5`
 - Generated checksum comparison: passed

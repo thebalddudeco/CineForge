@@ -1,0 +1,351 @@
+<Window x:Class="CineForge.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:CineForge.Desktop"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="CineForge Desktop 0.5.0" Width="1520" Height="960" MinWidth="1120" MinHeight="720"
+        Background="{StaticResource MicroGrid}" Foreground="{StaticResource Ink}"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanResize" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="32" ResizeBorderThickness="6" CornerRadius="0" GlassFrameThickness="0" UseAeroCaptionButtons="False"/>
+  </shell:WindowChrome.WindowChrome>
+  <Window.Resources>
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="{DynamicResource BodyFont}"/>
+      <Setter Property="FontSize" Value="29"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+    </Style>
+    <Style x:Key="HeroTitle" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="{DynamicResource BodyFont}"/>
+      <Setter Property="FontSize" Value="72"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="LineHeight" Value="71"/>
+      <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+    </Style>
+    <Style x:Key="Micro" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="{DynamicResource MicroFont}"/>
+      <Setter Property="FontSize" Value="9"/>
+      <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+    </Style>
+    <Style x:Key="Eyebrow" TargetType="TextBlock" BasedOn="{StaticResource Micro}">
+      <Setter Property="Foreground" Value="{StaticResource Acid}"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    <Style x:Key="PanelBorder" TargetType="Border">
+      <Setter Property="Background" Value="#F2242424"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Line}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="28"/>
+    </Style>
+    <Style x:Key="InstrumentPanel" TargetType="ContentControl">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ContentControl">
+            <local:BevelChrome BorderBrush="{StaticResource Line}" AccentBrush="{StaticResource Acid}" CornerCut="12" Padding="38" ShowInnerBorder="False" ShowTelemetry="True" ShowInstrumentation="True" OutlineCornerCuts="False">
+              <local:BevelChrome.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                  <GradientStop Color="#FA1A1A19" Offset="0"/>
+                  <GradientStop Color="#FA171716" Offset="0.34"/>
+                  <GradientStop Color="#FA121211" Offset="0.68"/>
+                  <GradientStop Color="#FA0D0E0C" Offset="1"/>
+                </LinearGradientBrush>
+              </local:BevelChrome.Background>
+              <local:BevelChrome.Effect><DropShadowEffect Color="#020300" Opacity="0.55" BlurRadius="30" ShadowDepth="14" Direction="270"/></local:BevelChrome.Effect>
+              <ContentPresenter/>
+            </local:BevelChrome>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="MapNode" TargetType="local:BevelChrome">
+      <Setter Property="Width" Value="116"/>
+      <Setter Property="MinHeight" Value="60"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Background" Value="#F2171714"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Line}"/>
+      <Setter Property="Padding" Value="14,13"/>
+      <Setter Property="CornerCut" Value="7"/>
+      <Setter Property="Profile" Value="DiagonalPair"/>
+      <Setter Property="ShowInnerBorder" Value="False"/>
+      <Setter Property="ShowTelemetry" Value="False"/>
+    </Style>
+    <Style x:Key="StepNumber" TargetType="TextBlock" BasedOn="{StaticResource Micro}">
+      <Setter Property="Width" Value="25"/>
+      <Setter Property="Margin" Value="0,2,8,0"/>
+    </Style>
+    <Style x:Key="LanguageButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Width" Value="29"/><Setter Property="Height" Value="22"/><Setter Property="Padding" Value="0"/>
+      <Setter Property="Margin" Value="0,0,5,0"/><Setter Property="FontSize" Value="10"/><Setter Property="FontFamily" Value="{DynamicResource OperationalFont}"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="LanguageSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+              <TextBlock x:Name="LanguageText" Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="LanguageSurface" Property="Background" Value="{StaticResource Acid}"/>
+                <Setter TargetName="LanguageSurface" Property="BorderBrush" Value="{StaticResource Acid}"/>
+                <Setter TargetName="LanguageText" Property="Foreground" Value="{StaticResource DarkText}"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter TargetName="LanguageSurface" Property="Opacity" Value="0.35"/></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="ReferenceSlot" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Height" Value="150"/>
+      <Setter Property="Padding" Value="10"/>
+      <Setter Property="Background" Value="#F2020300"/>
+      <Setter Property="BorderBrush" Value="#883F3F39"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+              <Rectangle x:Name="SlotFrame" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" StrokeDashArray="2,2"/>
+              <Border Margin="6" BorderBrush="#44242424" BorderThickness="1"/>
+              <Ellipse x:Name="TargetRing" Width="34" Height="34" Stroke="#55242424" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-34,0,0"/>
+              <Path Data="M0,6 H12 M6,0 V12" Stroke="#77242424" StrokeThickness="1" Width="12" Height="12" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-34,0,0"/>
+              <Path Data="M0,10 V0 H10" Stroke="{StaticResource Dim}" StrokeThickness="1" Width="10" Height="10" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7"/>
+              <Path Data="M0,0 H10 V10" Stroke="{StaticResource Dim}" StrokeThickness="1" Width="10" Height="10" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7"/>
+              <Path Data="M0,0 V10 H10" Stroke="{StaticResource Dim}" StrokeThickness="1" Width="10" Height="10" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="7"/>
+              <Path Data="M0,10 H10 V0" Stroke="{StaticResource Dim}" StrokeThickness="1" Width="10" Height="10" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="7"/>
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+              <Rectangle Width="18" Height="1" Fill="{StaticResource Acid}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" Opacity="0.7"/>
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,7">
+                <Rectangle Width="4" Height="4" Fill="{StaticResource Acid}" Margin="0,0,4,0" Opacity=".8"/>
+                <Rectangle Width="4" Height="4" Fill="{StaticResource Dim}" Margin="0,0,4,0" Opacity=".55"/>
+                <Rectangle Width="4" Height="4" Fill="{StaticResource Dim}" Opacity=".3"/>
+              </StackPanel>
+            </Grid>
+            <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="SlotFrame" Property="Stroke" Value="{StaticResource Acid}"/><Setter TargetName="TargetRing" Property="Stroke" Value="{StaticResource Acid}"/></Trigger></ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions><RowDefinition Height="32"/><RowDefinition Height="88"/><RowDefinition Height="*"/><RowDefinition Height="30"/></Grid.RowDefinitions>
+
+    <!-- Native CineForge window chrome. -->
+    <Border Grid.Row="0" Background="#FC020300" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+      <Grid>
+        <StackPanel Orientation="Horizontal" Margin="12,0,0,0" VerticalAlignment="Center">
+          <Grid Width="14" Height="17" Margin="0,0,9,0"><Rectangle Width="3" Height="16" Fill="{StaticResource Acid}" HorizontalAlignment="Left"><Rectangle.RenderTransform><SkewTransform AngleX="-8"/></Rectangle.RenderTransform></Rectangle><Rectangle Width="3" Height="11" Fill="{StaticResource Acid}" HorizontalAlignment="Center"><Rectangle.RenderTransform><SkewTransform AngleX="-8"/></Rectangle.RenderTransform></Rectangle><Rectangle Width="3" Height="7" Fill="{StaticResource Acid}" HorizontalAlignment="Right"><Rectangle.RenderTransform><SkewTransform AngleX="-8"/></Rectangle.RenderTransform></Rectangle></Grid>
+          <TextBlock Text="{DynamicResource L.DesktopTitle}" Style="{StaticResource Micro}" Foreground="{StaticResource Ink}" VerticalAlignment="Center"/>
+          <Rectangle Width="1" Height="10" Fill="{StaticResource Line}" Margin="10,0"/>
+          <TextBlock Text="{DynamicResource L.NativeWanTitle}" Style="{StaticResource Micro}" FontSize="7" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+          <Button Content="—" Width="44" Height="31" Padding="0" BorderThickness="0" Background="Transparent" Click="Minimize_Click"/>
+          <Button Content="□" Width="44" Height="31" Padding="0" BorderThickness="0" Background="Transparent" Click="Maximize_Click"/>
+          <Button Content="×" Width="44" Height="31" Padding="0" BorderThickness="0" Background="Transparent" Click="Close_Click"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Compact v0.2 instrument header -->
+    <Border Grid.Row="1" Background="#F0020300" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1" Padding="48,0">
+      <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="300"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <Grid Width="20" Height="29" Margin="0,0,10,0">
+            <Rectangle Width="4" Height="27" Fill="{StaticResource Acid}" HorizontalAlignment="Left" RenderTransformOrigin=".5,.5"><Rectangle.RenderTransform><SkewTransform AngleX="-8"/></Rectangle.RenderTransform></Rectangle>
+            <Rectangle Width="4" Height="20" Fill="{StaticResource Acid}" HorizontalAlignment="Center" RenderTransformOrigin=".5,.5"><Rectangle.RenderTransform><SkewTransform AngleX="-8"/></Rectangle.RenderTransform></Rectangle>
+            <Rectangle Width="4" Height="13" Fill="{StaticResource Acid}" HorizontalAlignment="Right" RenderTransformOrigin=".5,.5"><Rectangle.RenderTransform><SkewTransform AngleX="-8"/></Rectangle.RenderTransform></Rectangle>
+          </Grid>
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="CineForge" FontFamily="{DynamicResource BodyFont}" FontSize="17" FontWeight="Bold"/>
+            <TextBlock Text="{DynamicResource L.LocalStudio}" Style="{StaticResource Micro}" FontSize="7"/>
+          </StackPanel>
+          <Grid Width="49" Height="44" Margin="16,0,0,0">
+            <Polygon Points="6,1 43,1 49,10 30,43 20,43 0,10" Stroke="{StaticResource Acid}" StrokeThickness="1.5" Fill="{StaticResource Acid}"/>
+            <TextBlock Text="v0.5.0" Foreground="{StaticResource DarkText}" FontFamily="{DynamicResource MicroFont}" FontSize="7" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,11,0,0"/>
+          </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0">
+          <Ellipse Width="8" Height="8" Fill="{StaticResource Acid}" Margin="0,0,12,0" Style="{StaticResource SignalPulse}"/>
+          <Ellipse Width="8" Height="8" Stroke="{StaticResource Muted}" StrokeThickness="1" Margin="0,0,12,0"/>
+          <Ellipse Width="8" Height="8" Fill="{StaticResource Ink}" Margin="0,0,12,0" Opacity=".9"/>
+          <Ellipse Width="8" Height="8" Stroke="{StaticResource Muted}" StrokeThickness="1"/>
+        </StackPanel>
+
+        <Border x:Name="RuntimeDock" Grid.Column="1" Width="680" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#F5020300" BorderBrush="{StaticResource Line}" BorderThickness="1" Padding="8">
+          <Grid>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="330"/><ColumnDefinition Width="74"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <Border BorderBrush="{StaticResource Line}" BorderThickness="1" Background="#F0020300" Padding="7,4">
+              <Canvas x:Name="RuntimeCanvas" ClipToBounds="True"/>
+            </Border>
+            <Grid Grid.Column="1" Margin="7,0">
+              <local:OrbitalGlobe x:Name="RuntimeOrbital"/>
+              <Path Data="M0,9 V0 H9" Stroke="{StaticResource Dim}" StrokeThickness="1" Width="9" Height="9" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+              <Path Data="M0,9 H9 V0" Stroke="{StaticResource Dim}" StrokeThickness="1" Width="9" Height="9" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </Grid>
+            <Border Grid.Column="2" BorderBrush="{StaticResource Line}" BorderThickness="1,0,0,0" Padding="12,0,0,0">
+              <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal"><Ellipse Width="6" Height="6" Fill="{StaticResource Acid}" Margin="0,1,7,0" Style="{StaticResource SignalPulse}"/><TextBlock x:Name="RuntimeHeader" Text="{DynamicResource L.CheckingRuntime}" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}" FontSize="8"/></StackPanel>
+                <Grid Grid.Row="1" Margin="13,3,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal"><TextBlock Text="GPU / " Style="{StaticResource Micro}" Foreground="{StaticResource Dim}"/><TextBlock x:Name="RuntimeGpuValue" Text="—" Style="{StaticResource Micro}" Foreground="{StaticResource Ink}"/></StackPanel><StackPanel Grid.Column="1" Orientation="Horizontal"><TextBlock Text="VRAM / " Style="{StaticResource Micro}" Foreground="{StaticResource Dim}"/><TextBlock x:Name="RuntimeVramValue" Text="—" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}"/></StackPanel></Grid>
+                <Grid Grid.Row="2" Margin="13,3,0,0"><TextBlock x:Name="RuntimeEngineValue" Text="NATIVE WAN / CUDA" Style="{StaticResource Micro}" FontSize="7"/><TextBlock x:Name="RuntimeBuildValue" Text="BUILD 0.5.0" Style="{StaticResource Micro}" FontSize="7" HorizontalAlignment="Right"/></Grid>
+              </Grid>
+            </Border>
+          </Grid>
+        </Border>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+          <Button Content="{DynamicResource L.RefreshModels}" Click="RefreshModels_Click" Margin="0,0,8,0"/>
+          <Button Content="{DynamicResource L.OpenOutput}" Click="OpenOutput_Click"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <local:DitheredAtmosphereLayer Grid.Row="2"/>
+    <ScrollViewer Grid.Row="2" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <Grid MaxWidth="1520" HorizontalAlignment="Center">
+        <StackPanel>
+          <!-- v0.2 editorial hero -->
+          <Grid Height="450" Margin="90,0,90,0">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="1.08*"/><ColumnDefinition Width=".92*"/></Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock Text="{DynamicResource L.HeroEyebrow}" Style="{StaticResource Eyebrow}" Margin="0,0,0,17"/>
+              <TextBlock Style="{StaticResource HeroTitle}">
+                <Run Text="{DynamicResource L.HeroTitleOne}"/><LineBreak/>
+                <Run Text="{DynamicResource L.HeroTitleTwo}" FontFamily="Georgia" FontStyle="Italic" FontWeight="Normal" Foreground="#CCE0E0E0"/>
+              </TextBlock>
+              <TextBlock Width="650" HorizontalAlignment="Left" Margin="0,28,0,0" TextWrapping="Wrap" FontSize="16" LineHeight="26" Foreground="{StaticResource Muted}" Text="{DynamicResource L.HeroLede}"/>
+            </StackPanel>
+
+            <Grid Grid.Column="1" Margin="56,54,0,54">
+              <Grid.RowDefinitions><RowDefinition Height="22"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+              <Grid Grid.Row="0">
+                <TextBlock Text="SEQ.015 / CONTINUITY ROUTE" Style="{StaticResource Micro}" Foreground="{StaticResource Dim}" VerticalAlignment="Top"/>
+                <Rectangle Height="1" Fill="{StaticResource Line}" Margin="158,5,9,0" VerticalAlignment="Top"/>
+                <Ellipse Width="6" Height="6" Stroke="{StaticResource Dim}" StrokeThickness="1" Fill="{StaticResource Black}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0"/>
+              </Grid>
+              <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+              <local:BevelChrome Style="{StaticResource MapNode}"><Grid><Rectangle Width="2" Fill="{StaticResource Acid}" HorizontalAlignment="Left" Margin="-14,-13,0,-13" Style="{StaticResource SignalPulse}"/><StackPanel><TextBlock Text="01" Style="{StaticResource Micro}"/><TextBlock Text="{DynamicResource L.MapCanon}" FontWeight="SemiBold" Margin="0,3,0,0"/><TextBlock Text="{DynamicResource L.MapStoryLocks}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid></local:BevelChrome>
+              <TextBlock Text="→" Foreground="{StaticResource Dim}" Margin="8,0" VerticalAlignment="Center"/>
+              <StackPanel>
+                <local:BevelChrome Style="{StaticResource MapNode}" Margin="0,0,0,7"><StackPanel><TextBlock Text="A" Style="{StaticResource Micro}"/><TextBlock Text="{DynamicResource L.MapAngles}" FontWeight="SemiBold" Margin="0,3,0,0"/></StackPanel></local:BevelChrome>
+                <local:BevelChrome Style="{StaticResource MapNode}" Margin="0,0,0,7"><StackPanel><TextBlock Text="B" Style="{StaticResource Micro}"/><TextBlock Text="{DynamicResource L.MapInserts}" FontWeight="SemiBold" Margin="0,3,0,0"/></StackPanel></local:BevelChrome>
+                <local:BevelChrome Style="{StaticResource MapNode}"><StackPanel><TextBlock Text="C" Style="{StaticResource Micro}"/><TextBlock Text="{DynamicResource L.Progress}" FontWeight="SemiBold" Margin="0,3,0,0"/></StackPanel></local:BevelChrome>
+              </StackPanel>
+              <TextBlock Text="→" Foreground="{StaticResource Dim}" Margin="8,0" VerticalAlignment="Center"/>
+              <local:BevelChrome Style="{StaticResource MapNode}"><StackPanel><TextBlock Text="15" Style="{StaticResource Micro}"/><TextBlock Text="{DynamicResource L.MapFrames}" FontWeight="SemiBold" Margin="0,4,0,0"/><TextBlock Text="{DynamicResource L.MapApprove}" Style="{StaticResource Micro}" Margin="0,5,0,0"/></StackPanel></local:BevelChrome>
+              <TextBlock Text="→" Foreground="{StaticResource Dim}" Margin="8,0" VerticalAlignment="Center"/>
+              <local:BevelChrome Style="{StaticResource MapNode}" Background="#1AE4FF1A"><Grid><Rectangle Width="2" Fill="{StaticResource Acid}" HorizontalAlignment="Left" Margin="-14,-13,0,-13" Style="{StaticResource SignalPulse}"/><StackPanel><TextBlock Text="▶" Style="{StaticResource Micro}"/><TextBlock Text="{DynamicResource L.MapMotion}" FontWeight="SemiBold" Margin="0,3,0,0"/><TextBlock Text="{DynamicResource L.MapDuration}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid></local:BevelChrome>
+              </StackPanel>
+              </Viewbox>
+              <Path Grid.RowSpan="2" Data="M0,14 V0 H14" Stroke="{StaticResource Muted}" StrokeThickness="1" Width="14" Height="14" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-8,-8,0,0"/>
+              <Path Grid.RowSpan="2" Data="M0,0 H14 V14" Stroke="{StaticResource Muted}" StrokeThickness="1" Width="14" Height="14" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-8,-8,0"/>
+              <Path Grid.RowSpan="2" Data="M0,0 V14 H14" Stroke="{StaticResource Muted}" StrokeThickness="1" Width="14" Height="14" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-8,0,0,-8"/>
+              <Path Grid.RowSpan="2" Data="M0,14 H14 V0" Stroke="{StaticResource Muted}" StrokeThickness="1" Width="14" Height="14" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-8,-8"/>
+            </Grid>
+            <Grid Grid.ColumnSpan="2" VerticalAlignment="Bottom" Margin="-90,0,-90,0" Height="11">
+              <Rectangle Height="1" Fill="{StaticResource Line}" VerticalAlignment="Center"/>
+              <Ellipse Width="6" Height="6" Stroke="{StaticResource Dim}" StrokeThickness="1" Fill="{StaticResource Black}" HorizontalAlignment="Left"/>
+              <Ellipse Width="6" Height="6" Stroke="{StaticResource Dim}" StrokeThickness="1" Fill="{StaticResource Black}" HorizontalAlignment="Right"/>
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,22,0">
+                <Path Data="M0,8 L6,2" Stroke="{StaticResource Dim}" Margin="0,0,4,0"/><Path Data="M0,8 L6,2" Stroke="{StaticResource Dim}" Margin="0,0,4,0"/><Path Data="M0,8 L6,2" Stroke="{StaticResource Acid}" Margin="0,0,4,0"/><Path Data="M0,8 L6,2" Stroke="{StaticResource Acid}"/>
+              </StackPanel>
+            </Grid>
+          </Grid>
+
+          <Grid>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="250"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <!-- Narrow v0.2 workflow rail -->
+            <Grid Grid.Column="0" MinHeight="1040">
+              <Rectangle Width="1" Fill="{StaticResource Line}" HorizontalAlignment="Right"/>
+              <StackPanel Margin="24,38,24,0">
+                <TextBlock Text="{DynamicResource L.WorkflowLabel}" Style="{StaticResource Micro}" Foreground="{StaticResource Dim}" Margin="0,0,0,17"/>
+                <Grid Height="300">
+                  <Rectangle Width="1" Fill="{StaticResource Line}" HorizontalAlignment="Left"/>
+                  <Rectangle Width="2" Height="58" Fill="{StaticResource Acid}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                  <StackPanel>
+                    <Grid Height="58" Margin="12,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="01" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}" VerticalAlignment="Center"/><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="{DynamicResource L.StepScene}" FontSize="12" FontWeight="SemiBold"/><TextBlock Text="{DynamicResource L.StepSceneDesc}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid>
+                    <Grid Height="58" Margin="12,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="02" Style="{StaticResource Micro}" VerticalAlignment="Center"/><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="{DynamicResource L.StepReference}" FontSize="12" Foreground="{StaticResource Dim}"/><TextBlock Text="{DynamicResource L.StepReferenceDesc}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid>
+                    <Grid Height="58" Margin="12,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="03" Style="{StaticResource Micro}" VerticalAlignment="Center"/><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="{DynamicResource L.StepFactory}" FontSize="12" Foreground="{StaticResource Dim}"/><TextBlock Text="{DynamicResource L.StepFactoryDesc}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid>
+                    <Grid Height="58" Margin="12,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="04" Style="{StaticResource Micro}" VerticalAlignment="Center"/><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="{DynamicResource L.StepContinuity}" FontSize="12" Foreground="{StaticResource Dim}"/><TextBlock Text="{DynamicResource L.StepContinuityDesc}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid>
+                    <Grid Height="58" Margin="12,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="05" Style="{StaticResource Micro}" VerticalAlignment="Center"/><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="{DynamicResource L.StepMotion}" FontSize="12" Foreground="{StaticResource Dim}"/><TextBlock Text="{DynamicResource L.StepMotionDesc}" Style="{StaticResource Micro}" Margin="0,4,0,0"/></StackPanel></Grid>
+                  </StackPanel>
+                </Grid>
+                <Grid Margin="0,150,0,0">
+                  <Border BorderBrush="{StaticResource Line}" BorderThickness="1" Padding="13">
+                    <StackPanel><TextBlock Text="{DynamicResource L.LocalFirst}" Style="{StaticResource Eyebrow}" FontSize="8"/><TextBlock Text="{DynamicResource L.LocalFirstBody}" TextWrapping="Wrap" Style="{StaticResource Micro}" LineHeight="15" Margin="0,6,0,0"/></StackPanel>
+                  </Border>
+                </Grid>
+              </StackPanel>
+            </Grid>
+
+            <!-- v0.4 functionality inside the v0.2 studio shell -->
+            <StackPanel Grid.Column="1" Margin="62,36,62,100">
+              <ContentControl Style="{StaticResource InstrumentPanel}" Margin="0,0,0,18">
+                <StackPanel>
+                  <Grid Margin="0,0,0,24"><StackPanel><TextBlock Text="{DynamicResource L.ScenePanelLabel}" Style="{StaticResource Eyebrow}"/><TextBlock Text="{DynamicResource L.ScenePanelTitle}" Style="{StaticResource SectionTitle}" Margin="0,9,0,0"/></StackPanel><Border HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="{StaticResource Line}" BorderThickness="1" Padding="9,6"><TextBlock Text="{DynamicResource L.NotPlanned}" Style="{StaticResource Micro}"/></Border></Grid>
+                  <Border BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Margin="0,0,0,22"/>
+                  <Label Content="{DynamicResource L.ProjectTitle}"/><TextBox x:Name="TitleInput" Text="{DynamicResource L.DefaultTitle}" Margin="0,0,0,14"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="16"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel><Label Content="{DynamicResource L.PrincipalSubject}"/><TextBox x:Name="SubjectInput" Text="{DynamicResource L.DefaultSubject}" Margin="0,0,0,14"/><Label Content="{DynamicResource L.PrimaryAction}"/><TextBox x:Name="ActionInput" Text="{DynamicResource L.DefaultAction}" Margin="0,0,0,14"/><Label Content="{DynamicResource L.ImmediateObjective}"/><TextBox x:Name="ObjectiveInput" Text="{DynamicResource L.DefaultObjective}" Margin="0,0,0,14"/><Label Content="{DynamicResource L.VisualLanguage}"/><TextBox x:Name="LookInput" Text="{DynamicResource L.DefaultLook}"/></StackPanel>
+                    <StackPanel Grid.Column="2"><Label Content="{DynamicResource L.Environment}"/><TextBox x:Name="EnvironmentInput" Text="{DynamicResource L.DefaultEnvironment}" Margin="0,0,0,14"/><Label Content="{DynamicResource L.PressureObstacle}"/><TextBox x:Name="ObstacleInput" Text="{DynamicResource L.DefaultObstacle}" Margin="0,0,0,14"/><Label Content="{DynamicResource L.Lighting}"/><TextBox x:Name="LightingInput" Text="{DynamicResource L.DefaultLighting}" Margin="0,0,0,14"/><Label Content="{DynamicResource L.ClipLength}"/><ComboBox SelectedIndex="1"><ComboBoxItem Content="{DynamicResource L.Clip3}"/><ComboBoxItem Content="{DynamicResource L.Clip5}"/><ComboBoxItem Content="{DynamicResource L.Clip10}"/><ComboBoxItem Content="{DynamicResource L.Clip15}"/></ComboBox></StackPanel>
+                  </Grid>
+                  <StackPanel Orientation="Horizontal" Margin="0,24,0,0"><Button x:Name="BuildButton" Content="{DynamicResource L.BuildFactory}" Style="{StaticResource PrimaryButton}" Height="46" Click="BuildPlan_Click"/><TextBlock Text="{DynamicResource L.FactoryCreates}" Style="{StaticResource Micro}" VerticalAlignment="Center" Margin="16,0,0,0"/></StackPanel>
+                </StackPanel>
+              </ContentControl>
+
+              <ContentControl Style="{StaticResource InstrumentPanel}" Margin="0,0,0,18">
+                <StackPanel>
+                  <Grid Margin="0,0,0,22"><StackPanel><TextBlock Text="{DynamicResource L.ReferencePanelLabel}" Style="{StaticResource Eyebrow}"/><TextBlock Text="{DynamicResource L.ReferencePanelTitle}" Style="{StaticResource SectionTitle}" Margin="0,9,0,0"/></StackPanel><TextBlock x:Name="ReferencePath" Text="0 / 5" Style="{StaticResource Micro}" HorizontalAlignment="Right" VerticalAlignment="Top" TextTrimming="CharacterEllipsis" MaxWidth="340"/></Grid>
+                  <Border BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Margin="0,0,0,20"/>
+                  <UniformGrid Columns="5">
+                    <Button Style="{StaticResource ReferenceSlot}" Click="SelectReference_Click" Margin="0,0,8,0"><StackPanel><TextBlock Text="+" FontSize="22" Foreground="{StaticResource Acid}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource L.RefIdentity}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0"/><TextBlock Text="{DynamicResource L.RefIdentityDesc}" Style="{StaticResource Micro}" HorizontalAlignment="Center" Margin="0,4,0,0"/></StackPanel></Button>
+                    <Button Style="{StaticResource ReferenceSlot}" Click="SelectReference_Click" Margin="0,0,8,0"><StackPanel><TextBlock Text="+" FontSize="22" Foreground="{StaticResource Acid}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource L.RefWardrobe}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0"/><TextBlock Text="{DynamicResource L.RefWardrobeDesc}" Style="{StaticResource Micro}" HorizontalAlignment="Center" Margin="0,4,0,0"/></StackPanel></Button>
+                    <Button Style="{StaticResource ReferenceSlot}" Click="SelectReference_Click" Margin="0,0,8,0"><StackPanel><TextBlock Text="+" FontSize="22" Foreground="{StaticResource Acid}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource L.RefGeography}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0"/><TextBlock Text="{DynamicResource L.RefGeographyDesc}" Style="{StaticResource Micro}" HorizontalAlignment="Center" Margin="0,4,0,0"/></StackPanel></Button>
+                    <Button Style="{StaticResource ReferenceSlot}" Click="SelectReference_Click" Margin="0,0,8,0"><StackPanel><TextBlock Text="+" FontSize="22" Foreground="{StaticResource Acid}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource L.RefFilmLook}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0"/><TextBlock Text="{DynamicResource L.RefFilmLookDesc}" Style="{StaticResource Micro}" HorizontalAlignment="Center" Margin="0,4,0,0"/></StackPanel></Button>
+                    <Button Style="{StaticResource ReferenceSlot}" Click="SelectReference_Click"><StackPanel><TextBlock Text="+" FontSize="22" Foreground="{StaticResource Acid}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource L.RefProps}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0"/><TextBlock Text="{DynamicResource L.RefPropsDesc}" Style="{StaticResource Micro}" HorizontalAlignment="Center" Margin="0,4,0,0"/></StackPanel></Button>
+                  </UniformGrid>
+                </StackPanel>
+              </ContentControl>
+
+              <ContentControl Style="{StaticResource InstrumentPanel}" Margin="0,0,0,18">
+                <StackPanel>
+                  <Grid Margin="0,0,0,22"><StackPanel><TextBlock Text="{DynamicResource L.ModelRouterLabel}" Style="{StaticResource Eyebrow}"/><TextBlock Text="{DynamicResource L.DetectedMachine}" Style="{StaticResource SectionTitle}" Margin="0,9,0,0"/></StackPanel><Border HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="{StaticResource Line}" BorderThickness="1" Padding="9,6"><TextBlock Text="{DynamicResource L.WanLocal}" Style="{StaticResource Micro}"/></Border></Grid>
+                  <Border BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Margin="0,0,0,18"/>
+                  <Grid Width="360" HorizontalAlignment="Left">
+                    <local:BevelChrome Profile="DiagonalPair" CornerCut="7" Background="#F2020300" BorderBrush="{StaticResource Line}" Padding="13" ShowInnerBorder="False" ShowTelemetry="False">
+                      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Ellipse Width="6" Height="6" Fill="{StaticResource Acid}" VerticalAlignment="Top" Margin="0,4,10,0"/><StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource L.ActiveWanModel}" Style="{StaticResource Micro}" Foreground="{StaticResource Ink}" FontWeight="SemiBold"/><ComboBox x:Name="ModelPicker" DisplayMemberPath="Label" SelectedValuePath="Id" Margin="0,8,0,0"/><TextBlock Text="{DynamicResource L.LocalDesktopRuntime}" Style="{StaticResource Micro}" Margin="0,7,0,0"/></StackPanel></Grid>
+                    </local:BevelChrome>
+                  </Grid>
+                </StackPanel>
+              </ContentControl>
+
+              <StackPanel x:Name="FactoryPanel" Visibility="Collapsed">
+                <Grid Margin="0,0,0,14"><StackPanel><TextBlock Text="{DynamicResource L.ShotFactoryLabel}" Style="{StaticResource Eyebrow}"/><TextBlock Text="{DynamicResource L.CandidatesTitle}" Style="{StaticResource SectionTitle}" Margin="0,8,0,0"/><TextBlock x:Name="ProjectIdLabel" Style="{StaticResource Micro}" Margin="0,6,0,0"/></StackPanel><StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal"><Button Content="{DynamicResource L.FiveAngles}" Tag="angles" Click="Branch_Click" Margin="0,0,6,0"/><Button Content="{DynamicResource L.FiveInserts}" Tag="inserts" Click="Branch_Click" Margin="0,0,6,0"/><Button Content="{DynamicResource L.StoryProgression}" Tag="progression" Click="Branch_Click"/></StackPanel></Grid>
+                <ItemsControl x:Name="ShotList"><ItemsControl.ItemTemplate><DataTemplate><ContentControl Style="{StaticResource InstrumentPanel}" Margin="0,0,0,9"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="50"/><ColumnDefinition Width="*"/><ColumnDefinition Width="150"/></Grid.ColumnDefinitions><TextBlock Text="{Binding IndexLabel}" Foreground="{StaticResource Acid}" FontFamily="{DynamicResource MicroFont}" FontSize="17"/><StackPanel Grid.Column="1" Margin="0,0,22,0"><TextBlock Text="{Binding Title}" FontFamily="{DynamicResource BodyFont}" FontSize="16" FontWeight="SemiBold"/><TextBlock Text="{Binding StoryChange}" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}" Margin="0,4,0,7"/><TextBlock Text="{Binding Prompt}" TextWrapping="Wrap" Foreground="{StaticResource Muted}" FontSize="11" MaxHeight="46"/></StackPanel><Button Grid.Column="2" Content="{DynamicResource L.GenerateVideo}" Style="{StaticResource PrimaryButton}" Tag="{Binding}" Click="Generate_Click" VerticalAlignment="Center"/></Grid></ContentControl></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+              </StackPanel>
+
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </Grid>
+    </ScrollViewer>
+
+    <!-- Fixed native generation instrument: live data, never a prerecorded GIF. -->
+    <Grid x:Name="GenerationPanel" Grid.Row="2" Visibility="Collapsed" Width="620" Height="390" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,24,24" Panel.ZIndex="80">
+      <Path Stretch="Fill" Stroke="{StaticResource Ink}" StrokeThickness="1" Fill="#FA020300" Data="M 2,6 L 7,1 L 93,1 L 98,6 L 98,94 L 93,99 L 7,99 L 2,94 Z"/>
+      <Path Stretch="Fill" Stroke="{StaticResource Line}" StrokeThickness="1" Margin="9" Data="M 1,7 L 7,1 L 93,1 L 99,7 L 99,93 L 93,99 L 7,99 L 1,93 Z"/>
+      <Grid Margin="28,23"><Grid.RowDefinitions><RowDefinition Height="245"/><RowDefinition Height="12"/><RowDefinition Height="88"/></Grid.RowDefinitions>
+        <Grid><Path Stretch="Fill" Stroke="{StaticResource Dim}" StrokeThickness="1" Fill="#F5020300" Data="M 3,0 L 97,0 L 100,6 L 100,94 L 97,100 L 3,100 L 0,94 L 0,6 Z"/><Grid Margin="22,14"><Grid.RowDefinitions><RowDefinition Height="38"/><RowDefinition Height="*"/><RowDefinition Height="50"/></Grid.RowDefinitions><Grid><StackPanel><TextBlock x:Name="GenerationTitle" Text="{DynamicResource L.Generating}" Foreground="{StaticResource Acid}" FontFamily="{DynamicResource MicroFont}" FontSize="20" FontWeight="Bold"/><TextBlock Text="{DynamicResource L.FrameSynthesis}" Style="{StaticResource Micro}"/></StackPanel><StackPanel HorizontalAlignment="Right"><TextBlock x:Name="GenerationPercent" Text="00%" Foreground="{StaticResource Acid}" FontFamily="{DynamicResource MicroFont}" FontSize="20" HorizontalAlignment="Right"/><TextBlock x:Name="GenerationJobLabel" Text="JOB / CF-0000" Style="{StaticResource Micro}"/></StackPanel></Grid><Canvas x:Name="MatrixCanvas" Grid.Row="1" Margin="28,5" ClipToBounds="True"/><Grid Grid.Row="2"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions><Grid><TextBlock Text="{DynamicResource L.Progress}" Style="{StaticResource Micro}"/><TextBlock x:Name="GenerationStep" Text="STEP — / —" Style="{StaticResource Micro}" HorizontalAlignment="Right"/></Grid><Grid Grid.Row="1" Margin="0,8,0,0"><ProgressBar x:Name="GenerationProgress" Height="9" Foreground="{StaticResource Acid}" Background="{StaticResource Panel2}"/><TextBlock x:Name="GenerationPhase" Text="QUEUEING LOCAL JOB" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}" Margin="0,17,0,0"/></Grid></Grid></Grid></Grid>
+        <Grid Grid.Row="2"><Path Stretch="Fill" Stroke="{StaticResource Dim}" StrokeThickness="1" Fill="#F2171714" Data="M 3,0 L 97,0 L 100,10 L 100,90 L 97,100 L 3,100 L 0,90 L 0,10 Z"/><Grid Margin="22,13"><Grid.ColumnDefinitions><ColumnDefinition Width="1.45*"/><ColumnDefinition Width=".65*"/><ColumnDefinition Width=".65*"/><ColumnDefinition Width="1.05*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="{DynamicResource L.LocalRuntime}" Style="{StaticResource Micro}" Foreground="{StaticResource Acid}"/><TextBlock x:Name="JobDetail" Text="LOCAL WAN / ACTIVE" Style="{StaticResource Micro}" Foreground="{StaticResource Ink}" Margin="0,8,0,0"/></StackPanel><StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource L.Elapsed}" Style="{StaticResource Micro}"/><TextBlock x:Name="ElapsedLabel" Text="00:00" FontFamily="{DynamicResource MicroFont}" Margin="0,8,0,0"/></StackPanel><StackPanel Grid.Column="2"><TextBlock Text="{DynamicResource L.Eta}" Style="{StaticResource Micro}"/><TextBlock x:Name="EtaLabel" Text="—" FontFamily="{DynamicResource MicroFont}" Foreground="{StaticResource Acid}" Margin="0,8,0,0"/></StackPanel><StackPanel Grid.Column="3"><TextBlock Text="{DynamicResource L.SignalLock}" Style="{StaticResource Micro}"/><StackPanel Orientation="Horizontal" Margin="0,10,0,0"><Rectangle Width="10" Height="8" Fill="{StaticResource Signal}" Margin="0,0,4,0"/><Rectangle Width="10" Height="8" Fill="{StaticResource Signal}" Margin="0,0,4,0"/><Rectangle Width="10" Height="8" Fill="{StaticResource Signal}" Margin="0,0,4,0"/><Rectangle Width="10" Height="8" Fill="{StaticResource Panel}" Margin="0,0,4,0"/><Rectangle Width="10" Height="8" Fill="{StaticResource Panel}"/></StackPanel></StackPanel><Button x:Name="OpenResultButton" Grid.Column="4" Content="{DynamicResource L.OpenResult}" Visibility="Collapsed" Click="OpenResult_Click" VerticalAlignment="Center"/></Grid></Grid>
+      </Grid>
+    </Grid>
+
+    <Border Grid.Row="3" Background="{StaticResource Black}" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Padding="22,0">
+      <Grid><StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center"><Button x:Name="EnglishLanguageButton" Content="EN" Tag="en" ToolTip="English" Style="{StaticResource LanguageButton}" Click="Language_Click"/><Button x:Name="KoreanLanguageButton" Content="한" Tag="ko" ToolTip="한국어" Style="{StaticResource LanguageButton}" Click="Language_Click"/><Button x:Name="JapaneseLanguageButton" Content="日" Tag="ja" ToolTip="日本語" Style="{StaticResource LanguageButton}" Click="Language_Click"/></StackPanel><TextBlock x:Name="StatusText" Text="{DynamicResource L.StatusStarting}" Style="{StaticResource Micro}" VerticalAlignment="Center" Margin="112,0,0,0"/><TextBlock Text="{DynamicResource L.NativeArchitecture}" Style="{StaticResource Micro}" HorizontalAlignment="Right" VerticalAlignment="Center"/></Grid>
+    </Border>
+    <local:AtmosphereLayer Grid.RowSpan="4" Panel.ZIndex="100"/>
+  </Grid>
+</Window>
