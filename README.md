@@ -1,6 +1,6 @@
 # CineForge
 
-![CineForge GitHub banner](docs/assets/banners/cineforge-github-banner-1280x640.png)
+![CineForge GitHub banner](https://raw.githubusercontent.com/thebalddudeco/CineForge/main/docs/assets/banners/cineforge-github-banner-1280x640.png)
 
 CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
 
