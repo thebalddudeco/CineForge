@@ -30,6 +30,12 @@
     <AssemblyMetadata Include="CineForgeRuntimeBytes" Value="$(CineForgeRuntimeBytes)" />
     <AssemblyMetadata Include="CineForgeRuntimeSha256" Value="$(CineForgeRuntimeSha256)" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\Anta-Regular.ttf" LogicalName="CineForge.Installer.Fonts.Anta-Regular.ttf" />
+    <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\SairaCondensed-Regular.ttf" LogicalName="CineForge.Installer.Fonts.SairaCondensed-Regular.ttf" />
+    <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\CutiveMono-Regular.ttf" LogicalName="CineForge.Installer.Fonts.CutiveMono-Regular.ttf" />
+    <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\InterTight-VariableFont_wght.ttf" LogicalName="CineForge.Installer.Fonts.InterTight-VariableFont_wght.ttf" />
+  </ItemGroup>
   <ItemGroup Condition="'$(SkipPayload)' != 'true'">
     <EmbeddedResource Include="..\payload\CineForge-Payload.zip" LogicalName="CineForge.Payload.zip" />
   </ItemGroup>

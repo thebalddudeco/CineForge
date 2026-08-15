@@ -14,8 +14,8 @@
     <Product>CineForge Desktop</Product>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="Assets\Fonts\*.ttf" />
-    <Resource Include="Assets\orbital-globe.gif" />
-    <Content Include="Assets\Fonts\OFL-*.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="..\..\..\..\Brand System\Fonts\*.ttf" Link="Assets\Fonts\%(Filename)%(Extension)" />
+    <Resource Include="..\..\..\..\Brand System\Motion\orbital-globe.gif" Link="Assets\orbital-globe.gif" />
+    <Content Include="..\..\..\..\Brand System\Fonts\OFL-*.txt" Link="Assets\Fonts\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

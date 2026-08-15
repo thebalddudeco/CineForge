@@ -3,6 +3,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+BRAND_SYSTEM = ROOT.parents[1] / "Brand System"
 
 
 class DistributionTests(unittest.TestCase):
@@ -98,10 +99,10 @@ class DistributionTests(unittest.TestCase):
         self.assertIn('x:Name="GenerationJobLabel"', xaml)
         self.assertIn('x:Key="MicroGrid"', app)
         self.assertIn('TextElement.Foreground="{TemplateBinding Foreground}"', app)
-        self.assertIn('Assets\\Fonts\\*.ttf', project)
+        self.assertIn('Brand System\\Fonts\\*.ttf', project)
         self.assertIn("DrawRuntimeSignal", code)
         for name in ("Anta-Regular.ttf", "CutiveMono-Regular.ttf", "InterTight-VariableFont_wght.ttf"):
-            self.assertTrue((ROOT / "desktop" / "CineForge.Desktop" / "Assets" / "Fonts" / name).is_file())
+            self.assertTrue((BRAND_SYSTEM / "Fonts" / name).is_file())
 
     def test_desktop_generation_controls_follow_the_visible_workflow(self):
         xaml = (ROOT / "desktop" / "CineForge.Desktop" / "MainWindow.xaml").read_text(encoding="utf-8")
@@ -141,12 +142,21 @@ class DistributionTests(unittest.TestCase):
             "MPLUS1-VariableFont_wght.ttf", "ZenKurenaido-Regular.ttf",
             "ZenKakuGothicAntique-Regular.ttf", "SairaCondensed-Regular.ttf",
         ):
-            self.assertTrue((desktop / "Assets" / "Fonts" / font).is_file())
+            self.assertTrue((BRAND_SYSTEM / "Fonts" / font).is_file())
         self.assertIn('Content="한" Tag="ko"', xaml)
         self.assertIn('Content="日" Tag="ja"', xaml)
         self.assertIn('LocalizationManager.Apply(language, persist: true)', (desktop / "MainWindow.xaml.cs").read_text(encoding="utf-8"))
         self.assertIn('PreferencesPath', manager)
         self.assertIn('LANGUAGE / 언어 / 言語', installer)
+        self.assertIn('SegmentedProgressBar', installer)
+        self.assertIn('VersionBadge', installer)
+        self.assertIn('CineForgeSelector', installer)
+        visuals = (ROOT / "packaging" / "CineForge.Installer" / "InstallerVisuals.cs").read_text(encoding="utf-8")
+        self.assertIn('ClippedRectangle', visuals)
+        self.assertIn('Chartreuse = Color.FromArgb(228, 255, 26)', visuals)
+        self.assertIn('MenuItemSelected => CineForgeTheme.Chartreuse', visuals)
+        self.assertIn('e.Item.Selected ? CineForgeTheme.Black : CineForgeTheme.Alabaster', visuals)
+        self.assertIn('Fixed deterministic grain', visuals)
         self.assertIn('version = Program.ProductVersion, language', installer)
 
 

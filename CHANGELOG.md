@@ -7,11 +7,20 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 ### Documentation
 
 - Added a complete CineForge Desktop 0.5.0 user guide covering installation, runtime readiness, every workflow stage, the location of candidate-level Generate Video controls, live progress interpretation, outputs, localization, privacy, current version behavior, and troubleshooting.
+- Added public-facing release language that calls out the native desktop conversion, the full brand-system redesign, the new top-level CineForge Brand System asset library, and the richer installer/runtime telemetry story.
 
 ### Installer
 
 - Locked in-place upgrades to the existing `CineForge` application folder: the new application is staged, the owned previous installation is replaced as a whole, retired application files are removed, and the separate CineForge Library is preserved without duplicating models or creative work.
 - Hardened interrupted-upgrade recovery so a valid temporary application backup is restored before setup retries, and failed replacements roll back cleanly.
+- Rebuilt the native setup window with CineForge's approved instrument aesthetic: borderless branded chrome, embedded offline Anta/Saira Condensed/Cutive Mono/Inter Tight fonts, sparse grid and stationary grain, clipped double frames, registration marks, the filled tapered version badge, technical micro-labels, and a segmented live installation rail.
+- Replaced the generic Windows language combo box with a keyboard-accessible CineForge selector whose dark, chartreuse, hover, and selected states follow the locked contrast contract without blue system highlighting.
+- Preserved the installation engine beneath the redesign; setup remains native, verifies existing runtime/model components, resumes partial downloads, and keeps the application and CineForge Library separate.
+
+### Brand system
+
+- Consolidated the active CineForge brand library into the top-level `O:\CineForge\Brand System` archive, grouping logo sources, SVGs, transparent PNG masters, export sizes, fonts, motion studies, references, proof sheets, and brand docs under one source-of-truth structure.
+- Rewired Desktop, installer, tests, export tooling, and visual docs to use the centralized CineForge brand-asset library instead of scattered per-folder copies.
 
 ## [0.5.0] - 2026-08-15
 

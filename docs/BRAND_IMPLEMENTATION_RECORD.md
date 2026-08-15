@@ -45,6 +45,25 @@ Contrast is component state, not a suggestion:
 
 Font license files are packaged beside the font resources. The interface does not download fonts at runtime.
 
+## Brand system consolidation
+
+The v0.5.0 paper trail now treats the brand asset library as a deliberate product system rather than a loose pile of previews and exports.
+
+The active local source of truth is organized under `O:\CineForge\Brand System`:
+
+- `Logos/Source/AI` for original Illustrator logo files;
+- `Logos/SVG` for canonical vector lockups and marks;
+- `Logos/PNG` for named transparent raster masters;
+- `Logos/Exports` for favicon, app-icon, and production size deliveries;
+- `Logos/Previews` for approved badge and logo studies;
+- `Motion` for approved orbital, runtime, and generation motion references;
+- `Fonts` for every approved CineForge font plus license files;
+- `References` for concept boards and visual reference icon sheets;
+- `Docs` for the locked suite and manifest;
+- `Proofs` for export QA sheets.
+
+This keeps branding, installer chrome, UI telemetry styling, and release-asset generation aligned under one maintained asset library.
+
 ## Superseded visual concepts
 
 The following explorations must not return unless explicitly approved in a later design decision:

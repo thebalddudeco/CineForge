@@ -100,62 +100,111 @@ internal static class Program
 internal sealed class InstallerForm : Form
 {
     private readonly Label statusLabel;
-    private readonly ProgressBar progressBar;
+    private readonly SegmentedProgressBar progressBar;
     private readonly Button installButton;
     private readonly Button cancelButton;
     private readonly TextBox installPath;
     private readonly TextBox libraryPath;
-    private readonly ComboBox languagePicker;
+    private readonly CineForgeSelector languagePicker;
     private CancellationTokenSource? cancellation;
 
     public InstallerForm()
     {
         Text = $"CineForge Desktop {Program.ProductVersion} Setup";
-        ClientSize = new Size(760, 650);
-        FormBorderStyle = FormBorderStyle.FixedDialog;
+        ClientSize = new Size(880, 720);
+        FormBorderStyle = FormBorderStyle.None;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
-        BackColor = Color.FromArgb(2, 3, 0);
-        ForeColor = Color.FromArgb(224, 224, 224);
+        BackColor = CineForgeTheme.Black;
+        ForeColor = CineForgeTheme.Alabaster;
         Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath!);
+        DoubleBuffered = true;
+        Padding = new Padding(1);
 
-        var accent = new Panel { BackColor = Color.FromArgb(228, 255, 26), Location = new Point(0, 0), Size = new Size(8, 650) };
-        var eyebrow = new Label { Text = "CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = Color.FromArgb(228, 255, 26), Font = new Font("Segoe UI Semibold", 9), Location = new Point(54, 35) };
-        var title = new Label { Text = "Install CineForge Desktop", AutoSize = true, Font = new Font("Segoe UI", 28, FontStyle.Bold), Location = new Point(49, 63) };
-        var subtitle = new Label { Text = "Application and library locations stay completely separate from Shadowframe.", AutoSize = true, ForeColor = Color.FromArgb(224, 224, 224), Font = new Font("Segoe UI", 10), Location = new Point(54, 118) };
+        var surface = new InstallerSurface { Dock = DockStyle.Fill };
+        var chrome = new Panel { BackColor = CineForgeTheme.Black, Location = new Point(1, 1), Size = new Size(878, 40) };
+        var chromeMark = new Label { Text = "///", AutoSize = true, ForeColor = CineForgeTheme.Chartreuse, Font = CineForgeTheme.Title(14, FontStyle.Bold), Location = new Point(14, 10) };
+        var chromeTitle = new Label { Text = $"CINEFORGE DESKTOP  /  SETUP SYSTEM  /  {Program.ProductVersion}", AutoSize = true, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Mono(8), Location = new Point(56, 14) };
+        var minimize = ChromeButton("—", 800, (_, _) => WindowState = FormWindowState.Minimized);
+        var close = ChromeButton("×", 838, (_, _) => Close());
+        chrome.Controls.AddRange([chromeMark, chromeTitle, minimize, close]);
+        chrome.MouseDown += DragWindow;
+        chromeTitle.MouseDown += DragWindow;
 
-        var languageLabel = FieldLabel("LANGUAGE / 언어 / 言語", 150);
-        languagePicker = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(55, 171), Size = new Size(210, 28), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), DisplayMember = nameof(LanguageOption.Label), ValueMember = nameof(LanguageOption.Id) };
-        languagePicker.Items.AddRange([new LanguageOption("en", "EN  English"), new LanguageOption("ko", "한  한국어"), new LanguageOption("ja", "日  日本語")]);
-        languagePicker.SelectedValue = Program.DefaultLanguage;
+        var rail = new Panel { BackColor = CineForgeTheme.Line, Location = new Point(40, 58), Size = new Size(800, 1) };
+        var railDot = new Panel { BackColor = CineForgeTheme.Chartreuse, Location = new Point(830, 55), Size = new Size(7, 7) };
+        var badge = new VersionBadge { VersionText = $"v{Program.ProductVersion}", Location = new Point(765, 76), Size = new Size(76, 82) };
+        var eyebrow = new Label { Text = "■  CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = CineForgeTheme.Chartreuse, Font = CineForgeTheme.Mono(8, FontStyle.Bold), Location = new Point(55, 84) };
+        var title = new Label { Text = "Install CineForge Desktop", AutoSize = true, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Title(27), Location = new Point(50, 108) };
+        var subtitle = new Label { Text = "Choose the application and private local-library locations. Existing verified files are reused.", AutoSize = true, ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Body(10), Location = new Point(55, 154) };
 
-        var appLabel = FieldLabel("APPLICATION FOLDER", 215);
-        installPath = PathBox(240, Program.DefaultInstallRoot);
-        var appBrowse = BrowseButton(240, () => BrowseFor(installPath, "Select a parent folder for CineForge", "CineForge"));
+        var setupPanel = new InstrumentPanel { DoubleFrame = true, Location = new Point(40, 188), Size = new Size(800, 338) };
+        var panelCode = new Label { Text = "01 / INSTALLATION ROUTER", AutoSize = true, BackColor = Color.Transparent, ForeColor = CineForgeTheme.Chartreuse, Font = CineForgeTheme.Mono(8, FontStyle.Bold), Location = new Point(24, 25) };
+        var panelState = new Label { Text = "LOCAL / DESKTOP", AutoSize = true, BackColor = Color.Transparent, ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Mono(7), Location = new Point(676, 25) };
 
-        var libraryLabel = FieldLabel("CINEFORGE LIBRARY", 305);
-        libraryPath = PathBox(330, Program.DefaultDataRoot);
-        var libraryBrowse = BrowseButton(330, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
+        var languageLabel = FieldLabel("LANGUAGE / 언어 / 言語", 57);
+        languagePicker = new CineForgeSelector { Location = new Point(25, 78), Size = new Size(225, 29) };
+        languagePicker.SetOptions([new LanguageOption("en", "EN  English"), new LanguageOption("ko", "한  한국어"), new LanguageOption("ja", "日  日本語")], Program.DefaultLanguage);
+
+        var appLabel = FieldLabel("APPLICATION FOLDER", 119);
+        installPath = PathBox(140, Program.DefaultInstallRoot);
+        var appBrowse = BrowseButton(140, () => BrowseFor(installPath, "Select a parent folder for CineForge", "CineForge"));
+
+        var libraryLabel = FieldLabel("CINEFORGE LIBRARY", 186);
+        libraryPath = PathBox(207, Program.DefaultDataRoot);
+        var libraryBrowse = BrowseButton(207, () => BrowseFor(libraryPath, "Select a parent folder for the CineForge Library", "CineForge Library"));
         var libraryNote = new Label {
-            Text = "Creates the separate CineForge Library for inputs, outputs, projects, models, cache, logs, and temp.\nSetup downloads a ~2.0 GB native runtime, then approximately 35.6 GB of required Wan models.",
-            AutoSize = true, ForeColor = Color.FromArgb(224, 224, 224), Font = new Font("Segoe UI", 9), Location = new Point(55, 370)
+            Text = "SEPARATE DATA VAULT  /  inputs · outputs · projects · models · cache · logs · temp\nSetup verifies existing components before downloading the ~2.0 GB runtime and 35.6 GB Wan pack.",
+            AutoSize = true, BackColor = Color.Transparent, ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Body(8), Location = new Point(25, 249)
         };
+        var divider = new Panel { BackColor = CineForgeTheme.Line, Location = new Point(25, 295), Size = new Size(750, 1) };
+        setupPanel.Controls.AddRange([panelCode, panelState, languageLabel, languagePicker, appLabel, installPath, appBrowse, libraryLabel, libraryPath, libraryBrowse, libraryNote, divider]);
 
-        progressBar = new ProgressBar { Location = new Point(55, 455), Size = new Size(650, 10), Style = ProgressBarStyle.Continuous, Visible = false };
-        statusLabel = new Label { Text = "Ready to install", AutoEllipsis = true, Size = new Size(650, 38), ForeColor = Color.FromArgb(224, 224, 224), Location = new Point(55, 480) };
-        cancelButton = new Button { Text = "Pause", Size = new Size(110, 44), Location = new Point(375, 565), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), FlatStyle = FlatStyle.Flat, Visible = false };
-        installButton = new Button { Text = "Install + Download  →", Size = new Size(210, 44), Location = new Point(495, 565), BackColor = Color.FromArgb(228, 255, 26), ForeColor = Color.FromArgb(2, 3, 0), FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Semibold", 10) };
-        installButton.FlatAppearance.BorderSize = 0;
+        var telemetryPanel = new InstrumentPanel { Location = new Point(40, 542), Size = new Size(800, 96) };
+        var telemetryLabel = new Label { Text = "■  INSTALLATION SIGNAL", AutoSize = true, BackColor = Color.Transparent, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Mono(8), Location = new Point(20, 17) };
+        var telemetryCode = new Label { Text = "PKG.050 / READY", AutoSize = true, BackColor = Color.Transparent, ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Mono(7), Location = new Point(680, 18) };
+        progressBar = new SegmentedProgressBar { Location = new Point(20, 42), Size = new Size(760, 15), Visible = true, Value = 0 };
+        statusLabel = new Label { Text = "READY / Awaiting installation command", AutoEllipsis = true, Size = new Size(760, 22), ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Mono(8), Location = new Point(20, 65) };
+        telemetryPanel.Controls.AddRange([telemetryLabel, telemetryCode, progressBar, statusLabel]);
+
+        cancelButton = new CineForgeButton { Text = "PAUSE", Size = new Size(120, 44), Location = new Point(505, 657), Visible = false };
+        installButton = new CineForgeButton { Text = "INSTALL + DOWNLOAD  →", Size = new Size(205, 44), Location = new Point(635, 657), Primary = true };
+        var footer = new Label { Text = "LOCAL-FIRST / VERIFIED COMPONENTS / PRIVATE RUNTIME", AutoSize = true, ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Mono(7), Location = new Point(40, 672) };
+        var marks = new RegistrationMarks { Location = new Point(24, 72), Size = new Size(832, 574) };
+        marks.Enabled = false;
         cancelButton.Click += (_, _) => cancellation?.Cancel();
         installButton.Click += InstallClicked;
-        Controls.AddRange([accent, eyebrow, title, subtitle, languageLabel, languagePicker, appLabel, installPath, appBrowse, libraryLabel, libraryPath, libraryBrowse, libraryNote, progressBar, statusLabel, cancelButton, installButton]);
+        surface.Controls.AddRange([rail, railDot, marks, badge, eyebrow, title, subtitle, setupPanel, telemetryPanel, footer, cancelButton, installButton]);
+        marks.SendToBack();
+        Controls.AddRange([surface, chrome]);
+        chrome.BringToFront();
     }
 
-    private static Label FieldLabel(string text, int y) => new() { Text = text, AutoSize = true, ForeColor = Color.FromArgb(228, 255, 26), Font = new Font("Consolas", 8), Location = new Point(55, y) };
-    private static TextBox PathBox(int y, string value) => new() { Text = value, Size = new Size(550, 27), BackColor = Color.FromArgb(36, 36, 36), ForeColor = Color.FromArgb(224, 224, 224), BorderStyle = BorderStyle.FixedSingle, Location = new Point(55, y) };
+    private static Button ChromeButton(string text, int x, EventHandler action)
+    {
+        var button = new Button { Text = text, Location = new Point(x, 2), Size = new Size(38, 35), FlatStyle = FlatStyle.Flat, BackColor = CineForgeTheme.Black, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Control(12) };
+        button.FlatAppearance.BorderSize = 0;
+        button.FlatAppearance.MouseOverBackColor = CineForgeTheme.Carbon;
+        button.FlatAppearance.MouseDownBackColor = CineForgeTheme.Chartreuse;
+        button.Click += action;
+        return button;
+    }
+
+    private void DragWindow(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left) return;
+        ReleaseCapture();
+        SendMessage(Handle, 0xA1, 0x2, 0);
+    }
+
+    [DllImport("user32.dll")] private static extern bool ReleaseCapture();
+    [DllImport("user32.dll")] private static extern IntPtr SendMessage(IntPtr handle, int message, int wParam, int lParam);
+
+    private static Label FieldLabel(string text, int y) => new() { Text = text, AutoSize = true, BackColor = Color.Transparent, ForeColor = CineForgeTheme.Chartreuse, Font = CineForgeTheme.Mono(8, FontStyle.Bold), Location = new Point(25, y) };
+    private static TextBox PathBox(int y, string value) => new() { Text = value, Size = new Size(635, 29), BackColor = CineForgeTheme.Black, ForeColor = CineForgeTheme.Alabaster, BorderStyle = BorderStyle.FixedSingle, Font = CineForgeTheme.Body(9), Location = new Point(25, y) };
     private static Button BrowseButton(int y, Action action)
     {
-        var button = new Button { Text = "Browse…", Size = new Size(90, 28), Location = new Point(615, y - 1), FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(224, 224, 224), BackColor = Color.FromArgb(36, 36, 36) };
+        var button = new CineForgeButton { Text = "BROWSE…", Size = new Size(105, 30), Location = new Point(670, y - 1) };
         button.Click += (_, _) => action();
         return button;
     }
@@ -179,7 +228,7 @@ internal sealed class InstallerForm : Form
         progressBar.Visible = true;
         progressBar.Value = 0;
         cancelButton.Visible = true;
-        installButton.Location = new Point(495, 565);
+        installButton.Location = new Point(635, 657);
         cancellation = new CancellationTokenSource();
         try
         {
@@ -188,7 +237,7 @@ internal sealed class InstallerForm : Form
                 statusLabel.Text = item.Message;
                 if (item.Percent is int value) progressBar.Value = Math.Clamp(value, 0, 100);
             });
-            await InstallerEngine.InstallAsync(installPath.Text.Trim(), libraryPath.Text.Trim(), languagePicker.SelectedValue?.ToString() ?? "en", report, cancellation.Token);
+            await InstallerEngine.InstallAsync(installPath.Text.Trim(), libraryPath.Text.Trim(), languagePicker.SelectedValue, report, cancellation.Token);
             progressBar.Value = 100;
             statusLabel.Text = "CineForge Desktop and the required Wan model pack are installed and verified.";
             cancelButton.Visible = false;

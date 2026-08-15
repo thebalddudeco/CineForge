@@ -71,7 +71,7 @@ Fonts ship with the application and their licenses. The installed desktop app mu
 
 ## Exact version identifier
 
-The compact approved preview is `design-previews/cineforge-version-badges-brand-green-compact.png`.
+The compact approved preview is `../../../Brand System/Logos/Previews/cineforge-version-badges-brand-green-compact.png`.
 
 The silhouette must not be improvised, shortened, widened, converted to a hexagon, converted to an inverted triangle, or stretched to fit a header slot. Its geometry is:
 
@@ -93,7 +93,7 @@ Earlier hexagonal and triangular explorations are superseded by this exact taper
 
 ## Generation monitor
 
-The approved source is `design-previews/cineforge-generation-window-dot-matrix-still.png` and its animated study. The production control is native and driven by real job data; the GIF is a design reference only.
+The approved source is `../../../Brand System/Motion/cineforge-generation-window-dot-matrix-still.png` and its animated study. The production control is native and driven by real job data; the GIF is a design reference only.
 
 Required structure:
 
@@ -119,7 +119,7 @@ The matrix is the approved primary generation visual. Orbital, radar, and segmen
 
 ## Runtime connection monitor
 
-The approved source is `design-previews/cineforge-runtime-radio-history-still.png` and its animated study. The production control is native and reflects real runtime data.
+The approved source is `../../../Brand System/Motion/cineforge-runtime-radio-history-still.png` and its animated study. The production control is native and reflects real runtime data.
 
 Required structure and behavior:
 
@@ -136,7 +136,7 @@ This monitor replaces a flat one-line connected-device strip where space permits
 
 ## Frames, borders, and data callouts
 
-The approved concept board is `design-previews/cineforge-retrofuture-concept-board.png`.
+The approved concept board is `../../../Brand System/References/Boards/cineforge-retrofuture-concept-board.png`.
 
 Its language must recur throughout the product:
 

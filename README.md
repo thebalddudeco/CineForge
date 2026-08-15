@@ -11,6 +11,16 @@ The current repository and installer work are focused on CineForge Desktop.
 
 **CineForge Desktop 0.5.0 native-desktop release candidate.**
 
+### What’s new and worth showing off
+
+- A full native Windows desktop app with no browser shell, no localhost UI, and no ComfyUI dependency.
+- A rebuilt retrofuturist CineForge interface based on the approved v0.1.0 design language instead of the interim flat gray prototype.
+- A branded native installer with CineForge chrome, technical framing, offline bundled fonts, a segmented installation signal bar, and proper contrast-safe language controls.
+- Live runtime instrumentation with GPU / VRAM signal history instead of a plain connected-device text strip.
+- The approved breathing 38 × 10 generation dot matrix translated into a real native, data-driven status instrument.
+- Persistent English, Korean, and Japanese localization with their approved font families.
+- A locked top-level CineForge brand library for logos, fonts, motion studies, exports, proofs, and reference boards.
+
 The application, engine protocol, installer, packaging defaults, localized title bars, runtime telemetry, and approved filled version badge are stamped consistently as `0.5.0`. The release remains a candidate until every verification gate in `docs/RELEASE_PROCESS.md` has passed.
 
 The application now loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-FP8 UMT5 encoder, and Wan VAE directly through the CineForge Engine without ComfyUI. A real two-expert generation completed on an RTX 4070 with finite latents, finite non-black frames, live progress telemetry, and MP4 export. The remaining public-release gate is a clean-machine installer/download/generation/uninstall pass.
@@ -94,6 +104,8 @@ Every user-facing release must include:
 The required process is documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md). Architecture and scope decisions are recorded in [docs/decisions](docs/decisions).
 
 The complete product and version history is recorded in [docs/VERSION_HISTORY.md](docs/VERSION_HISTORY.md). The locked visual rules and their current native implementation are recorded in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md), [docs/V010_VISUAL_SOURCE_OF_TRUTH.md](docs/V010_VISUAL_SOURCE_OF_TRUTH.md), and [docs/BRAND_IMPLEMENTATION_RECORD.md](docs/BRAND_IMPLEMENTATION_RECORD.md).
+
+The consolidated local brand master now lives in `O:\CineForge\Brand System`, which holds the locked logo suite, approved font files, motion references, concept boards, export sizes, proof sheets, and brand documentation used during the v0.5.0 redesign pass.
 
 ## Models
 
