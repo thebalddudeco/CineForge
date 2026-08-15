@@ -89,6 +89,21 @@ class DistributionTests(unittest.TestCase):
         for name in ("Anta-Regular.ttf", "CutiveMono-Regular.ttf", "InterTight-VariableFont_wght.ttf"):
             self.assertTrue((ROOT / "desktop" / "CineForge.Desktop" / "Assets" / "Fonts" / name).is_file())
 
+    def test_desktop_generation_controls_follow_the_visible_workflow(self):
+        xaml = (ROOT / "desktop" / "CineForge.Desktop" / "MainWindow.xaml").read_text(encoding="utf-8")
+        code = (ROOT / "desktop" / "CineForge.Desktop" / "MainWindow.xaml.cs").read_text(encoding="utf-8")
+        model_picker = xaml.index('x:Name="ModelPicker"')
+        reference_pack = xaml.index('Text="{DynamicResource L.ReferencePanelLabel}"')
+        build_button = xaml.index('x:Name="BuildButton"')
+        factory_panel = xaml.index('x:Name="FactoryPanel"')
+        self.assertLess(model_picker, reference_pack)
+        self.assertLess(reference_pack, build_button)
+        self.assertLess(build_button, factory_panel)
+        self.assertEqual(xaml.count('x:Name="ModelPicker"'), 1)
+        self.assertIn('x:Name="BuildButton" Content="{DynamicResource L.BuildFactory}" Style="{StaticResource PrimaryButton}" Height="46" IsEnabled="False"', xaml)
+        self.assertIn('BuildButton.IsEnabled = _referenceImage is not null;', code)
+        self.assertIn('FactoryPanel.BringIntoView()', code)
+
     def test_native_palette_and_light_surface_contrast_are_locked(self):
         app = (ROOT / "desktop" / "CineForge.Desktop" / "App.xaml").read_text(encoding="utf-8")
         for color in ("#E4FF1A", "#242424", "#020300", "#E0E0E0", "#89FC00"):

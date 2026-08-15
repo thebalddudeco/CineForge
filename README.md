@@ -17,6 +17,20 @@ The application now loads the split Wan 2.2 I2V A14B scaled-FP8 experts, scaled-
 
 The installer is pinned to the validated release-candidate pack revision recorded in [docs/MODEL_PACK_SPEC.md](docs/MODEL_PACK_SPEC.md) and [docs/RELEASE_VERIFICATION.md](docs/RELEASE_VERIFICATION.md).
 
+## How to use CineForge Desktop
+
+1. **Install CineForge Desktop.** Choose an application folder and a separate CineForge Library folder when prompted. Setup downloads and verifies the required Wan model pack automatically.
+2. **Open CineForge.** Confirm that the header reports a connected GPU/runtime. If the model list is empty, use **Refresh Models** after setup has finished downloading the model pack.
+3. **Describe the sequence.** Complete the Scene Brief fields, choose the clip length, and select the installed Wan model from the model menu directly beneath Clip Length.
+4. **Lock the visual reference.** In **Lock what must not drift**, select the source image that establishes the subject and visual continuity. The build action remains unavailable until a reference image has been selected.
+5. **Build the 15-shot factory.** Select **Build 15-Shot Factory** beneath the reference pack. CineForge creates five angle prompts, five insert prompts, and five story-progressing prompts, then moves the view to the generated candidates.
+6. **Review the candidates.** Compare the planned shots and choose the candidate that should become video.
+7. **Generate the video.** Use **Generate Video** on the chosen candidate. CineForge sends that shot, the locked image, and its motion direction to the local Wan engine.
+8. **Monitor generation.** The live generation instrument reports stage, percentage, elapsed time, estimated time remaining, GPU activity, and VRAM use. The segmented bar is real progress data; the breathing dot matrix is the active-generation signal.
+9. **Open the result.** When generation completes, preview the clip or use **Open Output Folder** to access the exported file in the CineForge Library.
+
+The language controls in the lower-left corner switch the interface between English, Korean, and Japanese. CineForge Desktop keeps imported media, project data, models, and generated outputs on the local machine.
+
 ## Product scope
 
 - Wan-only local video generation

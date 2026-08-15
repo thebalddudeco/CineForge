@@ -144,6 +144,7 @@ public partial class MainWindow : Window
             var result = await _engine.SendAsync("import_reference", new { path = dialog.FileName, name = $"canonical-{IOPath.GetFileName(dialog.FileName)}" });
             _referenceImage = result.GetProperty("asset").GetProperty("path").GetString();
             ReferencePath.Text = _referenceImage?.ToUpperInvariant();
+            BuildButton.IsEnabled = _referenceImage is not null;
             StatusText.Text = L("L.ReferenceLocked");
         }
         catch (Exception ex) { ShowError(ex); }
@@ -151,6 +152,11 @@ public partial class MainWindow : Window
 
     private async void BuildPlan_Click(object sender, RoutedEventArgs e)
     {
+        if (_referenceImage is null)
+        {
+            MessageBox.Show(L("L.ReferenceRequired"), L("L.ReferenceRequiredTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
         BuildButton.IsEnabled = false;
         BuildButton.Content = L("L.BuildingFactory");
         try
@@ -189,12 +195,13 @@ public partial class MainWindow : Window
             ProjectIdLabel.Text = $"PROJECT {project.GetProperty("project_id").GetString()} · 90-NODE CINEMATIC LOGIC / NATIVE DESKTOP";
             ShowBranch("angles");
             FactoryPanel.Visibility = Visibility.Visible;
+            await Dispatcher.InvokeAsync(() => FactoryPanel.BringIntoView(), DispatcherPriority.ContextIdle);
             StatusText.Text = L("L.FactoryReady");
         }
         catch (Exception ex) { ShowError(ex); }
         finally
         {
-            BuildButton.IsEnabled = true;
+            BuildButton.IsEnabled = _referenceImage is not null;
             BuildButton.Content = L("L.BuildFactory");
         }
     }

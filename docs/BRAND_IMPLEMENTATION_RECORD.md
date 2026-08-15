@@ -71,6 +71,8 @@ The following explorations must not return unless explicitly approved in a later
 - completed Korean and Japanese interface localization coverage;
 - reduced film grain intensity and added dithering for smoother gradients;
 - used the exact supplied globe GIF, reduced its scale to prevent top/bottom clipping, and corrected its lower-right corner registration mark.
+- moved the WAN model control into the scene generation settings beneath Clip Length and removed the redundant full-width model-router panel;
+- moved the shot-factory action beneath the reference pack, required a locked reference before planning, and automatically brought generated candidates into view.
 
 ## Acceptance boundary
 

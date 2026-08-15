@@ -20,6 +20,8 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 - Removed the obsolete browser UI, localhost server, ComfyUI adapter, and legacy ComfyUI workflow file from the Desktop distribution.
 - Added a private stdin/stdout transport between the native WPF interface and the hidden local Wan worker.
 - Updated installer, runtime packaging, automatic model delivery, localization persistence, release verification, and architecture documentation for the native Desktop layout.
+- Moved the WAN model selector beneath Clip Length, removed the oversized model-router panel, and moved Build 15-Shot Factory beneath the reference slots so the visible control order matches the required workflow.
+- Disabled the shot-factory action until a canonical reference image is locked and automatically reveals the generated candidates after planning.
 
 ### Documentation and traceability
 
