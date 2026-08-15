@@ -20,6 +20,8 @@ CineForge now runs as a genuine native WPF Windows application with its own priv
 
 Download `CineForge-Desktop-Setup-0.5.0-win-x64.exe` and use `SHA256SUMS.txt` to verify it.
 
+New users should follow the complete **[CineForge Desktop 0.5.0 User Guide](https://github.com/thebalddudeco/CineForge/blob/main/docs/USER_GUIDE.md)**. It explains installation, the Scene Brief, canonical reference lock, 15-shot factory, candidate-level Generate Video controls, live progress data, outputs, localization, current version behavior, and troubleshooting.
+
 The setup EXE is intentionally small. During installation it downloads the matching `CineForge-Desktop-Runtime-0.5.0-win-x64.zip` release asset, verifies its SHA-256 checksum, extracts the application, and then downloads the pinned Wan pack. Publish both assets in the same GitHub Release.
 
 ### Verified preview artifact

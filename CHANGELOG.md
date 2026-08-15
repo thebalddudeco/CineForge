@@ -4,6 +4,10 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 ## [Unreleased]
 
+### Documentation
+
+- Added a complete CineForge Desktop 0.5.0 user guide covering installation, runtime readiness, every workflow stage, the location of candidate-level Generate Video controls, live progress interpretation, outputs, localization, privacy, current version behavior, and troubleshooting.
+
 ## [0.5.0] - 2026-08-15
 
 ### Native Windows interface and brand-system implementation
