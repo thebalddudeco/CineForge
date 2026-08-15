@@ -86,6 +86,7 @@ The current work replaces the Desktop presentation and process boundary without 
 - live GPU/VRAM telemetry and runtime history;
 - live 38 × 10 generation matrix and real progress data;
 - complete implementation of the approved retrofuturist brand contract;
+- consolidated top-level CineForge Brand System asset library for logos, exports, fonts, motion references, proofs, and source brand documentation;
 - exact filled tapered version identifier;
 - exact user-supplied orbital-globe animation packaged as an application resource;
 - numerous contrast, spacing, dropdown, registration-mark, grain, gradient, and clipping corrections from visual review.

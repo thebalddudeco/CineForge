@@ -2,6 +2,17 @@
 
 CineForge now runs as a genuine native WPF Windows application with its own private PyTorch/Diffusers inference worker. It does not launch a browser, host a localhost website, embed a WebView, launch ComfyUI, or contact ComfyUI.
 
+## What’s new in this drop
+
+- Full native-desktop conversion with a private local engine process.
+- Major CineForge brand-system rebuild based on the approved v0.1.0 visual language and retrofuturist micrographic references.
+- Approved tapered version badge now sourced from the locked Brand System System artboard and updated to `v0.5.0` for app and installer use.
+- Native branded installer redesign with CineForge chrome, segmented installation telemetry, clipped frames, and offline bundled UI fonts.
+- Live runtime signal history panel for GPU / VRAM / engine / build state.
+- Native breathing 38 × 10 generation matrix with separate real progress rail and live job telemetry.
+- Persistent English, Korean, and Japanese localization with approved fonts.
+- Top-level CineForge brand library consolidated for logos, exports, motion studies, references, proofs, and brand docs.
+
 ## Highlights
 
 - Native Windows installer with separate application and CineForge Library selectors.
@@ -15,6 +26,13 @@ CineForge now runs as a genuine native WPF Windows application with its own priv
 - Five camera angles, five inserts, and five story-progressing prompts per sequence.
 - Reference-pack uploads and continuity selection.
 - Existing raw checkpoint files are preserved and identified as conversion candidates.
+
+## Brand and design-system notes
+
+- The current interface is no longer the flat interim native shell; it now follows the locked CineForge visual contract.
+- The desktop app and installer both use the approved chartreuse / carbon / black / alabaster / lime palette with enforced contrast-safe state behavior.
+- The runtime header, generation monitor, installation signal, and workflow framing now reuse the same clipped technical grammar.
+- CineForge’s brand assets are now organized into a consolidated local `Brand System` archive containing source AI files, SVGs, transparent PNG masters, export sizes, favicons, fonts, motion studies, proof sheets, and reference boards.
 
 ## Download
 

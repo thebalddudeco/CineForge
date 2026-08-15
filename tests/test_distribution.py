@@ -3,6 +3,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+BRAND_SYSTEM = ROOT.parents[1] / "Brand System"
 
 
 class DistributionTests(unittest.TestCase):
@@ -24,6 +25,20 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("offset == file.Bytes", source)
         self.assertIn("RequestedRangeNotSatisfiable", source)
         self.assertNotIn('ModelRevision = "main"', source)
+
+    def test_installer_performs_owned_in_place_upgrades_with_rollback(self):
+        source = (ROOT / "packaging" / "CineForge.Installer" / "Program.cs").read_text(encoding="utf-8")
+        installation = (ROOT / "docs" / "INSTALLATION.md").read_text(encoding="utf-8")
+        release_process = (ROOT / "docs" / "RELEASE_PROCESS.md").read_text(encoding="utf-8")
+        self.assertIn('string staging = installRoot + $".installing-', source)
+        self.assertIn('string backup = installRoot + ".backup"', source)
+        self.assertIn("Directory.Move(installRoot, backup)", source)
+        self.assertIn("Directory.Move(staging, installRoot)", source)
+        self.assertIn("Directory.Move(backup, installRoot)", source)
+        self.assertIn("RequireInstallMarker(installRoot)", source)
+        self.assertIn("Preparing the in-place CineForge upgrade", source)
+        self.assertIn("The separate CineForge Library is never part", installation)
+        self.assertIn("in-place upgrade from the previous public release", release_process)
 
     def test_runtime_does_not_discover_shadowframe(self):
         checked = [
@@ -76,18 +91,19 @@ class DistributionTests(unittest.TestCase):
         project = (ROOT / "desktop" / "CineForge.Desktop" / "CineForge.Desktop.csproj").read_text(encoding="utf-8")
         code = (ROOT / "desktop" / "CineForge.Desktop" / "MainWindow.xaml.cs").read_text(encoding="utf-8")
         self.assertIn('<RowDefinition Height="88"/>', xaml)
-        self.assertIn('Width="49" Height="44"', xaml)
-        self.assertIn('Points="6,1 43,1 49,10 30,43 20,43 0,10"', xaml)
-        self.assertIn('Text="v0.5.0"', xaml)
+        self.assertIn('Source="Assets/version-badge-filled-acid-v0.5.0.png"', xaml)
+        self.assertIn('Source="Assets/logo-monochrome-alabaster-512.png"', xaml)
+        self.assertIn('Source="Assets/icon-mark-acid-64.png"', xaml)
         self.assertIn('x:Name="RuntimeCanvas"', xaml)
         self.assertIn('x:Name="MatrixCanvas"', xaml)
         self.assertIn('x:Name="GenerationJobLabel"', xaml)
         self.assertIn('x:Key="MicroGrid"', app)
         self.assertIn('TextElement.Foreground="{TemplateBinding Foreground}"', app)
-        self.assertIn('Assets\\Fonts\\*.ttf', project)
+        self.assertIn('Brand System\\Fonts\\*.ttf', project)
+        self.assertIn('Brand System\\System\\Generated\\version-badge-filled-acid-v0.5.0.png', project)
         self.assertIn("DrawRuntimeSignal", code)
         for name in ("Anta-Regular.ttf", "CutiveMono-Regular.ttf", "InterTight-VariableFont_wght.ttf"):
-            self.assertTrue((ROOT / "desktop" / "CineForge.Desktop" / "Assets" / "Fonts" / name).is_file())
+            self.assertTrue((BRAND_SYSTEM / "Fonts" / name).is_file())
 
     def test_desktop_generation_controls_follow_the_visible_workflow(self):
         xaml = (ROOT / "desktop" / "CineForge.Desktop" / "MainWindow.xaml").read_text(encoding="utf-8")
@@ -127,12 +143,21 @@ class DistributionTests(unittest.TestCase):
             "MPLUS1-VariableFont_wght.ttf", "ZenKurenaido-Regular.ttf",
             "ZenKakuGothicAntique-Regular.ttf", "SairaCondensed-Regular.ttf",
         ):
-            self.assertTrue((desktop / "Assets" / "Fonts" / font).is_file())
+            self.assertTrue((BRAND_SYSTEM / "Fonts" / font).is_file())
         self.assertIn('Content="한" Tag="ko"', xaml)
         self.assertIn('Content="日" Tag="ja"', xaml)
         self.assertIn('LocalizationManager.Apply(language, persist: true)', (desktop / "MainWindow.xaml.cs").read_text(encoding="utf-8"))
         self.assertIn('PreferencesPath', manager)
         self.assertIn('LANGUAGE / 언어 / 言語', installer)
+        self.assertIn('SegmentedProgressBar', installer)
+        self.assertIn('version-badge-filled-acid-v0.5.0.png', installer)
+        self.assertIn('CineForgeSelector', installer)
+        visuals = (ROOT / "packaging" / "CineForge.Installer" / "InstallerVisuals.cs").read_text(encoding="utf-8")
+        self.assertIn('ClippedRectangle', visuals)
+        self.assertIn('Chartreuse = Color.FromArgb(228, 255, 26)', visuals)
+        self.assertIn('MenuItemSelected => CineForgeTheme.Chartreuse', visuals)
+        self.assertIn('e.Item.Selected ? CineForgeTheme.Black : CineForgeTheme.Alabaster', visuals)
+        self.assertIn('Fixed deterministic grain', visuals)
         self.assertIn('version = Program.ProductVersion, language', installer)
 
 

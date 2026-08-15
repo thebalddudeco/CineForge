@@ -19,7 +19,7 @@ The historical source is a visual and interaction reference only. CineForge Desk
 
 ### Overall visual language
 
-- `design-previews/cineforge-retrofuture-concept-board.png`
+- `../../../Brand System/References/Boards/cineforge-retrofuture-concept-board.png`
 
 Authority for:
 
@@ -34,10 +34,10 @@ Authority for:
 
 ### Generation monitor
 
-- `design-previews/cineforge-generation-window-dot-matrix-still.png`
-- `design-previews/cineforge-generation-window-dot-matrix.gif`
-- `design-previews/cineforge-dot-matrix-breathe-green-v2-still.png`
-- `design-previews/cineforge-dot-matrix-breathe-green-v2.gif`
+- `../../../Brand System/Motion/cineforge-generation-window-dot-matrix-still.png`
+- `../../../Brand System/Motion/cineforge-generation-window-dot-matrix.gif`
+- `../../../Brand System/Motion/cineforge-dot-matrix-breathe-green-v2-still.png`
+- `../../../Brand System/Motion/cineforge-dot-matrix-breathe-green-v2.gif`
 
 Authority for the fixed square-cell matrix, asynchronous breathing, migrating green cells, segmented progress, percentage, elapsed time, ETA, frame/step data, signal lock, and the complete nested generation frame.
 
@@ -45,25 +45,25 @@ The GIFs demonstrate motion only. Production progress is rendered natively from 
 
 ### Runtime monitor
 
-- `design-previews/cineforge-runtime-radio-history-still.png`
-- `design-previews/cineforge-runtime-radio-history.gif`
+- `../../../Brand System/Motion/cineforge-runtime-radio-history-still.png`
+- `../../../Brand System/Motion/cineforge-runtime-radio-history.gif`
 
 Authority for the four-band signal history, green leading waveform, moving scan line, clipped instrument frame, GPU/VRAM/engine/build telemetry, and connected state.
 
 ### Secondary motion vocabulary
 
-- `design-previews/cineforge-orbital-loader.gif`
-- `design-previews/cineforge-radar-loader.gif`
-- `design-previews/cineforge-signal-core-loader.gif`
-- `design-previews/cineforge-particle-signal-loader.gif`
-- `design-previews/cineforge-motion-preview-sheet.png`
+- `../../../Brand System/Motion/cineforge-orbital-loader.gif`
+- `../../../Brand System/Motion/cineforge-radar-loader.gif`
+- `../../../Brand System/Motion/cineforge-signal-core-loader.gif`
+- `../../../Brand System/Motion/cineforge-particle-signal-loader.gif`
+- `../../../Brand System/Logos/Previews/cineforge-motion-preview-sheet.png`
 
 These elements may identify distinct planning, acquisition, inference, encoding, or completion phases. They may not replace the live dot-matrix generation monitor.
 
 ### Exact version identifier
 
-- `design-previews/cineforge-version-badges-brand-green-compact.png`
-- `design-previews/cineforge-version-badges-reference-exact-compact.png`
+- `../../../Brand System/Logos/Previews/cineforge-version-badges-brand-green-compact.png`
+- `../../../Brand System/Logos/Previews/cineforge-version-badges-reference-exact-compact.png`
 
 The approved production silhouette is the compact vertically tapered badge: flat top, short shoulders, widest upper corners, long inward sides, and narrow flat bottom. The later hexagonal concept-board badge is not the production version identifier.
 
