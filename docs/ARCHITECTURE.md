@@ -9,12 +9,11 @@ flowchart LR
     B --> C[Five angles]
     B --> D[Five inserts]
     B --> E[Five story beats]
-    C --> F[Native proof renderer]
-    D --> F
-    E --> F
-    F --> G[Manual continuity select]
+    C --> G[Shot selection]
+    D --> G
+    E --> G
     G --> H[Motion director]
-    H --> I[Native image-to-video adapter]
+    H --> I[Native Wan image-to-video adapter]
 ```
 
 ## Components
@@ -22,10 +21,10 @@ flowchart LR
 - `cineforge/planner.py` owns the deterministic 3 × 5 shot topology.
 - `cineforge/discovery.py` inventories raw model assets, standalone model packs, and the GPU directly.
 - `cineforge/engine.py` owns the native queue, progress records, model lifecycle, generated media, and Diffusers adapters.
-- `cineforge/server.py` persists projects and exposes the local JSON API and static UI.
-- `web/` is a dependency-free browser client.
+- `desktop/CineForge.Desktop/` is the native WPF window, Windows file-dialog layer, workflow UI, and live progress display.
+- `cineforge/worker.py` is the bundled private engine process. It accepts newline-delimited commands through redirected standard input and returns results through redirected standard output.
 
-The application does not call a ComfyUI server. Generation jobs run through the CineForge Engine, which reports sampling progress, phases, elapsed time, ETA, errors, and outputs directly to the interface.
+The application does not call a ComfyUI server. Generation jobs run through the CineForge Engine, which reports sampling progress, phases, elapsed time, ETA, errors, and outputs directly to the native interface. The desktop executable contains no WebView and the engine never opens a listening socket.
 
 ## Native model-pack contract
 
@@ -42,4 +41,4 @@ Raw `.safetensors` files remain visible in the inventory but are not declared ru
 
 ## Runtime safety
 
-The server binds to `127.0.0.1`. Model and Hugging Face caches use the configured model cache on `X:`. Generated media is served only from CineForge's generated-media directory. The engine does not launch, import, modify, or contact ComfyUI.
+The desktop interface starts the bundled engine as a hidden child process with private redirected streams. It does not bind a localhost port, serve files over HTTP, launch a browser, import ComfyUI, or contact ComfyUI. Models, cache files, inputs, projects, and generated media remain in the independently selected CineForge Library.

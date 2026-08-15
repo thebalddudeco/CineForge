@@ -1,0 +1,63 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+  <sys:String x:Key="L.SystemSubtitle">LOCAL WAN CINEMATIC SYSTEM</sys:String>
+  <sys:String x:Key="L.EngineInitializing">ENGINE INITIALIZING</sys:String>
+  <sys:String x:Key="L.Workflow">WORKFLOW / 01</sys:String>
+  <sys:String x:Key="L.NavScene">⊹  01  SCENE BRIEF</sys:String>
+  <sys:String x:Key="L.NavReference">⊹  02  REFERENCE LOCK</sys:String>
+  <sys:String x:Key="L.NavFactory">⊹  03  SHOT FACTORY</sys:String>
+  <sys:String x:Key="L.NavGeneration">⊹  04  WAN GENERATION</sys:String>
+  <sys:String x:Key="L.ModelAdapter">MODEL ADAPTER</sys:String>
+  <sys:String x:Key="L.RuntimeHistory">RUNTIME SIGNAL HISTORY</sys:String>
+  <sys:String x:Key="L.DesktopEdition">DESKTOP EDITION</sys:String>
+  <sys:String x:Key="L.PrivateProcess">PRIVATE LOCAL PROCESS&#10;NO BROWSER · NO LOCALHOST</sys:String>
+  <sys:String x:Key="L.BuildSystem">BUILD THE CINEMATIC SYSTEM</sys:String>
+  <sys:String x:Key="L.PipelineSummary">One canonical reference → five angles → five inserts → five story-progressing shots → Wan video</sys:String>
+  <sys:String x:Key="L.OpenOutput">OPEN OUTPUT FOLDER  ↗</sys:String>
+  <sys:String x:Key="L.SceneBrief">SCENE BRIEF</sys:String>
+  <sys:String x:Key="L.ProjectTitle">PROJECT TITLE</sys:String>
+  <sys:String x:Key="L.Subject">SUBJECT / IDENTITY LOCK</sys:String>
+  <sys:String x:Key="L.Action">ACTION</sys:String>
+  <sys:String x:Key="L.Environment">ENVIRONMENT</sys:String>
+  <sys:String x:Key="L.StoryControl">STORY CONTROL</sys:String>
+  <sys:String x:Key="L.Objective">OBJECTIVE</sys:String>
+  <sys:String x:Key="L.Obstacle">OBSTACLE / THREAT</sys:String>
+  <sys:String x:Key="L.Lighting">LIGHTING</sys:String>
+  <sys:String x:Key="L.Look">LOOK</sys:String>
+  <sys:String x:Key="L.DefaultTitle">Untitled cinematic project</sys:String>
+  <sys:String x:Key="L.DefaultSubject">The principal subject</sys:String>
+  <sys:String x:Key="L.DefaultAction">pursues the immediate objective under pressure</sys:String>
+  <sys:String x:Key="L.DefaultEnvironment">the established story environment</sys:String>
+  <sys:String x:Key="L.DefaultObjective">complete the immediate objective</sys:String>
+  <sys:String x:Key="L.DefaultObstacle">an emerging obstacle</sys:String>
+  <sys:String x:Key="L.DefaultLighting">motivated practical light shaped with negative fill</sys:String>
+  <sys:String x:Key="L.DefaultLook">cinematic naturalism, textured shadows, restrained halation, subtle grain</sys:String>
+  <sys:String x:Key="L.CanonicalReference">CANONICAL REFERENCE</sys:String>
+  <sys:String x:Key="L.NoImage">No image selected. Choose the starting frame for image-to-video.</sys:String>
+  <sys:String x:Key="L.SelectImage">SELECT IMAGE…</sys:String>
+  <sys:String x:Key="L.BuildFactory">BUILD 15-SHOT FACTORY  →</sys:String>
+  <sys:String x:Key="L.FactoryTitle">SHOT FACTORY / 15 CANDIDATES</sys:String>
+  <sys:String x:Key="L.FiveAngles">FIVE ANGLES</sys:String>
+  <sys:String x:Key="L.FiveInserts">FIVE INSERTS</sys:String>
+  <sys:String x:Key="L.StoryProgression">STORY PROGRESSION</sys:String>
+  <sys:String x:Key="L.GenerateVideo">GENERATE VIDEO  →</sys:String>
+  <sys:String x:Key="L.Generating">GENERATING</sys:String>
+  <sys:String x:Key="L.FrameSynthesis">FRAME SYNTHESIS</sys:String>
+  <sys:String x:Key="L.Progress">PROGRESS</sys:String>
+  <sys:String x:Key="L.LocalRuntime">●  LOCAL RUNTIME</sys:String>
+  <sys:String x:Key="L.Elapsed">ELAPSED</sys:String>
+  <sys:String x:Key="L.Eta">ETA</sys:String>
+  <sys:String x:Key="L.SignalLock">SIGNAL LOCK</sys:String>
+  <sys:String x:Key="L.OpenResult">OPEN RESULT  ↗</sys:String>
+  <sys:String x:Key="L.NativeArchitecture">CINEFORGE DESKTOP · NATIVE WINDOWS ARCHITECTURE</sys:String>
+  <sys:String x:Key="L.StatusStarting">STARTING PRIVATE CINEFORGE ENGINE</sys:String><sys:String x:Key="L.Connected">CONNECTED / {0}</sys:String><sys:String x:Key="L.EngineReadyNoGpu">ENGINE READY / GPU UNAVAILABLE</sys:String><sys:String x:Key="L.NativeOnline">NATIVE ENGINE ONLINE</sys:String><sys:String x:Key="L.CheckGpu">ENGINE READY · CHECK GPU RUNTIME</sys:String><sys:String x:Key="L.EngineOffline">ENGINE OFFLINE</sys:String><sys:String x:Key="L.NoModel">NO INSTALLED WAN MODEL PACK WAS FOUND</sys:String>
+  <sys:String x:Key="L.ChooseReferenceTitle">Choose a canonical reference frame</sys:String><sys:String x:Key="L.LockingReference">LOCKING CANONICAL REFERENCE</sys:String><sys:String x:Key="L.ReferenceLocked">CANONICAL REFERENCE LOCKED</sys:String><sys:String x:Key="L.BuildingFactory">BUILDING SHOT FACTORY…</sys:String><sys:String x:Key="L.FactoryReady">SHOT FACTORY READY · 15 CANDIDATES</sys:String>
+  <sys:String x:Key="L.ReferenceRequired">Choose a canonical reference image before starting Wan generation.</sys:String><sys:String x:Key="L.ReferenceRequiredTitle">Reference required</sys:String><sys:String x:Key="L.ModelRequired">No installed Wan model pack is available.</sys:String><sys:String x:Key="L.ModelRequiredTitle">Model required</sys:String><sys:String x:Key="L.Queueing">QUEUEING LOCAL WAN JOB</sys:String><sys:String x:Key="L.LocalActive">LOCAL WAN / ACTIVE</sys:String><sys:String x:Key="L.Running">RUNNING</sys:String><sys:String x:Key="L.Step">STEP {0} / {1}</sys:String><sys:String x:Key="L.Complete">GENERATION COMPLETE</sys:String><sys:String x:Key="L.OutputSaved">OUTPUT SAVED / SIGNAL LOCK</sys:String><sys:String x:Key="L.VideoComplete">WAN VIDEO GENERATION COMPLETE</sys:String><sys:String x:Key="L.GenerationError">GENERATION ERROR</sys:String><sys:String x:Key="L.LanguageChanged">LANGUAGE / ENGLISH</sys:String>
+  <sys:String x:Key="L.DesktopTitle">CINEFORGE DESKTOP</sys:String><sys:String x:Key="L.NativeWanTitle">NATIVE WAN CINEMATIC SYSTEM / 0.5.0</sys:String><sys:String x:Key="L.LocalStudio">LOCAL CINEMATIC STUDIO</sys:String><sys:String x:Key="L.CheckingRuntime">CHECKING RUNTIME</sys:String><sys:String x:Key="L.RefreshModels">REFRESH MODELS</sys:String>
+  <sys:String x:Key="L.HeroEyebrow">REFERENCE → BRANCH → SELECT → MOVE</sys:String><sys:String x:Key="L.HeroTitleOne">Build the sequence,</sys:String><sys:String x:Key="L.HeroTitleTwo">not just the frame.</sys:String><sys:String x:Key="L.HeroLede">Turn any scene into a continuity-aware shot system: five angles, five inserts, five progressing beats, then move the strongest frames with the local Wan runtime.</sys:String>
+  <sys:String x:Key="L.MapCanon">Canon</sys:String><sys:String x:Key="L.MapStoryLocks">Story + locks</sys:String><sys:String x:Key="L.MapAngles">Angles</sys:String><sys:String x:Key="L.MapInserts">Inserts</sys:String><sys:String x:Key="L.MapFrames">Frames</sys:String><sys:String x:Key="L.MapApprove">Approve</sys:String><sys:String x:Key="L.MapMotion">Motion</sys:String><sys:String x:Key="L.MapDuration">2–15 SEC</sys:String>
+  <sys:String x:Key="L.WorkflowLabel">W O R K F L O W</sys:String><sys:String x:Key="L.StepScene">Scene brief</sys:String><sys:String x:Key="L.StepSceneDesc">Define intent</sys:String><sys:String x:Key="L.StepReference">Reference pack</sys:String><sys:String x:Key="L.StepReferenceDesc">Lock continuity</sys:String><sys:String x:Key="L.StepFactory">Shot factory</sys:String><sys:String x:Key="L.StepFactoryDesc">Build 15 prompts</sys:String><sys:String x:Key="L.StepContinuity">Continuity select</sys:String><sys:String x:Key="L.StepContinuityDesc">Approve frames</sys:String><sys:String x:Key="L.StepMotion">Motion director</sys:String><sys:String x:Key="L.StepMotionDesc">Animate selections</sys:String>
+  <sys:String x:Key="L.LocalFirst">LOCAL-FIRST</sys:String><sys:String x:Key="L.LocalFirstBody">Prompts, references, and outputs stay on this PC. Generation uses the active local Wan runtime.</sys:String><sys:String x:Key="L.ScenePanelLabel">01 / SCENE BRIEF</sys:String><sys:String x:Key="L.ScenePanelTitle">Give the sequence a dramatic spine.</sys:String><sys:String x:Key="L.NotPlanned">NOT PLANNED</sys:String>
+  <sys:String x:Key="L.PrincipalSubject">PRINCIPAL SUBJECT</sys:String><sys:String x:Key="L.PrimaryAction">PRIMARY ACTION</sys:String><sys:String x:Key="L.ImmediateObjective">IMMEDIATE OBJECTIVE</sys:String><sys:String x:Key="L.VisualLanguage">VISUAL LANGUAGE</sys:String><sys:String x:Key="L.PressureObstacle">PRESSURE / OBSTACLE</sys:String><sys:String x:Key="L.ClipLength">CLIP LENGTH</sys:String><sys:String x:Key="L.Clip3">3 SECONDS</sys:String><sys:String x:Key="L.Clip5">5 SECONDS</sys:String><sys:String x:Key="L.Clip10">10 SECONDS</sys:String><sys:String x:Key="L.Clip15">15 SECONDS</sys:String><sys:String x:Key="L.FactoryCreates">CREATES 5 ANGLES · 5 INSERTS · 5 STORY BEATS</sys:String>
+  <sys:String x:Key="L.ReferencePanelLabel">02 / REFERENCE PACK</sys:String><sys:String x:Key="L.ReferencePanelTitle">Lock what must not drift.</sys:String><sys:String x:Key="L.RefIdentity">IDENTITY / SUBJECT</sys:String><sys:String x:Key="L.RefIdentityDesc">Face, form, silhouette</sys:String><sys:String x:Key="L.RefWardrobe">WARDROBE / SURFACE</sys:String><sys:String x:Key="L.RefWardrobeDesc">Materials and state</sys:String><sys:String x:Key="L.RefGeography">GEOGRAPHY</sys:String><sys:String x:Key="L.RefGeographyDesc">Location and orientation</sys:String><sys:String x:Key="L.RefFilmLook">FILM LOOK</sys:String><sys:String x:Key="L.RefFilmLookDesc">Color, texture, lighting</sys:String><sys:String x:Key="L.RefProps">PROPS / DETAILS</sys:String><sys:String x:Key="L.RefPropsDesc">Hands, objects, condition</sys:String>
+  <sys:String x:Key="L.ModelRouterLabel">LOCAL MODEL ROUTER</sys:String><sys:String x:Key="L.DetectedMachine">Detected on this machine</sys:String><sys:String x:Key="L.WanLocal">WAN / LOCAL</sys:String><sys:String x:Key="L.ActiveWanModel">ACTIVE WAN VIDEO MODEL</sys:String><sys:String x:Key="L.LocalDesktopRuntime">LOCAL / DESKTOP RUNTIME</sys:String><sys:String x:Key="L.ShotFactoryLabel">03–04 / SHOT FACTORY + SELECT</sys:String><sys:String x:Key="L.CandidatesTitle">Fifteen continuity-aware candidates.</sys:String>
+</ResourceDictionary>

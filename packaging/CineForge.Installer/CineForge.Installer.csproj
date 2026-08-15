@@ -14,13 +14,13 @@
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <PublishReadyToRun>false</PublishReadyToRun>
-    <Version>0.4.0</Version>
-    <FileVersion>0.4.0.0</FileVersion>
+    <Version>0.5.0</Version>
+    <FileVersion>0.5.0.0</FileVersion>
     <Product>CineForge Desktop</Product>
     <Company>The Bald Dude Co.</Company>
     <Copyright>Copyright 2026 The Bald Dude Co.</Copyright>
-    <CineForgeRuntimeFileName Condition="'$(CineForgeRuntimeFileName)' == ''">CineForge-Desktop-Runtime-0.4.0-win-x64.zip</CineForgeRuntimeFileName>
-    <CineForgeRuntimeUrl Condition="'$(CineForgeRuntimeUrl)' == ''">https://github.com/thebalddudeco/CineForge/releases/download/v0.4.0/CineForge-Desktop-Runtime-0.4.0-win-x64.zip</CineForgeRuntimeUrl>
+    <CineForgeRuntimeFileName Condition="'$(CineForgeRuntimeFileName)' == ''">CineForge-Desktop-Runtime-0.5.0-win-x64.zip</CineForgeRuntimeFileName>
+    <CineForgeRuntimeUrl Condition="'$(CineForgeRuntimeUrl)' == ''">https://github.com/thebalddudeco/CineForge/releases/download/v0.5.0/CineForge-Desktop-Runtime-0.5.0-win-x64.zip</CineForgeRuntimeUrl>
     <CineForgeRuntimeBytes Condition="'$(CineForgeRuntimeBytes)' == ''">2017201506</CineForgeRuntimeBytes>
     <CineForgeRuntimeSha256 Condition="'$(CineForgeRuntimeSha256)' == ''">4ab5dbfbe10c576aea97276f3e8a554d57fe544d0cf11437cb656cec4794d346</CineForgeRuntimeSha256>
   </PropertyGroup>

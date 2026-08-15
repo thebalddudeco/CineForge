@@ -45,9 +45,6 @@ TEMP_ROOT = DATA_ROOT / "temp"
 
 @dataclass
 class Settings:
-    host: str = "127.0.0.1"
-    port: int = 7331
-    comfy_url: str = "http://127.0.0.1:8188"
     inference_backend: str = "native"
     model_roots: list[str] = field(default_factory=list)
     model_cache_root: str | None = None
@@ -79,7 +76,7 @@ def load_settings() -> Settings:
         config_path = fallback_config
     if config_path.exists():
         raw = json.loads(config_path.read_text(encoding="utf-8"))
-        for key in ("host", "port", "comfy_url", "inference_backend", "model_roots", "model_cache_root", "output_root", "input_root"):
+        for key in ("inference_backend", "model_roots", "model_cache_root", "output_root", "input_root"):
             if key in raw:
                 setattr(settings, key, raw[key])
     PROJECTS_ROOT.mkdir(parents=True, exist_ok=True)

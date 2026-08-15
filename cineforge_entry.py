@@ -1,4 +1,4 @@
-from cineforge.server import main
+from cineforge.worker import main
 
 
 if __name__ == "__main__":

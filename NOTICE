@@ -9,3 +9,10 @@ https://github.com/Wan-Video/Wan2.2
 
 CineForge is an independent project and is not affiliated with or endorsed by
 Alibaba or the Wan Team.
+
+The native desktop interface bundles Anta, Saira Condensed, Cutive Mono,
+Inter Tight, Gugi, Orbit, IBM Plex Sans KR, M PLUS 1, Zen Kurenaido, and
+Zen Kaku Gothic Antique from the Google Fonts collection. These families are
+distributed under the SIL Open Font License 1.1; corresponding license texts
+ship with the application under Assets/Fonts. Kumar One Outline is bundled as
+a special display font under its upstream Google Fonts license metadata.

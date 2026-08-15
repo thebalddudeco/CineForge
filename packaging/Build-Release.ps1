@@ -1,5 +1,5 @@
 param(
-  [string]$Version = "0.4.0",
+  [string]$Version = "0.5.0",
   [switch]$SkipToolBootstrap
 )
 
@@ -55,19 +55,17 @@ if (!$SkipToolBootstrap) {
 if ($LASTEXITCODE -ne 0) { throw "The native CUDA inference dependencies are not available to the packaging environment." }
 $diffusersSource = (& $venvPython -c "import pathlib,diffusers; print(pathlib.Path(diffusers.__file__).parent)").Trim()
 
-Write-Host "Building the standalone CineForge application..."
+Write-Host "Building the private CineForge Wan engine..."
 & $venvPython -m PyInstaller `
   --noconfirm `
   --clean `
-  --windowed `
-  --name CineForge `
+  --console `
+  --name "CineForge Engine" `
   --icon $iconPath `
   --version-file (Join-Path $PSScriptRoot "version_info.txt") `
   --distpath $distRoot `
   --workpath $buildRoot `
   --specpath $workRoot `
-  --add-data "$(Join-Path $appRoot 'web');web" `
-  --add-data "$(Join-Path $appRoot 'cineforge\workflows');cineforge\workflows" `
   --add-data "$diffusersSource;diffusers" `
   --hidden-import torch `
   --hidden-import diffusers `
@@ -86,11 +84,22 @@ Write-Host "Building the standalone CineForge application..."
   --exclude-module sklearn `
   --exclude-module pandas `
   --exclude-module matplotlib `
-  (Join-Path $appRoot "cineforge_entry.py")
+  (Join-Path $appRoot "cineforge_worker_entry.py")
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed with exit code $LASTEXITCODE." }
 
-$appDist = Join-Path $distRoot "CineForge"
-if (!(Test-Path -LiteralPath (Join-Path $appDist "CineForge.exe"))) { throw "The standalone CineForge executable was not created." }
+$workerDist = Join-Path $distRoot "CineForge Engine"
+if (!(Test-Path -LiteralPath (Join-Path $workerDist "CineForge Engine.exe"))) { throw "The private CineForge Engine executable was not created." }
+$appDist = Join-Path $distRoot "CineForge Desktop"
+$engineDist = Join-Path $appDist "Engine"
+New-Item -ItemType Directory -Force -Path $appDist,$engineDist | Out-Null
+Write-Host "Building the native CineForge Windows interface..."
+$desktopProject = Join-Path $appRoot "desktop\CineForge.Desktop\CineForge.Desktop.csproj"
+dotnet publish $desktopProject -c Release -r win-x64 --self-contained true -o $appDist `
+  /p:Version=$Version /p:FileVersion="$Version.0" /p:InformationalVersion=$Version
+if ($LASTEXITCODE -ne 0) { throw "The native desktop build failed with exit code $LASTEXITCODE." }
+Copy-Item -Path (Join-Path $workerDist "*") -Destination $engineDist -Recurse -Force
+if (!(Test-Path -LiteralPath (Join-Path $appDist "CineForge.exe"))) { throw "The native CineForge Desktop executable was not created." }
+if (!(Test-Path -LiteralPath (Join-Path $engineDist "CineForge Engine.exe"))) { throw "The bundled private engine is missing." }
 Copy-Item -LiteralPath (Join-Path $appRoot "README.md") -Destination (Join-Path $appDist "README.md")
 Copy-Item -LiteralPath (Join-Path $appRoot "config.example.json") -Destination (Join-Path $appDist "config.example.json")
 

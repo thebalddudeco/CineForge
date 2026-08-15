@@ -3,8 +3,6 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
-import urllib.error
-import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -27,40 +25,13 @@ FAMILY_RULES = [
 ]
 
 
-def _get_json(url: str, timeout: float = 3.0) -> dict[str, Any]:
-    with urllib.request.urlopen(url, timeout=timeout) as response:
-        return json.loads(response.read().decode("utf-8"))
-
-
-def runtime_status(settings: Settings) -> dict[str, Any]:
-    try:
-        stats = _get_json(f"{settings.comfy_url}/system_stats")
-        system = stats.get("system", {})
-        devices = stats.get("devices", [])
-        device = devices[0] if devices else {}
-        total_vram = max(0, int(device.get("vram_total") or 0))
-        free_vram = min(total_vram, max(0, int(device.get("vram_free") or 0)))
-        return {
-            "online": True,
-            "url": settings.comfy_url,
-            "comfyui_version": system.get("comfyui_version"),
-            "python_version": system.get("python_version"),
-            "device": device.get("name"),
-            "vram_total_gb": round(total_vram / 1024**3, 1),
-            "vram_free_gb": round(free_vram / 1024**3, 1),
-            "argv": system.get("argv", []),
-        }
-    except (OSError, urllib.error.URLError, json.JSONDecodeError) as exc:
-        return {"online": False, "url": settings.comfy_url, "error": str(exc)}
-
-
 def native_runtime_status(settings: Settings) -> dict[str, Any]:
     """Report the GPU directly. This probe does not contact or import ComfyUI."""
     result: dict[str, Any] = {
         "online": False,
         "backend": "native",
         "engine": "CineForge Engine",
-        "engine_version": "0.2.0",
+        "engine_version": "0.5.0",
         "url": None,
     }
     command = shutil.which("nvidia-smi")
@@ -69,42 +40,30 @@ def native_runtime_status(settings: Settings) -> dict[str, Any]:
         return result
     try:
         completed = subprocess.run(
-            [command, "--query-gpu=name,memory.total,memory.free,driver_version", "--format=csv,noheader,nounits"],
+            [command, "--query-gpu=name,memory.total,memory.free,utilization.gpu,temperature.gpu,power.draw,driver_version", "--format=csv,noheader,nounits"],
             check=True, capture_output=True, text=True, timeout=8,
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
         line = completed.stdout.strip().splitlines()[0]
-        name, total_mb, free_mb, driver = [part.strip() for part in line.split(",", 3)]
+        name, total_mb, free_mb, utilization, temperature, power, driver = [part.strip() for part in line.split(",", 6)]
+        def number(value: str, fallback: float = 0.0) -> float:
+            try:
+                return float(value)
+            except ValueError:
+                return fallback
         result.update({
             "online": True,
             "device": name,
             "vram_total_gb": round(float(total_mb) / 1024, 1),
             "vram_free_gb": round(float(free_mb) / 1024, 1),
+            "gpu_utilization_percent": number(utilization),
+            "temperature_c": number(temperature),
+            "power_w": number(power),
             "driver_version": driver,
             "python_version": None,
         })
     except (OSError, ValueError, subprocess.SubprocessError, IndexError) as exc:
         result["error"] = str(exc)
-    return result
-
-
-def node_capabilities(settings: Settings) -> dict[str, bool]:
-    wanted = {
-        "UNETLoader": "unet_loader",
-        "CheckpointLoaderSimple": "checkpoint_loader",
-        "WanImageToVideo": "wan_image_to_video",
-        "LTXVConditioning": "ltx_conditioning",
-        "LTXVImgToVideoInplace": "ltx_image_to_video",
-        "SaveVideo": "save_video",
-        "SaveImage": "save_image",
-    }
-    result = {alias: False for alias in wanted.values()}
-    try:
-        info = _get_json(f"{settings.comfy_url}/object_info", timeout=8.0)
-        for node_name, alias in wanted.items():
-            result[alias] = node_name in info
-    except (OSError, urllib.error.URLError, json.JSONDecodeError):
-        pass
     return result
 
 
