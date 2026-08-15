@@ -26,6 +26,12 @@ The installer downloads approximately 2.0 GB for the native CineForge runtime an
 
 The application folder and CineForge Library must be separate folders. Shadowframe folders and models are never reused.
 
+### Installing a newer CineForge version
+
+Close CineForge, run the new installer, and select the same `CineForge` application folder and `CineForge Library` used by the previous version. Setup replaces the complete application installation in place, so matching runtime files are overwritten and files retired by the new release are removed rather than stacked beside it. The separate library is preserved, including installed Wan models, source images, outputs, projects, preferences, cached downloads, and interrupted `.partial` files.
+
+Setup keeps a temporary rollback copy of the previous application until the new one is installed successfully. It will not replace a folder unless that folder contains CineForge's ownership marker.
+
 ## 2. Confirm that the local engine is ready
 
 Open CineForge Desktop and look at the instrument panel across the top of the window.

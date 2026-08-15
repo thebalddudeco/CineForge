@@ -22,6 +22,17 @@ The language can be changed later without reinstalling by selecting `EN`, `한`,
 
 Downloads resume from `.partial` files if the network fails, setup closes, or the user pauses installation. Rerunning the installer with the same library path continues the transfer.
 
+## Upgrading in place
+
+To upgrade CineForge without creating duplicate application files, run the newer installer and choose the same **application folder** and the same **CineForge Library** used by the installed version.
+
+- Setup closes the installed CineForge process, prepares the new application in a staging folder, and then replaces the complete owned application folder. Files shared by both versions are replaced once; files removed from the new release do not remain behind.
+- The previous application folder is held as a temporary rollback copy until the replacement succeeds. If setup is interrupted during the swap, the next setup run restores that copy before trying again.
+- The separate CineForge Library is never part of the application-folder replacement. Models, inputs, outputs, projects, preferences, cached downloads, and resumable `.partial` files remain in place and are reused.
+- Setup refuses to replace any destination that is not marked as a CineForge installation. It also refuses to place the application folder inside the library or the library inside the application folder.
+
+Do not create a version-numbered subfolder for a routine upgrade. Choosing the existing `CineForge` folder is the supported update path and does not stack another runtime beside the old one.
+
 ## Folder layout
 
 ```text

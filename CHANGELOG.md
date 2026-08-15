@@ -8,6 +8,11 @@ All notable CineForge changes are recorded here. The format follows Keep a Chang
 
 - Added a complete CineForge Desktop 0.5.0 user guide covering installation, runtime readiness, every workflow stage, the location of candidate-level Generate Video controls, live progress interpretation, outputs, localization, privacy, current version behavior, and troubleshooting.
 
+### Installer
+
+- Locked in-place upgrades to the existing `CineForge` application folder: the new application is staged, the owned previous installation is replaced as a whole, retired application files are removed, and the separate CineForge Library is preserved without duplicating models or creative work.
+- Hardened interrupted-upgrade recovery so a valid temporary application backup is restored before setup retries, and failed replacements roll back cleanly.
+
 ## [0.5.0] - 2026-08-15
 
 ### Native Windows interface and brand-system implementation

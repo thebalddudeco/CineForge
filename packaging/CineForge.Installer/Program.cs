@@ -274,13 +274,24 @@ internal static class InstallerEngine
     private static void InstallApplication(string installRoot, string payloadPath, IProgress<InstallProgress>? progress)
     {
         string parent = Path.GetDirectoryName(installRoot)!;
-        if (Directory.Exists(installRoot)) RequireInstallMarker(installRoot);
         Directory.CreateDirectory(parent);
         string staging = installRoot + $".installing-{Guid.NewGuid():N}";
         string backup = installRoot + ".backup";
+        // A fixed backup name lets a later setup run recover an upgrade that was
+        // interrupted after the old application directory had been moved aside.
+        if (!Directory.Exists(installRoot) && Directory.Exists(backup))
+        {
+            RequireInstallMarker(backup);
+            Directory.Move(backup, installRoot);
+        }
+        bool replacingExistingInstall = Directory.Exists(installRoot);
+        if (replacingExistingInstall) RequireInstallMarker(installRoot);
+        bool stagedApplicationPromoted = false;
         try
         {
-            progress?.Report(new("Extracting CineForge application files…", 1));
+            progress?.Report(new(replacingExistingInstall
+                ? "Preparing the in-place CineForge upgrade…"
+                : "Extracting CineForge application files…", 1));
             Directory.CreateDirectory(staging);
             using Stream payload = new FileStream(payloadPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var archive = new ZipArchive(payload, ZipArchiveMode.Read);
@@ -298,6 +309,7 @@ internal static class InstallerEngine
                 Directory.Move(installRoot, backup);
             }
             Directory.Move(staging, installRoot);
+            stagedApplicationPromoted = true;
             File.Copy(Environment.ProcessPath!, Path.Combine(installRoot, "CineForge Desktop Setup.exe"), true);
             if (Directory.Exists(backup))
             {
@@ -308,7 +320,21 @@ internal static class InstallerEngine
         catch
         {
             if (Directory.Exists(staging)) Directory.Delete(staging, true);
-            if (!Directory.Exists(installRoot) && Directory.Exists(backup)) Directory.Move(backup, installRoot);
+            if (Directory.Exists(backup))
+            {
+                RequireInstallMarker(backup);
+                if (Directory.Exists(installRoot))
+                {
+                    RequireInstallMarker(installRoot);
+                    Directory.Delete(installRoot, true);
+                }
+                Directory.Move(backup, installRoot);
+            }
+            else if (stagedApplicationPromoted && Directory.Exists(installRoot))
+            {
+                RequireInstallMarker(installRoot);
+                Directory.Delete(installRoot, true);
+            }
             throw;
         }
     }

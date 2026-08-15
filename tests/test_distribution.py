@@ -25,6 +25,20 @@ class DistributionTests(unittest.TestCase):
         self.assertIn("RequestedRangeNotSatisfiable", source)
         self.assertNotIn('ModelRevision = "main"', source)
 
+    def test_installer_performs_owned_in_place_upgrades_with_rollback(self):
+        source = (ROOT / "packaging" / "CineForge.Installer" / "Program.cs").read_text(encoding="utf-8")
+        installation = (ROOT / "docs" / "INSTALLATION.md").read_text(encoding="utf-8")
+        release_process = (ROOT / "docs" / "RELEASE_PROCESS.md").read_text(encoding="utf-8")
+        self.assertIn('string staging = installRoot + $".installing-', source)
+        self.assertIn('string backup = installRoot + ".backup"', source)
+        self.assertIn("Directory.Move(installRoot, backup)", source)
+        self.assertIn("Directory.Move(staging, installRoot)", source)
+        self.assertIn("Directory.Move(backup, installRoot)", source)
+        self.assertIn("RequireInstallMarker(installRoot)", source)
+        self.assertIn("Preparing the in-place CineForge upgrade", source)
+        self.assertIn("The separate CineForge Library is never part", installation)
+        self.assertIn("in-place upgrade from the previous public release", release_process)
+
     def test_runtime_does_not_discover_shadowframe(self):
         checked = [
             ROOT / "cineforge" / "config.py",
