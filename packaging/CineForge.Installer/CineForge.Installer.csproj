@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>CineForge Desktop Setup</AssemblyName>
     <RootNamespace>CineForge.Installer</RootNamespace>
-    <ApplicationIcon>..\assets\CineForge.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\..\Brand System\Logos\Exports\favicon\cineforge-app-icon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
@@ -35,6 +35,8 @@
     <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\SairaCondensed-Regular.ttf" LogicalName="CineForge.Installer.Fonts.SairaCondensed-Regular.ttf" />
     <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\CutiveMono-Regular.ttf" LogicalName="CineForge.Installer.Fonts.CutiveMono-Regular.ttf" />
     <EmbeddedResource Include="..\..\..\..\Brand System\Fonts\InterTight-VariableFont_wght.ttf" LogicalName="CineForge.Installer.Fonts.InterTight-VariableFont_wght.ttf" />
+    <EmbeddedResource Include="..\..\..\..\Brand System\Logos\Exports\icon-mark-acid\icon-mark-acid-64.png" LogicalName="CineForge.Installer.Brand.icon-mark-acid-64.png" />
+    <EmbeddedResource Include="..\..\..\..\Brand System\System\Generated\version-badge-filled-acid-v0.5.0.png" LogicalName="CineForge.Installer.Brand.version-badge-filled-acid-v0.5.0.png" />
   </ItemGroup>
   <ItemGroup Condition="'$(SkipPayload)' != 'true'">
     <EmbeddedResource Include="..\payload\CineForge-Payload.zip" LogicalName="CineForge.Payload.zip" />

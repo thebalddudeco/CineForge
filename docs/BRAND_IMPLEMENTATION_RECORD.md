@@ -30,7 +30,7 @@ Contrast is component state, not a suggestion:
 | v0.1.0 composition and hierarchy | WPF hero, workflow rail, main instrument column, reference pack, and local model router |
 | Clipped/tapered frames | `BevelChrome` and native path-based generation chrome |
 | Sparse grid and stationary texture | `AtmosphereLayer` and `DitheredAtmosphereLayer`; grain remains static and 35% less prominent than the first native pass |
-| Filled tapered six-sided version identifier | Header path with uniform aspect ratio, chartreuse fill, and black monospaced version text |
+| Filled tapered six-sided version identifier | App and installer now source the filled `0.5.0` badge from the approved Brand System System artboard rather than drawing a substitute polygon in code |
 | Live runtime history | Native sampled GPU/VRAM traces and scan cursor; no prerecorded runtime GIF |
 | Live generation status | Fixed 38 × 10 native matrix, asynchronous five-second opacity phases, migrating lime subset, separate progress bar, percentage, phase, elapsed time, ETA, and step data |
 | Approved orbital globe | Exact user-supplied GIF embedded as `Assets/orbital-globe.gif`, decoded into complete native frames, displayed at 86% within its header viewport |

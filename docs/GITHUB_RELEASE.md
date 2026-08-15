@@ -6,7 +6,7 @@ CineForge now runs as a genuine native WPF Windows application with its own priv
 
 - Full native-desktop conversion with a private local engine process.
 - Major CineForge brand-system rebuild based on the approved v0.1.0 visual language and retrofuturist micrographic references.
-- Exact filled tapered version badge restored.
+- Approved tapered version badge now sourced from the locked Brand System System artboard and updated to `v0.5.0` for app and installer use.
 - Native branded installer redesign with CineForge chrome, segmented installation telemetry, clipped frames, and offline bundled UI fonts.
 - Live runtime signal history panel for GPU / VRAM / engine / build state.
 - Native breathing 38 × 10 generation matrix with separate real progress rail and live job telemetry.

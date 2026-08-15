@@ -123,8 +123,8 @@ internal sealed class InstallerForm : Form
 
         var surface = new InstallerSurface { Dock = DockStyle.Fill };
         var chrome = new Panel { BackColor = CineForgeTheme.Black, Location = new Point(1, 1), Size = new Size(878, 40) };
-        var chromeMark = new Label { Text = "///", AutoSize = true, ForeColor = CineForgeTheme.Chartreuse, Font = CineForgeTheme.Title(14, FontStyle.Bold), Location = new Point(14, 10) };
-        var chromeTitle = new Label { Text = $"CINEFORGE DESKTOP  /  SETUP SYSTEM  /  {Program.ProductVersion}", AutoSize = true, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Mono(8), Location = new Point(56, 14) };
+        var chromeMark = new PictureBox { Image = LoadEmbeddedBitmap("CineForge.Installer.Brand.icon-mark-acid-64.png"), SizeMode = PictureBoxSizeMode.Zoom, BackColor = Color.Transparent, Location = new Point(14, 8), Size = new Size(18, 18) };
+        var chromeTitle = new Label { Text = $"CINEFORGE DESKTOP  /  SETUP SYSTEM  /  {Program.ProductVersion}", AutoSize = true, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Mono(8), Location = new Point(44, 14) };
         var minimize = ChromeButton("—", 800, (_, _) => WindowState = FormWindowState.Minimized);
         var close = ChromeButton("×", 838, (_, _) => Close());
         chrome.Controls.AddRange([chromeMark, chromeTitle, minimize, close]);
@@ -133,7 +133,7 @@ internal sealed class InstallerForm : Form
 
         var rail = new Panel { BackColor = CineForgeTheme.Line, Location = new Point(40, 58), Size = new Size(800, 1) };
         var railDot = new Panel { BackColor = CineForgeTheme.Chartreuse, Location = new Point(830, 55), Size = new Size(7, 7) };
-        var badge = new VersionBadge { VersionText = $"v{Program.ProductVersion}", Location = new Point(765, 76), Size = new Size(76, 82) };
+        var badge = new PictureBox { Image = LoadEmbeddedBitmap("CineForge.Installer.Brand.version-badge-filled-acid-v0.5.0.png"), SizeMode = PictureBoxSizeMode.Zoom, BackColor = Color.Transparent, Location = new Point(765, 76), Size = new Size(76, 82) };
         var eyebrow = new Label { Text = "■  CINEFORGE DESKTOP / LOCAL WAN VIDEO SYSTEM", AutoSize = true, ForeColor = CineForgeTheme.Chartreuse, Font = CineForgeTheme.Mono(8, FontStyle.Bold), Location = new Point(55, 84) };
         var title = new Label { Text = "Install CineForge Desktop", AutoSize = true, ForeColor = CineForgeTheme.Alabaster, Font = CineForgeTheme.Title(27), Location = new Point(50, 108) };
         var subtitle = new Label { Text = "Choose the application and private local-library locations. Existing verified files are reused.", AutoSize = true, ForeColor = CineForgeTheme.Muted, Font = CineForgeTheme.Body(10), Location = new Point(55, 154) };
@@ -207,6 +207,14 @@ internal sealed class InstallerForm : Form
         var button = new CineForgeButton { Text = "BROWSE…", Size = new Size(105, 30), Location = new Point(670, y - 1) };
         button.Click += (_, _) => action();
         return button;
+    }
+
+    private static Bitmap LoadEmbeddedBitmap(string logicalName)
+    {
+        using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(logicalName)
+            ?? throw new InvalidOperationException($"Missing embedded brand asset: {logicalName}");
+        using var image = Image.FromStream(stream);
+        return new Bitmap(image);
     }
 
     private static void BrowseFor(TextBox target, string description, string leaf)

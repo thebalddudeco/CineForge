@@ -1,5 +1,7 @@
 # CineForge
 
+![CineForge GitHub banner](docs/assets/banners/cineforge-github-banner-1280x640.png)
+
 CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
 
 - **CineForge Desktop** is the private, local-only Windows edition. It downloads the required Wan models and performs generation on the user's own compatible NVIDIA GPU.
@@ -20,6 +22,30 @@ The current repository and installer work are focused on CineForge Desktop.
 - The approved breathing 38 × 10 generation dot matrix translated into a real native, data-driven status instrument.
 - Persistent English, Korean, and Japanese localization with their approved font families.
 - A locked top-level CineForge brand library for logos, fonts, motion studies, exports, proofs, and reference boards.
+
+## Design system rebuild
+
+The Desktop interface and installer no longer use the flat interim native shell. v0.5.0 restores and production-locks the approved CineForge visual language that started in v0.1.0, then carries it through the native app, setup flow, release assets, and public brand package.
+
+The key shift was not "more decoration." It was a move from a generic utility shell to a cinematic instrument panel that communicates real runtime state while keeping the workflow readable.
+
+What changed:
+
+- sparse retrofuturist grid structure instead of blank flat fields;
+- clipped and tapered panel frames instead of plain rectangles;
+- fine ivory rules with selective acid-chartreuse activation;
+- contrast-safe color behavior: dark text on light/green surfaces and light text on dark surfaces;
+- approved language-aware font system for English, Korean, and Japanese;
+- live runtime signal history replacing static connected-device text;
+- the fixed breathing 38 × 10 generation matrix replacing generic loading treatment;
+- technical micro-labels, data callouts, segmented signal bars, and restrained instrumentation drawn from the locked concept references;
+- a consolidated top-level CineForge Brand System archive so app, installer, proofs, exports, and marketing graphics all pull from the same source of truth.
+
+For the locked rules and implementation record, see:
+
+- [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)
+- [docs/V010_VISUAL_SOURCE_OF_TRUTH.md](docs/V010_VISUAL_SOURCE_OF_TRUTH.md)
+- [docs/BRAND_IMPLEMENTATION_RECORD.md](docs/BRAND_IMPLEMENTATION_RECORD.md)
 
 The application, engine protocol, installer, packaging defaults, localized title bars, runtime telemetry, and approved filled version badge are stamped consistently as `0.5.0`. The release remains a candidate until every verification gate in `docs/RELEASE_PROCESS.md` has passed.
 
@@ -106,6 +132,16 @@ The required process is documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PRO
 The complete product and version history is recorded in [docs/VERSION_HISTORY.md](docs/VERSION_HISTORY.md). The locked visual rules and their current native implementation are recorded in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md), [docs/V010_VISUAL_SOURCE_OF_TRUTH.md](docs/V010_VISUAL_SOURCE_OF_TRUTH.md), and [docs/BRAND_IMPLEMENTATION_RECORD.md](docs/BRAND_IMPLEMENTATION_RECORD.md).
 
 The consolidated local brand master now lives in `O:\CineForge\Brand System`, which holds the locked logo suite, approved font files, motion references, concept boards, export sizes, proof sheets, and brand documentation used during the v0.5.0 redesign pass.
+
+## Publishing banners
+
+We now have a dedicated banner suite for public publishing and repository presentation:
+
+- GitHub social banner
+- Medium publication/article banner
+- Substack publication/post banner
+
+The approved banner master lives at `O:\CineForge\Brand System\Banners\Artboard 1.png`, and the repository-ready delivery copies used by GitHub, Medium, and Substack live in `docs/assets/banners/`.
 
 ## Models
 

@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>CineForge</AssemblyName>
     <RootNamespace>CineForge.Desktop</RootNamespace>
-    <ApplicationIcon>..\..\packaging\assets\CineForge.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\..\Brand System\Logos\Exports\favicon\cineforge-app-icon.ico</ApplicationIcon>
     <Version>0.5.0</Version>
     <FileVersion>0.5.0.0</FileVersion>
     <AssemblyTitle>CineForge Desktop</AssemblyTitle>
@@ -16,6 +16,9 @@
   <ItemGroup>
     <Resource Include="..\..\..\..\Brand System\Fonts\*.ttf" Link="Assets\Fonts\%(Filename)%(Extension)" />
     <Resource Include="..\..\..\..\Brand System\Motion\orbital-globe.gif" Link="Assets\orbital-globe.gif" />
+    <Resource Include="..\..\..\..\Brand System\Logos\Exports\logo-monochrome-alabaster\logo-monochrome-alabaster-512.png" Link="Assets\logo-monochrome-alabaster-512.png" />
+    <Resource Include="..\..\..\..\Brand System\Logos\Exports\icon-mark-acid\icon-mark-acid-64.png" Link="Assets\icon-mark-acid-64.png" />
+    <Resource Include="..\..\..\..\Brand System\System\Generated\version-badge-filled-acid-v0.5.0.png" Link="Assets\version-badge-filled-acid-v0.5.0.png" />
     <Content Include="..\..\..\..\Brand System\Fonts\OFL-*.txt" Link="Assets\Fonts\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

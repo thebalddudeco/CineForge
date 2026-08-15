@@ -71,7 +71,7 @@ Fonts ship with the application and their licenses. The installed desktop app mu
 
 ## Exact version identifier
 
-The compact approved preview is `../../../Brand System/Logos/Previews/cineforge-version-badges-brand-green-compact.png`.
+The approved version-identifier source lives in `../../../Brand System/System/Artboard 1.pdf` and its companion System artboards. The current release raster used by the app and installer is generated from that locked source and stored in `../../../Brand System/System/Generated/version-badge-filled-acid-v0.5.0.png`.
 
 The silhouette must not be improvised, shortened, widened, converted to a hexagon, converted to an inverted triangle, or stretched to fit a header slot. Its geometry is:
 
