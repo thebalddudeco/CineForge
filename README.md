@@ -1,5 +1,7 @@
 # CineForge
 
+![CineForge GitHub banner](docs/assets/banners/cineforge-github-banner-1280x640.png)
+
 CineForge is a Wan-powered cinematic video system with two planned editions. Both editions share the same visual language, project structure, and generation workflow.
 
 - **CineForge Desktop** is the private, local-only Windows edition. It downloads the required Wan models and performs generation on the user's own compatible NVIDIA GPU.
